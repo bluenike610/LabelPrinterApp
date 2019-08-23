@@ -54,6 +54,7 @@
                     android:layout_height="wrap_content"
                     android:drawableTint="#FF4081"
                     android:hint="@string/user_id"
+                    android:lines="1"
                     android:textSize="@dimen/screen_label_text_font"
                     android:text="user"
                     android:inputType="textEmailAddress" />
@@ -90,6 +91,7 @@
                     android:layout_height="wrap_content"
                     android:drawableTint="#FF4081"
                     android:textSize="@dimen/screen_label_text_font"
+                    android:lines="1"
                     android:hint="@string/password"
                     android:text="111111"
                     android:inputType="textPassword" />

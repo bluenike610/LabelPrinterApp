@@ -79,10 +79,11 @@ public class InvoiceDialog extends Dialog {
                         PrinterManager manager = new PrinterManager();
                         LabelPrinter printer = manager.invoiceOnlyPrintStart(money, invoiceTxt.getText().toString());
 
-                        if(printer != null) {
-                            listner.OnInvoiceBtnClicked(printer);
+                        //test
+//                        if(printer != null) {
+                            listner.OnInvoiceBtnClicked(printer, (int) money, invoiceTxt.getText().toString());
                             dismiss();
-                        }
+//                        }
                     }
                 }
             }
@@ -93,6 +94,6 @@ public class InvoiceDialog extends Dialog {
     }
 
     public interface InvoicePrinterListner {
-        public abstract void OnInvoiceBtnClicked(LabelPrinter printer);
+        public abstract void OnInvoiceBtnClicked(LabelPrinter printer, int value, String only);
     }
 }

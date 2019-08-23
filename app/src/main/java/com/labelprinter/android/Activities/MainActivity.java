@@ -350,7 +350,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 @Override
                 public void OnTicketingInvoiceBtnClicked(LabelPrinter printer, int value, String only) { //to print
-                    checkingPintState(printer, 1, value, only);
+                    //test
+                    DbHelper dbHelper = new DbHelper(currentActivity);
+                    Queries query = new Queries(null, dbHelper);
+                    query.addSellInfoWithData(ticketingList, selectedPayType);
+                    query.addInvoiceInfoWithData(value, only, selectedPayType);
+
+//                    checkingPintState(printer, 1, value, only);
                 }
 
                 @Override

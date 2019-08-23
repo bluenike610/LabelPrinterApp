@@ -151,10 +151,11 @@ public class TicketingDlg extends Dialog {
                             PrinterManager manager = new PrinterManager();
                             LabelPrinter printer = manager.printerStart(models, ticketingMoney, invoiceTxt.getText().toString());
 
-                            if(printer != null) {
+                            //test
+//                            if(printer != null) {
                                 linstener.OnTicketingInvoiceBtnClicked(printer, Integer.valueOf((int) preMoney), invoiceTxt.getText().toString());
                                 dismiss();
-                            }
+//                            }
                         }
                     }
                 }

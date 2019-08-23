@@ -35,6 +35,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -694,4 +695,21 @@ public class Common {
         return sb.toString();
     }
 
+    public String writeToFile(byte[] array, String fname) {
+        String fPath = "";
+        try {
+            FileOutputStream stream = new FileOutputStream(fname);
+            stream.write(array);
+            stream.flush();
+            stream.close();
+            fPath = fname;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return "";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+        return fPath;
+    }
 }

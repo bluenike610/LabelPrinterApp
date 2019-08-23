@@ -13,6 +13,8 @@ import com.citizen.sdk.labelprint.LabelConst;
 import com.citizen.sdk.labelprint.LabelDesign;
 import com.citizen.sdk.labelprint.LabelPrinter;
 import com.labelprinter.android.Common.Common;
+import com.labelprinter.android.DBManager.DbHelper;
+import com.labelprinter.android.DBManager.Queries;
 import com.labelprinter.android.Models.PrinterInfo;
 import com.labelprinter.android.Models.TicketInfo;
 import com.labelprinter.android.Models.TicketModel;
@@ -205,7 +207,7 @@ public class PrinterManager {
 
         if (cm.printerInfos.size() >0) {
             for (PrinterInfo info : cm.printerInfos) {
-                if (info.getType().equals("RYOSHUSHO"))
+                if (info.getType().equals("RYOSHUSHO") || info.getIsShown().equals("0"))
                     continue;
                 String content = "";
                 Calendar nowDate = Calendar.getInstance();
@@ -242,17 +244,25 @@ public class PrinterManager {
                 int endY = (int) (info.getEndY()); // mm
 
                 if (info.getPrinterType().equals("TEXT")) {
-                    if (info.getFormat().equals("HAKKENBI")) { //発券日(当日)を示す
-                        content = nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日";
-                    }else if (info.getFormat().equals("YUKOKIGEN")) { //チケット定義情報の有効期間(日) + 発券日を示す
-                        content = "発券日 " + nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日";
-                    }else if (info.getFormat().equals("KENSHUMEI")) { //チケット定義情報の券種名を示す 券種名(1日　大人など）を示す
-                        content = model.getName();
-                    }else if (info.getFormat().equals("KAKAKU")) { //チケットの価格を示す
-                        content = String.valueOf(model.getPrice());
-                    }else if (info.getFormat().equals("GENZAINICHIJI")) { //現在日時を示す
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日(E) hh:mm", Locale.JAPANESE);
-                        content = sdf.format(nowDate);
+                    switch (info.getPrinterNum()) {
+                        case 1: //チケット定義情報の券種名を示す 券種名(1日　大人など）を示す
+                            content = model.getName() + " " + model.getPrice();
+                            break;
+                        case 2: //発券日(当日)を示す
+                            content = nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日";
+                            break;
+                        case 3: //発券日(当日)を示す
+                            content = "発券日 " + nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日";
+                            break;
+                        case 4: //連絡先
+                            content = info.getFormat();
+                            break;
+                        case 8:
+                            content = "";
+                            break;
+                        default:
+                            content = "";
+                            break;
                     }
 
 //                    case 1
@@ -278,27 +288,22 @@ public class PrinterManager {
                             LabelConst.CLS_PRT_RES_203, LabelConst.CLS_UNIT_MILLI);
 
                 }else if (info.getPrinterType().equals("IMAGE")) {
-                    content = info.getFileName();
-//                    drawNVBitmap (String name, int hexp, int vexp, int x, int y)
-                    design.drawNVBitmap (content, 1, 1, startX, startY);
-
-//                    drawBitmap (String filePath, int rotation, int width, int height, int x, int y)
-//                    File root = android.os.Environment.getExternalStorageDirectory();
-//                    File dir = new File(root.getAbsolutePath() + "/LabelPrinter");
-//                    if(dir.exists()) {
-//                        File file = new File(dir, content);
-//                        design.drawBitmap (file.getAbsolutePath(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
-////                    drawBitmap (String filePath, int rotation, int width, int height, int x, int y, int resolution, int measurementUnit)
-//                        design.drawBitmap (file.getAbsolutePath(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY,
-//                                LabelConst.CLS_PRT_RES_300, LabelConst.CLS_UNIT_MILLI);
-//                    }
-
+                    if (info.getImgData() != null) {
+//                        drawBitmap (String filePath, int rotation, int width, int height, int x, int y)
+                        design.drawBitmap (info.getFileName(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
+//                    drawBitmap (String filePath, int rotation, int width, int height, int x, int y, int resolution, int measurementUnit)
+//                            design.drawBitmap (file.getAbsolutePath(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY,
+//                                    LabelConst.CLS_PRT_RES_300, LabelConst.CLS_UNIT_MILLI);
+                    }else {
+                        content = info.getFileName();
+                        design.drawNVBitmap (content, 1, 1, startX, startY);
+                    }
                 }else if (info.getPrinterType().equals("BARCODE")) {
 //                    drawBarCode (String data, int symbology, int rotation, int thick, int narrow, int height, int x, int y,int showText)
-//                    String interleaved25 = "1234567890";
-//                    design.drawBarCode(interleaved25, LabelConst.CLS_BCS_INTERLEAVED25,
-//                            LabelConst.CLS_RT_NORMAL, 5, 2, 50, 10, 100,
-//                            LabelConst.CLS_BCS_TEXT_SHOW);
+                    content = info.getBarcode();
+                    design.drawBarCode(content, info.getBarcodeType(),
+                            LabelConst.CLS_RT_NORMAL, 5, 2, info.getBarcodeHeight(), startX, startY,
+                            LabelConst.CLS_BCS_TEXT_SHOW);
                 }else if (info.getPrinterType().equals("LINE")) {
 //                    drawLine (int x1, int y1, int x2, int y2, int thickness)
                     design.drawLine (startX, startY, endX, endY, 1);
@@ -319,9 +324,9 @@ public class PrinterManager {
     private void getDesignFromInvoiceInfo (LabelDesign design, long invoiceMoney, String invoiceName) {
         if (cm.printerInfos.size() >0) {
             for (PrinterInfo info : cm.printerInfos) {
-                if (info.getType().equals("TICKET"))
+                if (info.getType().equals("TICKET") || info.getIsShown().equals("0"))
                     continue;
-                String content = String.valueOf(invoiceMoney);
+                String content = "";
                 Calendar nowDate = Calendar.getInstance();
 
                 String fontName = info.getFont();
@@ -346,65 +351,34 @@ public class PrinterManager {
                 int endY = (int) (info.getEndY()); // mm
 
                 if (info.getPrinterType().equals("TEXT")) {
-//                    if (info.getFormat().equals("HAKKENBI")) { //発券日(当日)を示す
-//                        content = nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日";
-//                    }else if (info.getFormat().equals("YUKOKIGEN")) { //チケット定義情報の有効期間(日) + 発券日を示す
-//                        content = "発券日 " + nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日";
-//                    }else if (info.getFormat().equals("KENSHUMEI")) { //チケット定義情報の券種名を示す 券種名(1日　大人など）を示す
-//                        content = model.getName();
-//                    }else if (info.getFormat().equals("KAKAKU")) { //チケットの価格を示す
-//                        content = String.valueOf(model.getPrice());
-//                    }else if (info.getFormat().equals("GENZAINICHIJI")) { //現在日時を示す
-//                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日(E) hh:mm", Locale.JAPANESE);
-//                        content = sdf.format(nowDate);
-//                    }
-
-//                    case 1
-//                    drawTextPtrFont (String data, int locale, int font, int rotation, int hexp, int vexp, int size, int x, int y)
-//                    design.drawTextPtrFont(content,
-//                            LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
-//                            LabelConst.CLS_RT_NORMAL, 1, 1,
-//                            kanjiSize, startX, startY);
-
-//                    case 2
-//                    drawTextDLFont (String data, int encoding, String fontID, int rotation, int hexp, int vexp, int point, int x, int y)
-                    // TrueTypeダウンロードフォント
-//                    design.drawTextDLFont(content,
-//                            LabelConst.CLS_ENC_CDPG_IBM850, "S50",
-//                            LabelConst.CLS_RT_NORMAL, 1, 1, fontSize, startX, startY);
-
-//                    case 3
-//                    drawTextLocalFont (String data, Typeface fontType, int rotation, int hRatio, int vRatio, int point, int style, int x, int y, int resolution, int measurementUnit)
-                    // 解像度指定 203dpi、単位指定 mm
+                    switch (info.getPrinterNum()) {
+                        case 1: //領収書
+                            content = info.getFormat();
+                            break;
+                        case 2:
+                            content = info.getFormat();
+                            break;
+                        case 3:
+                            content = "領収金額　： " + invoiceMoney;
+                            break;
+                        case 5:
+                            content = "但し　： " + invoiceName;
+                            break;
+                        case 7:
+                            DbHelper dbHelper = new DbHelper(currentActivity);
+                            Queries query = new Queries(null, dbHelper);
+                            int invoiceNum = query.getEndNumberWithSection("RYOSHUSHO") + 1;
+                            content = "No　： " + invoiceNum;
+                            break;
+                        default:
+                            content = "";
+                            break;
+                    }
                     design.drawTextLocalFont(content, Typeface.create(fontName, Typeface.NORMAL),
                             LabelConst.CLS_RT_NORMAL, 100, 100, fontSize,
                             style, startX, startY,
                             LabelConst.CLS_PRT_RES_203, LabelConst.CLS_UNIT_MILLI);
-
-                }else if (info.getPrinterType().equals("IMAGE")) {
-                    content = info.getFileName();
-//                    drawNVBitmap (String name, int hexp, int vexp, int x, int y)
-                    design.drawNVBitmap (content, 1, 1, startX, startY);
-
-//                    drawBitmap (String filePath, int rotation, int width, int height, int x, int y)
-//                    File root = android.os.Environment.getExternalStorageDirectory();
-//                    File dir = new File(root.getAbsolutePath() + "/LabelPrinter");
-//                    if(dir.exists()) {
-//                        File file = new File(dir, content);
-//                        design.drawBitmap (file.getAbsolutePath(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
-////                    drawBitmap (String filePath, int rotation, int width, int height, int x, int y, int resolution, int measurementUnit)
-//                        design.drawBitmap (file.getAbsolutePath(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY,
-//                                LabelConst.CLS_PRT_RES_300, LabelConst.CLS_UNIT_MILLI);
-//                    }
-
-                }else if (info.getPrinterType().equals("BARCODE")) {
-//                    drawBarCode (String data, int symbology, int rotation, int thick, int narrow, int height, int x, int y,int showText)
-//                    String interleaved25 = "1234567890";
-//                    design.drawBarCode(interleaved25, LabelConst.CLS_BCS_INTERLEAVED25,
-//                            LabelConst.CLS_RT_NORMAL, 5, 2, 50, 10, 100,
-//                            LabelConst.CLS_BCS_TEXT_SHOW);
                 }else if (info.getPrinterType().equals("LINE")) {
-//                    drawLine (int x1, int y1, int x2, int y2, int thickness)
                     design.drawLine (startX, startY, endX, endY, 1);
                 }
             }

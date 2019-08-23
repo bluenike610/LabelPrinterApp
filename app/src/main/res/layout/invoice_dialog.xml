@@ -50,6 +50,7 @@
                     android:layout_toLeftOf="@+id/lbYen"
                     android:gravity="center|right"
                     android:paddingLeft="10dp"
+                    android:lines="1"
                     android:paddingRight="10dp"
                     android:textColor="@color/black"
                     android:textSize="40sp"

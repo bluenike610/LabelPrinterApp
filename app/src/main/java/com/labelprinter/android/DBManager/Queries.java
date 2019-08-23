@@ -732,9 +732,9 @@ public class Queries {
         PrinterInfo info = new PrinterInfo();
 
         info.setType(mCursor.getString(mCursor.getColumnIndex("chohyokb")));
-        info.setPrinterNum(mCursor.getInt(mCursor.getColumnIndex("hyojikb")));
+        info.setPrinterNum(mCursor.getInt(mCursor.getColumnIndex("areano")));
         info.setPrinterType(mCursor.getString(mCursor.getColumnIndex("injishubetsu")));
-        info.setIsShown(String.valueOf(mCursor.getInt(mCursor.getColumnIndex("areano"))));
+        info.setIsShown(String.valueOf(mCursor.getInt(mCursor.getColumnIndex("hyojikb"))));
         info.setFont(mCursor.getString(mCursor.getColumnIndex("fontmei")));
         info.setFontSize(mCursor.getInt(mCursor.getColumnIndex("fontsize")));
         info.setIsItalic(mCursor.getInt(mCursor.getColumnIndex("fontstyle_shatai")));

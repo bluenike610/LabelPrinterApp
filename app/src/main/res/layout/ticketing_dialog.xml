@@ -132,6 +132,7 @@
                             android:layout_toLeftOf="@+id/lbYen"
                             android:background="@drawable/border_white"
                             android:gravity="center|right"
+                            android:lines="1"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
                             android:textColor="@color/black"

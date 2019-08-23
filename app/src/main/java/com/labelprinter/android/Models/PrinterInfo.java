@@ -1,5 +1,11 @@
 package com.labelprinter.android.Models;
 
+import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
+
+import static com.labelprinter.android.Common.Common.cm;
+
 public class PrinterInfo {
     private String type; //帳票区分
     private int printerNum; //印字番号
@@ -123,7 +129,18 @@ public class PrinterInfo {
     }
 
     public void setImgData(byte[] val) {
-        imgData = val;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        File root = android.os.Environment.getExternalStorageDirectory();
+        File dir = new File(root.getAbsolutePath() + "/LabelPrinter/Images");
+        if(dir.exists()) {
+            File file = new File(dir, "img_" + calendar.getTimeInMillis() + ".png");
+            String fname = cm.writeToFile(val, file.getAbsolutePath());
+            if (!fname.equals("")) {
+                setFileName(fname);
+            }
+        }
+            imgData = val;
     }
     public byte[] getImgData() {
         return imgData;

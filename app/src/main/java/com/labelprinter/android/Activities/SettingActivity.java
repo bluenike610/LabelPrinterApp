@@ -13,6 +13,8 @@ import com.labelprinter.android.Common.Common;
 import com.labelprinter.android.Common.Config;
 import com.labelprinter.android.Common.DownTimer;
 import com.labelprinter.android.Common.LocalStorageManager;
+import com.labelprinter.android.DBManager.DbHelper;
+import com.labelprinter.android.DBManager.Queries;
 import com.labelprinter.android.Dialogs.DeviceSettingDialog;
 import com.labelprinter.android.Dialogs.InvoiceDialog;
 import com.labelprinter.android.Dialogs.StartModeDialog;
@@ -66,7 +68,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         loadingLayout.setVisibility(View.INVISIBLE);
     }
 
-    private void checkingPrintState(final LabelPrinter printer) {
+    private void checkingPrintState(final LabelPrinter printer, final int value, final String only) {
         isLoading = true;
         loadingLayout.setVisibility(View.VISIBLE);
         final DownTimer myTimer = new DownTimer(1, 500);
@@ -92,6 +94,9 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                     }else { // completed print
                         cm.hasPrintingErr = false;
                         loadingLayout.setVisibility(View.INVISIBLE);
+                        DbHelper dbHelper = new DbHelper(currentActivity);
+                        Queries query = new Queries(null, dbHelper);
+                        query.addInvoiceInfoWithData(value, only, 1);
                         myTimer.initialize();
                         isLoading = false;
                     }
@@ -130,8 +135,13 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.invoiceBtn:
                 InvoiceDialog invoiceDialog = new InvoiceDialog(currentActivity, new InvoiceDialog.InvoicePrinterListner() {
                     @Override
-                    public void OnInvoiceBtnClicked(LabelPrinter printer) {
-                        checkingPrintState(printer);
+                    public void OnInvoiceBtnClicked(LabelPrinter printer, int value, String only) {
+                        //test
+                        DbHelper dbHelper = new DbHelper(currentActivity);
+                        Queries query = new Queries(null, dbHelper);
+                        query.addInvoiceInfoWithData(value, only, 1);
+
+//                        checkingPrintState(printer, value, only);
                     }
                 });
                 invoiceDialog.show();
