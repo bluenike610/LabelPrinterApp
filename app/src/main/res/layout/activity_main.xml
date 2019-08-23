@@ -1,0 +1,884 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".Activities.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomLayout"
+        android:weightSum="10">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp"
+            android:layout_weight="7">
+
+            <LinearLayout
+                android:id="@+id/buttonGroup"
+                android:layout_width="400dp"
+                android:layout_height="60dp"
+                android:orientation="horizontal"
+                android:layout_marginBottom="-2dp"
+                android:weightSum="4">
+
+                <LinearLayout
+                    android:id="@+id/ticketTypeLayout1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/border_white"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/ticketType1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/screen_label_text_font"
+                        android:text="@string/workday"
+                        android:textColor="@color/black"
+                        android:layout_margin="15dp"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ticketTypeLayout2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/border_main"
+                    android:layout_marginLeft="-2dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/ticketType2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/screen_label_text_font"
+                        android:text="@string/holiday"
+                        android:textColor="@color/black"
+                        android:layout_margin="15dp"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ticketTypeLayout3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/border_main"
+                    android:layout_marginLeft="-2dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/ticketType3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/screen_label_text_font"
+                        android:text="@string/mmc"
+                        android:textColor="@color/black"
+                        android:layout_margin="15dp"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ticketTypeLayout4"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/border_main"
+                    android:layout_marginLeft="-2dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/ticketType4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textSize="@dimen/screen_label_text_font"
+                        android:text="@string/kmc"
+                        android:textColor="@color/black"
+                        android:layout_margin="15dp"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/buttonGroup"
+                android:orientation="vertical"
+                android:background="@drawable/border_white"
+                android:weightSum="4"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:weightSum="5">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" >
+
+                        <TextView
+                            android:id="@+id/ticket11"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:layout_margin="5dp"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/ticket12"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/ticket13"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/ticket14"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/ticket15"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:weightSum="5">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" >
+
+                        <TextView
+                            android:id="@+id/ticket21"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:layout_margin="5dp"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/ticket22"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/ticket23"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/ticket24"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/ticket25"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:weightSum="5">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" >
+
+                        <TextView
+                            android:id="@+id/ticket31"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:layout_margin="5dp"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/ticket32"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/ticket33"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/ticket34"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/ticket35"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:weightSum="5">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1" >
+
+                        <TextView
+                            android:id="@+id/ticket41"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:layout_margin="5dp"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/ticket42"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/ticket43"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/ticket44"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/ticket_btn_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:id="@+id/ticket45"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border_ticket_bg"
+                            android:textSize="@dimen/screen_label_text_font"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="400dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="58dp"
+                android:weightSum="4"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/overLayer1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="2dp"
+                    android:visibility="visible"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"/>
+
+                <LinearLayout
+                    android:id="@+id/overLayer2"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:layout_marginLeft="-1dp"
+                    android:layout_marginRight="3dp"
+                    android:visibility="invisible"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"/>
+
+                <LinearLayout
+                    android:id="@+id/overLayer3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:layout_marginLeft="-2dp"
+                    android:layout_marginRight="2dp"
+                    android:visibility="invisible"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"/>
+
+                <LinearLayout
+                    android:id="@+id/overLayer4"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="-1dp"
+                    android:layout_marginRight="1dp"
+                    android:background="@color/white"
+                    android:visibility="invisible"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="3">
+
+            <ScrollView
+                android:id="@+id/ticketScroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/border_white"
+                android:layout_marginBottom="20dp"
+                android:layout_above="@+id/sumLayout"
+                android:focusable="true"
+                android:focusableInTouchMode="true">
+
+                <LinearLayout
+                    android:id="@+id/ticketListLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+
+            </ScrollView>
+
+            <LinearLayout
+                android:id="@+id/sumLayout"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/border_white"
+                android:orientation="vertical"
+                android:weightSum="3"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:textSize="@dimen/screen_label_text_font"
+                    android:text="@string/lb_sum"
+                    android:gravity="center|left"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="100dp"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:id="@+id/sumPriceTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:textSize="55dp"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:layout_weight="2"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/bottomLayout"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:orientation="horizontal"
+        android:layout_above="@+id/statusLayout"
+        android:weightSum="8">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btnSystem"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/normal_button"
+                android:textSize="@dimen/screen_btn_text_font"
+                android:text="@string/btn_system"
+                android:gravity="center"
+                android:layout_marginRight="10dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btnReport"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/normal_button"
+                android:textSize="@dimen/screen_btn_text_font"
+                android:text="@string/btn_report"
+                android:gravity="center"
+                android:layout_marginRight="10dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btnClear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/normal_button"
+                android:textSize="@dimen/screen_btn_text_font"
+                android:text="@string/btn_clear"
+                android:gravity="center"
+                android:layout_marginRight="10dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btnRefund"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/normal_button"
+                android:textSize="@dimen/screen_btn_text_font"
+                android:text="@string/btn_refund"
+                android:gravity="center"
+                android:layout_marginRight="10dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btnReticketing"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/normal_button"
+                android:gravity="center"
+                android:text="@string/btn_reticketing"
+                android:textSize="@dimen/screen_btn_text_font" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btnConsign"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/normal_button"
+                android:textSize="@dimen/screen_btn_text_font"
+                android:text="@string/btn_consign"
+                android:gravity="center"
+                android:layout_marginRight="10dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btnReceivable"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/normal_button"
+                android:gravity="center"
+                android:text="@string/btn_receivable"
+                android:textSize="@dimen/screen_btn_text_font" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btnCash"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/normal_button"
+                android:textSize="@dimen/screen_btn_text_font"
+                android:text="@string/btn_cash"
+                android:gravity="center"
+                android:layout_marginRight="20dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/normal_button"
+                android:textSize="@dimen/screen_btn_text_font"
+                android:text="@string/login"
+                android:gravity="center"
+                android:layout_marginRight="20dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/statusLayout"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/separater1"
+            android:background="@color/SEPARATER_BCOLOR"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+        <TextView
+            android:id="@+id/userInfo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|right"
+            android:paddingRight="16dp"
+            android:lines="1"
+            android:textSize="@dimen/status_text_font" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/loadingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/half_transfer">
+
+        <RelativeLayout
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_loading"
+            android:padding="20dp">
+
+            <ProgressBar
+                android:id="@+id/loading_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminateTintMode="src_atop"
+                android:indeterminateTint="@color/black"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/loading_spinner"
+                android:text="@string/lb_printing"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="20dp"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
