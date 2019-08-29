@@ -7,7 +7,7 @@ public class Config {
     public static String USER_NAME = "MyLogin";
     public static String PASSWORD = "1111111111111111";
 
-//    public static String XML_NAME = "スキー場発券システム設定1.xml";
-    public static String XML_NAME = "ticket.xml.txt";
+    public static String XML_NAME = "スキー場発券システム設定1.xml";
+//    public static String XML_NAME = "ticket.xml.txt";
     public static String CONFIG_NAME = "config.xml";
 }

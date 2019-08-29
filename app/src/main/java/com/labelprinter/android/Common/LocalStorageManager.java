@@ -77,5 +77,18 @@ public class LocalStorageManager {
         String syncState = sharedPreferences.getString("ticket_names", null);
         return syncState;
     }
+
+    public void saveXMLFile(String fname) {
+        SharedPreferences sharedPreferences = Common.myApp.getSharedPreferences(String.valueOf(R.string.app_name), Common.myApp.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("xml_name", fname);
+        editor.commit();
+    }
+
+    public String getXMLFile() {
+        SharedPreferences sharedPreferences = Common.myApp.getSharedPreferences(String.valueOf(R.string.app_name), Common.myApp.MODE_PRIVATE);
+        String syncState = sharedPreferences.getString("xml_name", null);
+        return syncState;
+    }
 }
 

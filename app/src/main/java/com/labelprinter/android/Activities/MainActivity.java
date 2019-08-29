@@ -1,10 +1,13 @@
 package com.labelprinter.android.Activities;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -28,9 +31,12 @@ import com.labelprinter.android.Models.TicketModel;
 import com.labelprinter.android.Models.TicketType;
 import com.labelprinter.android.PrinterManager.PrinterManager;
 import com.labelprinter.android.R;
+import com.labelprinter.android.Utils.DialogManager;
 import com.labelprinter.android.Views.TicketListItemView;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.labelprinter.android.Common.Common.cm;
 import static com.labelprinter.android.Common.Common.currentActivity;
@@ -65,44 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         currentActivity = this;
         super.onResume();
 
-        TextView userInfo = findViewById(R.id.userInfo);
-        userInfo.setText(cm.getUserInfo());
-
-        if (cm.ticketTypes.size() > 0) {
-            LocalStorageManager localStorageManager = new LocalStorageManager();
-            String result = localStorageManager.getHideTicketType();
-            ArrayList<String> hideTypes = new ArrayList<>();
-            tabList = new ArrayList<>();
-            if (result != null) {
-                if (!result.equals("")) {
-                    hideTypes = cm.convertToArrayListFromString(result);
-                    for (TicketType type : cm.ticketTypes) {
-                        boolean isHidden = false;
-                        for (String name : hideTypes) {
-                            if (type.getName().equals(name)) {
-                                isHidden = true;
-                            }
-                        }
-                        if (!isHidden)
-                            tabList.add(type);
-                    }
-                }else {
-                    tabList = (ArrayList<TicketType>) cm.ticketTypes.clone();
-                }
-            }else {
-                tabList = (ArrayList<TicketType>) cm.ticketTypes.clone();
-            }
-            for (int i=0; i<tabViewArr.size(); i++) {
-                if (i > tabList.size()-1) {
-                    tabLayoutArr.get(i).setVisibility(View.INVISIBLE);
-                }else {
-                    tabLayoutArr.get(i).setVisibility(View.VISIBLE);
-                    TicketType type = tabList.get(i);
-                    tabViewArr.get(i).setText(type.getName());
-                }
-
-            }
-        }
+        showTabs();
     }
 
     @Override
@@ -135,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tabLayoutArr = new ArrayList<>();
         tabMaskArr = new ArrayList<>();
         tabViewArr = new ArrayList<>();
-
         ticketingList = new ArrayList<>();
 
         ArrayList<TextView> items1 = new ArrayList<>();
@@ -235,6 +203,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         }
                     });
+                }else {
+                    GradientDrawable bgShape = (GradientDrawable) view.getBackground();
+                    bgShape.mutate();
+                    bgShape.setColor(Color.parseColor("#E0E0E0"));
+                    view.setText("");
+                    view.setOnClickListener(null);
+                    view.setOnLongClickListener(null);
                 }
             }
         }
@@ -281,6 +256,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button cashBtn = findViewById(R.id.btnCash);
         cashBtn.setOnClickListener(this);
 
+        Button selectXmlBtn = findViewById(R.id.selectXML);
+        selectXmlBtn.setOnClickListener(this);
+
         ticketListView = findViewById(R.id.ticketListLayout);
         sumPriceTxt = findViewById(R.id.sumPriceTxt);
 
@@ -290,6 +268,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         loadingLayout.setVisibility(View.INVISIBLE);
 
         setTicketList();
+    }
+
+    private void showTabs() {
+        TextView userInfo = findViewById(R.id.userInfo);
+        userInfo.setText(cm.getUserInfo());
+
+        if (cm.ticketTypes.size() > 0) {
+            LocalStorageManager localStorageManager = new LocalStorageManager();
+            String result = localStorageManager.getHideTicketType();
+            ArrayList<String> hideTypes = new ArrayList<>();
+            tabList = new ArrayList<>();
+            if (result != null) {
+                if (!result.equals("")) {
+                    hideTypes = cm.convertToArrayListFromString(result);
+                    for (TicketType type : cm.ticketTypes) {
+                        boolean isHidden = false;
+                        for (String name : hideTypes) {
+                            if (type.getName().equals(name)) {
+                                isHidden = true;
+                            }
+                        }
+                        if (!isHidden)
+                            tabList.add(type);
+                    }
+                }else {
+                    tabList = (ArrayList<TicketType>) cm.ticketTypes.clone();
+                }
+            }else {
+                tabList = (ArrayList<TicketType>) cm.ticketTypes.clone();
+            }
+            for (int i=0; i<tabViewArr.size(); i++) {
+                if (i > tabList.size()-1) {
+                    tabLayoutArr.get(i).setVisibility(View.INVISIBLE);
+                }else {
+                    tabLayoutArr.get(i).setVisibility(View.VISIBLE);
+                    TicketType type = tabList.get(i);
+                    tabViewArr.get(i).setText(type.getName());
+                }
+
+            }
+        }
     }
 
     private void setTicketList() {
@@ -355,6 +374,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Queries query = new Queries(null, dbHelper);
                     query.addSellInfoWithData(ticketingList, selectedPayType);
                     query.addInvoiceInfoWithData(value, only, selectedPayType);
+                    ticketingList.clear();
+                    setTicketList();
 
 //                    checkingPintState(printer, 1, value, only);
                 }
@@ -392,13 +413,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     currentActivity.getResources().getString(R.string.printing_err_msg), new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-
                                         }
                                     }, null);
                             return;
                         }
                     }else { // completed print
-
                         if (invoiceOption != 2) {
                             DbHelper dbHelper = new DbHelper(currentActivity);
                             Queries query = new Queries(null, dbHelper);
@@ -406,7 +425,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             if (invoiceOption == 1)
                                 query.addInvoiceInfoWithData(invoiceValue, invoiceOnlyStr, selectedPayType);
                         }
-
                         ticketingList.clear();
                         setTicketList();
                         cm.hasPrintingErr = false;
@@ -424,10 +442,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onTick(int progressValue) {
-
             }
         });
         myTimer.start();
+    }
+
+    private void selectXML() {
+        File root = android.os.Environment.getExternalStorageDirectory();
+        File dir = new File(root.getAbsolutePath() + "/LabelPrinter");
+        File[] files = dir.listFiles();
+        if (files.length > 0) {
+            final String[] fileList = new String[files.length];
+            int ind = 0;
+
+            for (int i = 0; i < files.length; i++)
+            {
+                fileList[i] = files[i].getName();
+            }
+            DialogManager.showRadioDialog(
+                    this,
+                    getResources().getString(R.string.select_xml_title),
+                    fileList,
+                    null,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            LocalStorageManager localStorageManager = new LocalStorageManager();
+                            localStorageManager.saveXMLFile(fileList[which]);
+                            cm.getTicketInfoFromXml();
+
+                            localStorageManager.saveHideTicketType(null);
+                            initUI();
+                            showTabs();
+                            tabChanged(0);
+                        }
+                    });
+        }else {
+            Common.cm.showAlertDlg(currentActivity.getResources().getString(R.string.no_xml_title),
+                    currentActivity.getResources().getString(R.string.no_xml_msg), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    }, null);
+            return;
+        }
+
     }
 
     @Override
@@ -480,6 +539,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnCash:
                 showTicketingDlg(4);
                 selectedPayType = 1;
+                break;
+            case R.id.selectXML:
+                selectXML();
                 break;
         }
     }

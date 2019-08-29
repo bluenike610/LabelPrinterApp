@@ -81,7 +81,7 @@ public class TicketingDlg extends Dialog {
                     if (!String.valueOf(preMoney).equals(val)) {
                         preMoney = Long.valueOf(String.valueOf(val));
                         preMoneyTxt.setText(cm.numberFormat(cm.parseInteger(String.valueOf(preMoney))));
-                        remainMoney = (int) (ticketingMoney - preMoney);
+                        remainMoney = (int) (preMoney - ticketingMoney);
                         remainMoneyTxt.setText(cm.numberFormat(remainMoney) + currentActivity.getResources().getString(R.string.lb_yen));
                     }
                 }

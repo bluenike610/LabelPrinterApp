@@ -162,7 +162,12 @@ public class Common {
     }
 
     public void getTicketInfoFromXml () {
-        String sampleXml = readFromXml(Config.XML_NAME);
+        LocalStorageManager localStorageManager = new LocalStorageManager();
+        String fname =  localStorageManager.getXMLFile();
+        if (fname == null) {
+            fname = Config.XML_NAME;
+        }
+        String sampleXml = readFromXml(fname);
         if (!sampleXml.equals("")) {
 
 //            XmlToJson xmlToJson = new XmlToJson.Builder(String.valueOf(sampleXml)).build();
@@ -175,6 +180,7 @@ public class Common {
 
                 Object json = ticketTypeObj.get("ticket");
 
+                ticketTypes.clear();
                 if (json instanceof JSONObject) {
                     JSONObject ticket = ticketTypeObj.getJSONObject("ticket");
                     TicketType type = new TicketType();
@@ -213,6 +219,7 @@ public class Common {
                     }
                 }
 
+                printerInfos.clear();
                 JSONObject printInfoObj = ticketObject.getJSONObject("printinfo");
                 json = printInfoObj.get("印字設定");
                 if (json instanceof JSONObject) {
@@ -262,6 +269,7 @@ public class Common {
                     }
                 }
 
+                ticketModels.clear();
                 if (ticketObject.has("Item")) {
                     json = ticketObject.get("Item");
                     if (json instanceof JSONObject) {
