@@ -116,6 +116,13 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         LocalStorageManager localStorageManager = new LocalStorageManager();
+        String userId = localStorageManager.getLoginStatus();
+        if (userId != null) {
+            userid.setText(userId);
+        }else {
+            userid.setText("");
+        }
+        password.setText("");
         String val = localStorageManager.getStartMode();
         if (val != null) {
             if (val.equals("online")) {
@@ -226,7 +233,7 @@ public class LoginActivity extends AppCompatActivity {
 //        user.setName("テスター");
 //        user.setPassword("111111");
         if (user != null) {
-            manager.saveLoginInfo("logined");
+            manager.saveLoginInfo(user.getId());
             cm.me = user;
             Intent intent = new Intent(currentActivity, MainActivity.class);
             startActivity(intent);
@@ -257,7 +264,7 @@ public class LoginActivity extends AppCompatActivity {
 //        cm.me = user;
         if (user != null) {
             query.addUserInfo(user);
-            manager.saveLoginInfo("logined");
+            manager.saveLoginInfo(user.getId());
             cm.me = user;
             Intent intent = new Intent(cm.currentActivity, MainActivity.class);
             startActivity(intent);

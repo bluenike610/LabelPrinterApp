@@ -16,7 +16,7 @@ import com.labelprinter.android.Common.LocalStorageManager;
 import com.labelprinter.android.DBManager.DbHelper;
 import com.labelprinter.android.DBManager.Queries;
 import com.labelprinter.android.Dialogs.DeviceSettingDialog;
-import com.labelprinter.android.Dialogs.InvoiceDialog;
+import com.labelprinter.android.Dialogs.ReceiptDialog;
 import com.labelprinter.android.Dialogs.StartModeDialog;
 import com.labelprinter.android.Dialogs.TicketTypeSettingDialog;
 import com.labelprinter.android.R;
@@ -51,7 +51,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         findViewById(R.id.startModeBtn).setOnClickListener(this);
         findViewById(R.id.deviceSettingBtn).setOnClickListener(this);
         findViewById(R.id.ticketTypeBtn).setOnClickListener(this);
-        findViewById(R.id.invoiceBtn).setOnClickListener(this);
+        findViewById(R.id.receiptBtn).setOnClickListener(this);
         findViewById(R.id.backBtn).setOnClickListener(this);
 
         serverIPTxt = findViewById(R.id.serverIPTxt);
@@ -96,7 +96,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                         loadingLayout.setVisibility(View.INVISIBLE);
                         DbHelper dbHelper = new DbHelper(currentActivity);
                         Queries query = new Queries(null, dbHelper);
-                        query.addInvoiceInfoWithData(value, only, 1);
+                        query.addReceiptInfoWithData(value, only, 1);
                         myTimer.initialize();
                         isLoading = false;
                     }
@@ -132,19 +132,19 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 TicketTypeSettingDialog ticketTypeSettingDialog = new TicketTypeSettingDialog(currentActivity);
                 ticketTypeSettingDialog.show();
                 break;
-            case R.id.invoiceBtn:
-                InvoiceDialog invoiceDialog = new InvoiceDialog(currentActivity, new InvoiceDialog.InvoicePrinterListner() {
+            case R.id.receiptBtn:
+                ReceiptDialog receiptDialog = new ReceiptDialog(currentActivity, new ReceiptDialog.ReceiptPrinterListner() {
                     @Override
-                    public void OnInvoiceBtnClicked(LabelPrinter printer, int value, String only) {
+                    public void OnReceiptBtnClicked(LabelPrinter printer, int value, String only) {
                         //test
                         DbHelper dbHelper = new DbHelper(currentActivity);
                         Queries query = new Queries(null, dbHelper);
-                        query.addInvoiceInfoWithData(value, only, 1);
+                        query.addReceiptInfoWithData(value, only, 1);
 
 //                        checkingPrintState(printer, value, only);
                     }
                 });
-                invoiceDialog.show();
+                receiptDialog.show();
                 break;
             case R.id.backBtn:
                 finish();

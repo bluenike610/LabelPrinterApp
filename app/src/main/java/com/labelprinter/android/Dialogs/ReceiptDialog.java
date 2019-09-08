@@ -21,15 +21,15 @@ import com.labelprinter.android.R;
 import static com.labelprinter.android.Common.Common.cm;
 import static com.labelprinter.android.Common.Common.currentActivity;
 
-public class InvoiceDialog extends Dialog {
+public class ReceiptDialog extends Dialog {
 
     private long money = 0;
-    private EditText moneyTxt, invoiceTxt;
-    private InvoicePrinterListner listner;
+    private EditText moneyTxt, receiptTxt;
+    private ReceiptPrinterListner listner;
 
-    public InvoiceDialog(@NonNull Context context, final InvoicePrinterListner listner) {
+    public ReceiptDialog(@NonNull Context context, final ReceiptPrinterListner listner) {
         super(context);
-        setContentView(R.layout.invoice_dialog);
+        setContentView(R.layout.receipt_dialog);
         this.listner = listner;
 
         moneyTxt = findViewById(R.id.preMoney);
@@ -58,15 +58,15 @@ public class InvoiceDialog extends Dialog {
             }
         });
 
-        invoiceTxt = findViewById(R.id.invoiceTxt);
+        receiptTxt = findViewById(R.id.receiptTxt);
 
 
-        findViewById(R.id.ticketingInvoiceBtn).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.ticketingReceiptBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (invoiceTxt.getText().toString().equals("") || money == 0) {
+                if (receiptTxt.getText().toString().equals("") || money == 0) {
                     Common.cm.showAlertDlg(currentActivity.getResources().getString(R.string.input_err_title),
-                            currentActivity.getResources().getString(R.string.invoice_name_err_msg), new DialogInterface.OnClickListener() {
+                            currentActivity.getResources().getString(R.string.receipt_name_err_msg), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
 
@@ -77,11 +77,11 @@ public class InvoiceDialog extends Dialog {
                     //print
                     if (listner != null) {
                         PrinterManager manager = new PrinterManager();
-                        LabelPrinter printer = manager.invoiceOnlyPrintStart(money, invoiceTxt.getText().toString());
+                        LabelPrinter printer = manager.receiptOnlyPrintStart(money, receiptTxt.getText().toString());
 
                         //test
 //                        if(printer != null) {
-                            listner.OnInvoiceBtnClicked(printer, (int) money, invoiceTxt.getText().toString());
+                            listner.OnReceiptBtnClicked(printer, (int) money, receiptTxt.getText().toString());
                             dismiss();
 //                        }
                     }
@@ -93,7 +93,7 @@ public class InvoiceDialog extends Dialog {
         userInfo.setText(cm.getUserInfo());
     }
 
-    public interface InvoicePrinterListner {
-        public abstract void OnInvoiceBtnClicked(LabelPrinter printer, int value, String only);
+    public interface ReceiptPrinterListner {
+        public abstract void OnReceiptBtnClicked(LabelPrinter printer, int value, String only);
     }
 }

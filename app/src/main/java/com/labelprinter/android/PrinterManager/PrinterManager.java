@@ -41,7 +41,7 @@ public class PrinterManager {
         getPermissions(permissions);
     }
 
-    public LabelPrinter printerStart(ArrayList<TicketInfo> infos, long invoceMoney, String invoiceName) {
+    public LabelPrinter printerStart(ArrayList<TicketInfo> infos, long receiptMoney, String receiptName) {
         this.ticketInfos = infos;
         // Constructor
         LabelPrinter printer = new LabelPrinter();
@@ -79,13 +79,13 @@ public class PrinterManager {
                         if (LabelConst.CLS_SUCCESS != printResult) {
                             cm.hasPrintingErr = true;
                         }
-                        if (invoceMoney > 0) {
+                        if (receiptMoney > 0) {
                             // Set Property (Cut on last page)
                             printer.setMediaHandling(LabelConst.CLS_MEDIAHANDLING_CUT);
 
                             // Print label
 
-                            getDesignFromInvoiceInfo(design, invoceMoney, invoiceName);
+                            getDesignFromReceiptInfo(design, receiptMoney, receiptName);
                             printResult = printer.print(design, 1);
                             if (LabelConst.CLS_SUCCESS != printResult) {
                                 cm.hasPrintingErr = true;
@@ -102,7 +102,7 @@ public class PrinterManager {
                         }
                     }
                 }
-                if (invoceMoney > 0) {
+                if (receiptMoney > 0) {
 
                 }
             }
@@ -118,7 +118,7 @@ public class PrinterManager {
         return printer;
     }
 
-    public LabelPrinter invoiceOnlyPrintStart(long invoceMoney, String invoiceName) {
+    public LabelPrinter receiptOnlyPrintStart(long receiptMoney, String receiptName) {
         // Constructor
         LabelPrinter printer = new LabelPrinter();
 
@@ -141,7 +141,7 @@ public class PrinterManager {
 
             // Print label
 
-            getDesignFromInvoiceInfo(design, invoceMoney, invoiceName);
+            getDesignFromReceiptInfo(design, receiptMoney, receiptName);
             cm.hasPrintingErr = false;
             int printResult = printer.print(design, 1);
             if (LabelConst.CLS_SUCCESS != printResult) {
@@ -321,7 +321,7 @@ public class PrinterManager {
         }
     }
 
-    private void getDesignFromInvoiceInfo (LabelDesign design, long invoiceMoney, String invoiceName) {
+    private void getDesignFromReceiptInfo (LabelDesign design, long receiptMoney, String receiptName) {
         if (cm.printerInfos.size() >0) {
             for (PrinterInfo info : cm.printerInfos) {
                 if (info.getType().equals("TICKET") || info.getIsShown().equals("0"))
@@ -359,16 +359,16 @@ public class PrinterManager {
                             content = info.getFormat();
                             break;
                         case 3:
-                            content = "領収金額　： " + invoiceMoney;
+                            content = "領収金額　： " + receiptMoney;
                             break;
                         case 5:
-                            content = "但し　： " + invoiceName;
+                            content = "但し　： " + receiptName;
                             break;
                         case 7:
                             DbHelper dbHelper = new DbHelper(currentActivity);
                             Queries query = new Queries(null, dbHelper);
-                            int invoiceNum = query.getEndNumberWithSection("RYOSHUSHO") + 1;
-                            content = "No　： " + invoiceNum;
+                            int receiptNum = query.getEndNumberWithSection("RYOSHUSHO") + 1;
+                            content = "No　： " + receiptNum;
                             break;
                         default:
                             content = "";

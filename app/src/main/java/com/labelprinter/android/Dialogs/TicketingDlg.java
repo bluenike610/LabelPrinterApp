@@ -41,7 +41,7 @@ public class TicketingDlg extends Dialog {
     private int ticketingMoney, remainMoney;
     private long preMoney = 0;
     private TextView ticketingMoneyTxt, remainMoneyTxt;
-    private EditText preMoneyTxt, invoiceTxt;
+    private EditText preMoneyTxt, receiptTxt;
 
     public TicketingDlg(@NonNull Context context, final int type, ArrayList<TicketInfo> datas, final TicketingLinstener linstener) {
         super(context);
@@ -62,7 +62,7 @@ public class TicketingDlg extends Dialog {
             ticketingMoneyLb.setText(R.string.ticketing_money);
 
         preMoneyTxt = findViewById(R.id.preMoney);
-        invoiceTxt = findViewById(R.id.invoiceTxt);
+        receiptTxt = findViewById(R.id.receiptTxt);
         if (type == 4) {
             InputFilter[] FilterArray = new InputFilter[1];
             FilterArray[0] = new InputFilter.LengthFilter(10);
@@ -92,7 +92,7 @@ public class TicketingDlg extends Dialog {
             });
         }else {
             preMoneyTxt.setEnabled(false);
-//            invoiceTxt.setEnabled(false);
+//            receiptTxt.setEnabled(false);
         }
 
         Button ticketingBtn = findViewById(R.id.ticketingBtn);
@@ -129,15 +129,15 @@ public class TicketingDlg extends Dialog {
             }
         });
 
-        Button ticketingInvoiceBtn = findViewById(R.id.ticketingInvoiceBtn);
-        ticketingInvoiceBtn.setOnClickListener(new View.OnClickListener() {
+        Button ticketingReceiptBtn = findViewById(R.id.ticketingReceiptBtn);
+        ticketingReceiptBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (paymentType == 0) {
                     linstener.OnRefundTicketingBtnClicked();
                     dismiss();
                 }else {
-                    if (preMoney == 0 || invoiceTxt.getText().toString().equals("")) {
+                    if (preMoney == 0 || receiptTxt.getText().toString().equals("")) {
                         Common.cm.showAlertDlg(currentActivity.getResources().getString(R.string.input_err_title),
                                 currentActivity.getResources().getString(R.string.price_name_err_msg), new DialogInterface.OnClickListener() {
                                     @Override
@@ -149,11 +149,11 @@ public class TicketingDlg extends Dialog {
                     }else {
                         if (linstener != null) {
                             PrinterManager manager = new PrinterManager();
-                            LabelPrinter printer = manager.printerStart(models, ticketingMoney, invoiceTxt.getText().toString());
+                            LabelPrinter printer = manager.printerStart(models, ticketingMoney, receiptTxt.getText().toString());
 
                             //test
 //                            if(printer != null) {
-                                linstener.OnTicketingInvoiceBtnClicked(printer, Integer.valueOf((int) preMoney), invoiceTxt.getText().toString());
+                                linstener.OnTicketingReceiptBtnClicked(printer, Integer.valueOf((int) preMoney), receiptTxt.getText().toString());
                                 dismiss();
 //                            }
                         }
@@ -192,7 +192,7 @@ public class TicketingDlg extends Dialog {
 
     public interface TicketingLinstener {
         public abstract void OnTicketingBtnClicked(LabelPrinter printer);
-        public abstract void OnTicketingInvoiceBtnClicked(LabelPrinter printer, int value, String only);
+        public abstract void OnTicketingReceiptBtnClicked(LabelPrinter printer, int value, String only);
         public abstract void OnRefundTicketingBtnClicked();
     }
 }

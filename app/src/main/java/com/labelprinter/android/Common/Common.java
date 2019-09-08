@@ -144,6 +144,7 @@ public class Common {
     }
 
     public void getConfigInfoFromXml() {
+/*
         String sampleXml = readFromXml(Config.CONFIG_NAME);
         if (!sampleXml.equals("")) {
             JSONObject jsonObject = null;
@@ -159,6 +160,7 @@ public class Common {
                 e.printStackTrace();
             }
         }
+*/
     }
 
     public void getTicketInfoFromXml () {
@@ -358,11 +360,11 @@ public class Common {
                     }
                 }
                 myReader.close();
-                if (fname.equals(Config.XML_NAME)) {
+//                if (fname.equals(Config.XML_NAME)) {
                     DbHelper dbHelper = new DbHelper(currentActivity);
                     Queries query = new Queries(null, dbHelper);
-                    query.addReadXMLdata(Config.XML_NAME, aBuffer);
-                }
+                    query.addReadXMLdata(fname, aBuffer);
+//                }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {

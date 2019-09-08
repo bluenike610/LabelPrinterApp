@@ -335,7 +335,7 @@ public class APIManager {
                 }
 
                 //dat_ryoshu
-                list = query.getInvoiceData(calendar);
+                list = query.getReceiptData(calendar);
                 if (list.size() > 0) {
                     for (HashMap data : list) {
                         if (data != null) {
@@ -379,21 +379,21 @@ public class APIManager {
                 }
 
                 //dat_history
-//                list = query.getReadXMLData(calendar);
-//                if (list.size() > 0) {
-//                    for (HashMap data : list) {
-//                        if (data != null) {
-//                            st.executeUpdate("INSERT INTO dat_history (tanmatsumei, filemei, filenaiyo, sakuseiuserid, sakuseinichiji, koshinuserid, koshinnichiji)VALUES(" +
-//                                    "'"+ data.get("tanmatsumei") +"', " +
-//                                    "'"+ data.get("filemei") +"', " +
-//                                    "'"+ data.get("filenaiyo") +"', " +
-//                                    "'"+ data.get("sakuseiuserid") +"', " +
-//                                    "'"+ data.get("sakuseinichiji") +"', " +
-//                                    "'"+ data.get("koshinuserid") +"', " +
-//                                    "'"+ data.get("koshinnichiji") + "')");
-//                        }
-//                    }
-//                }
+                list = query.getReadXMLData(calendar);
+                if (list.size() > 0) {
+                    for (HashMap data : list) {
+                        if (data != null) {
+                            st.executeUpdate("INSERT INTO dat_history (tanmatsumei, filemei, filenaiyo, sakuseiuserid, sakuseinichiji, koshinuserid, koshinnichiji) VALUES(" +
+                                    "'"+ data.get("tanmatsumei") +"', " +
+                                    "'"+ data.get("filemei") +"', " +
+                                    "'"+ data.get("filenaiyo") +"', " +
+                                    "'"+ data.get("sakuseiuserid") +"', " +
+                                    "'"+ data.get("sakuseinichiji") +"', " +
+                                    "'"+ data.get("koshinuserid") +"', " +
+                                    "'"+ data.get("koshinnichiji") + "')");
+                        }
+                    }
+                }
             } catch (SQLException e) {
                 return false;
             }
@@ -425,6 +425,9 @@ public class APIManager {
                     st.executeUpdate("DELETE FROM dat_record WHERE koshinuserid = '" + cm.me.getId()
                             + "' and koshinnichiji >= '" + cm.converToDateTimeFormatFromTime(startTime)
                             + "' and koshinnichiji <= '" + cm.converToDateTimeFormatFromTime(endTime) + "'");
+                    String sss = "DELETE FROM dat_record WHERE koshinuserid = '" + cm.me.getId()
+                            + "' and koshinnichiji >= '" + cm.converToDateTimeFormatFromTime(startTime)
+                            + "' and koshinnichiji <= '" + cm.converToDateTimeFormatFromTime(endTime) + "'";
                     //dat_ryoshu
                     st.executeUpdate("DELETE FROM dat_ryoshu WHERE koshinuserid = '" + cm.me.getId()
                             + "' and koshinnichiji >= '" + cm.converToDateTimeFormatFromTime(startTime)
@@ -434,10 +437,33 @@ public class APIManager {
                             + "' and koshinnichiji >= '" + cm.converToDateTimeFormatFromTime(startTime)
                             + "' and koshinnichiji <= '" + cm.converToDateTimeFormatFromTime(endTime) + "'");
                     //dat_history
-//                    st.executeUpdate("DELETE FROM dat_history WHERE koshinnichiji >= " + cm.converToDateTimeFormatFromTime(startTime) + " end koshinnichiji <= " + cm.converToDateTimeFormatFromTime(endTime));
+                    st.executeUpdate("DELETE FROM dat_history WHERE koshinuserid = '" + cm.me.getId()
+                            + "' and koshinnichiji >= '" + cm.converToDateTimeFormatFromTime(startTime)
+                            + "' and koshinnichiji <= '" + cm.converToDateTimeFormatFromTime(endTime) + "'");
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+            } catch (SQLException e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean syncHistoryToServer(ContentValues data) {
+        Connection con = connectionclass();
+        if (con != null) {
+            Statement st = null;
+            try {
+                st = con.createStatement();
+                st.executeUpdate("INSERT INTO dat_history (tanmatsumei, filemei, filenaiyo, sakuseiuserid, sakuseinichiji, koshinuserid, koshinnichiji) VALUES(" +
+                        "'"+ data.get("tanmatsumei") +"', " +
+                        "'"+ data.get("filemei") +"', " +
+                        "'"+ data.get("filenaiyo") +"', " +
+                        "'"+ data.get("sakuseiuserid") +"', " +
+                        "'"+ cm.converToDateTimeFormatFromTime(Long.parseLong(String.format( "%.0f",data.get("sakuseinichiji")))) +"', " +
+                        "'"+ data.get("koshinuserid") +"', " +
+                        "'"+ cm.converToDateTimeFormatFromTime(Long.parseLong(String.format( "%.0f",data.get("koshinnichiji")))) + "')");
             } catch (SQLException e) {
                 return false;
             }

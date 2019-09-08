@@ -129,14 +129,14 @@
             android:weightSum="2">
 
             <Button
-                android:id="@+id/invoiceBtn"
+                android:id="@+id/receiptBtn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:background="@drawable/normal_button"
                 android:textColor="@color/black"
-                android:text="@string/btn_invoice"
+                android:text="@string/btn_receipt"
                 android:layout_marginRight="100dp"
                 android:textSize="@dimen/screen_btn_text_font" />
 
@@ -172,7 +172,7 @@
                 android:gravity="center"
                 android:background="@drawable/normal_button"
                 android:textColor="@color/black"
-                android:text="@string/btn_invoice"
+                android:text="@string/btn_receipt"
                 android:layout_marginRight="100dp"
                 android:visibility="invisible"
                 android:textSize="@dimen/screen_btn_text_font" />

@@ -376,7 +376,7 @@ public class Queries {
         return list;
     }
 
-    public void addInvoiceInfoWithData(int invoiceMoney, String onlyStr, int payType) {
+    public void addReceiptInfoWithData(int receiptMoney, String onlyStr, int payType) {
         db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         int num = addNumberWithSection("RYOSHUSHO");
@@ -390,7 +390,7 @@ public class Queries {
             values.put("hanbaibasho", "センターハウス2F発券場所1");
         }
         values.put("hakkonichiji", cm.convertToMilisecondsFromDate(new Date()));
-        values.put("ryoshukingaku", invoiceMoney);
+        values.put("ryoshukingaku", receiptMoney);
         values.put("tadashigaki", onlyStr);
         values.put("uriageno", payType);
         values.put("sakuseiuserid", cm.me.getId());
@@ -400,7 +400,7 @@ public class Queries {
         db.insert("dat_ryoshu", null, values);
     }
 
-    public ArrayList<HashMap> getInvoiceData(Calendar calendar) {
+    public ArrayList<HashMap> getReceiptData(Calendar calendar) {
         ArrayList<HashMap> list = new ArrayList<>();
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         try {
@@ -531,6 +531,8 @@ public class Queries {
         values.put("koshinuserid", cm.me.getId());
         values.put("koshinnichiji", cm.convertToMilisecondsFromDate(new Date()));
         db.insert("dat_history", null, values);
+        APIManager manager = new APIManager();
+//        manager.syncHistoryToServer(values);
     }
 
     public ArrayList<HashMap> getReadXMLData(Calendar calendar) {

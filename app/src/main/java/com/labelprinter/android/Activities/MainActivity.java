@@ -368,12 +368,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 @Override
-                public void OnTicketingInvoiceBtnClicked(LabelPrinter printer, int value, String only) { //to print
+                public void OnTicketingReceiptBtnClicked(LabelPrinter printer, int value, String only) { //to print
                     //test
                     DbHelper dbHelper = new DbHelper(currentActivity);
                     Queries query = new Queries(null, dbHelper);
                     query.addSellInfoWithData(ticketingList, selectedPayType);
-                    query.addInvoiceInfoWithData(value, only, selectedPayType);
+                    query.addReceiptInfoWithData(value, only, selectedPayType);
                     ticketingList.clear();
                     setTicketList();
 
@@ -395,7 +395,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void checkingPintState(final LabelPrinter printer, final int invoiceOption, final int invoiceValue, final String invoiceOnlyStr) {
+    private void checkingPintState(final LabelPrinter printer, final int receiptOption, final int receiptValue, final String receiptOnlyStr) {
         isLoading = true;
         loadingLayout.setVisibility(View.VISIBLE);
         final DownTimer myTimer = new DownTimer(1, 500);
@@ -418,12 +418,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             return;
                         }
                     }else { // completed print
-                        if (invoiceOption != 2) {
+                        if (receiptOption != 2) {
                             DbHelper dbHelper = new DbHelper(currentActivity);
                             Queries query = new Queries(null, dbHelper);
                             query.addSellInfoWithData(ticketingList, selectedPayType);
-                            if (invoiceOption == 1)
-                                query.addInvoiceInfoWithData(invoiceValue, invoiceOnlyStr, selectedPayType);
+                            if (receiptOption == 1)
+                                query.addReceiptInfoWithData(receiptValue, receiptOnlyStr, selectedPayType);
                         }
                         ticketingList.clear();
                         setTicketList();

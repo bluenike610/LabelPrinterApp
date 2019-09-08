@@ -198,7 +198,7 @@
                     android:textStyle="bold"/>
 
                 <RelativeLayout
-                    android:id="@+id/invoiceLayout"
+                    android:id="@+id/receiptLayout"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_below="@+id/ticketingBtn"
@@ -223,7 +223,7 @@
                     </LinearLayout>
 
                     <EditText
-                        android:id="@+id/invoiceTxt"
+                        android:id="@+id/receiptTxt"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentBottom="true"
@@ -243,15 +243,15 @@
 
 
                 <Button
-                    android:id="@+id/ticketingInvoiceBtn"
+                    android:id="@+id/ticketingReceiptBtn"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:layout_below="@+id/invoiceLayout"
+                    android:layout_below="@+id/receiptLayout"
                     android:layout_marginTop="30dp"
                     android:background="@drawable/normal_button"
                     android:textColor="@color/black"
                     android:textSize="30dp"
-                    android:text="@string/btn_invoice_pay"
+                    android:text="@string/btn_receipt_pay"
                     android:textStyle="bold"/>
 
             </RelativeLayout>

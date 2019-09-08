@@ -22,7 +22,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:textSize="@dimen/screen_label_text_font"
-                android:text="@string/lb_invoice_money"
+                android:text="@string/lb_receipt_money"
                 android:gravity="left|bottom"
                 android:textColor="@color/black"/>
 
@@ -74,7 +74,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/invoiceLayout"
+            android:id="@+id/receiptLayout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_below="@+id/moneyLayout"
@@ -101,7 +101,7 @@
             </LinearLayout>
 
             <EditText
-                android:id="@+id/invoiceTxt"
+                android:id="@+id/receiptTxt"
                 android:layout_width="0dp"
                 android:layout_weight="2"
                 android:layout_height="match_parent"
@@ -119,16 +119,16 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/ticketingInvoiceBtn"
+            android:id="@+id/ticketingReceiptBtn"
             android:layout_width="250dp"
             android:layout_height="60dp"
-            android:layout_below="@+id/invoiceLayout"
+            android:layout_below="@+id/receiptLayout"
             android:layout_marginTop="100dp"
             android:background="@drawable/normal_button"
             android:layout_centerHorizontal="true"
             android:textColor="@color/black"
             android:textSize="30dp"
-            android:text="@string/btn_invoice_only"
+            android:text="@string/btn_receipt_only"
             android:textStyle="bold"/>
 
     </RelativeLayout>
