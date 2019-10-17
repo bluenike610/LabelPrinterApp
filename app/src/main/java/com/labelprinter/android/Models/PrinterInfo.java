@@ -133,14 +133,17 @@ public class PrinterInfo {
         calendar.setTime(new Date());
         File root = android.os.Environment.getExternalStorageDirectory();
         File dir = new File(root.getAbsolutePath() + "/LabelPrinter/Images");
-        if(dir.exists()) {
-            File file = new File(dir, "img_" + calendar.getTimeInMillis() + ".png");
+        if(!dir.exists()) {
+            dir.mkdirs();
+        }
+        File file = new File(dir, "img_" + calendar.getTimeInMillis() + ".png");
+        if (val != null) {
             String fname = cm.writeToFile(val, file.getAbsolutePath());
             if (!fname.equals("")) {
                 setFileName(fname);
             }
-        }
             imgData = val;
+        }
     }
     public byte[] getImgData() {
         return imgData;

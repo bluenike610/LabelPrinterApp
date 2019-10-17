@@ -26,90 +26,23 @@
                 android:layout_height="60dp"
                 android:orientation="horizontal"
                 android:layout_marginBottom="-2dp"
-                android:weightSum="4">
+                android:background="@drawable/border_white">
 
-                <LinearLayout
-                    android:id="@+id/ticketTypeLayout1"
-                    android:layout_width="0dp"
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/border_white"
-                    android:layout_weight="1">
+                    android:layout_marginRight="1dp"
+                    android:layout_marginLeft="1dp">
 
-                    <TextView
-                        android:id="@+id/ticketType1"
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:id="@+id/tabItemLayout"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:textSize="@dimen/screen_label_text_font"
-                        android:text="@string/workday"
-                        android:textColor="@color/black"
-                        android:layout_margin="15dp"
-                        android:gravity="center"/>
+                        android:orientation="horizontal">
 
-                </LinearLayout>
+                    </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/ticketTypeLayout2"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/border_main"
-                    android:layout_marginLeft="-2dp"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:id="@+id/ticketType2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:textSize="@dimen/screen_label_text_font"
-                        android:text="@string/holiday"
-                        android:textColor="@color/black"
-                        android:layout_margin="15dp"
-                        android:gravity="center"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ticketTypeLayout3"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/border_main"
-                    android:layout_marginLeft="-2dp"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:id="@+id/ticketType3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:textSize="@dimen/screen_label_text_font"
-                        android:text="@string/mmc"
-                        android:textColor="@color/black"
-                        android:layout_margin="15dp"
-                        android:gravity="center"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ticketTypeLayout4"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/border_main"
-                    android:layout_marginLeft="-2dp"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:id="@+id/ticketType4"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:textSize="@dimen/screen_label_text_font"
-                        android:text="@string/kmc"
-                        android:textColor="@color/black"
-                        android:layout_margin="15dp"
-                        android:gravity="center"/>
-
-                </LinearLayout>
+                </HorizontalScrollView>
 
             </LinearLayout>
 
@@ -526,59 +459,6 @@
                     </LinearLayout>
 
                 </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="400dp"
-                android:layout_height="2dp"
-                android:layout_marginTop="58dp"
-                android:weightSum="4"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/overLayer1"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:layout_marginLeft="1dp"
-                    android:layout_marginRight="2dp"
-                    android:visibility="visible"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"/>
-
-                <LinearLayout
-                    android:id="@+id/overLayer2"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:layout_marginLeft="-1dp"
-                    android:layout_marginRight="3dp"
-                    android:visibility="invisible"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"/>
-
-                <LinearLayout
-                    android:id="@+id/overLayer3"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:layout_marginLeft="-2dp"
-                    android:layout_marginRight="2dp"
-                    android:visibility="invisible"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"/>
-
-                <LinearLayout
-                    android:id="@+id/overLayer4"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="-1dp"
-                    android:layout_marginRight="1dp"
-                    android:background="@color/white"
-                    android:visibility="invisible"
-                    android:layout_weight="1"
-                    android:orientation="horizontal"/>
 
             </LinearLayout>
 

@@ -20,6 +20,8 @@
     <string name="kmc">KMC</string>
     <string name="lb_printing">プリント中...</string>
     <string name="btn_select_xml">XMLの選択</string>
+    <string name="device_err_title">端末名エラー</string>
+    <string name="device_err_msg">端末名を設定する必要があります。</string>
 
     <!--Font-->
     <string name="FontM">Noto Sans CJK JP Medium</string>
@@ -36,6 +38,7 @@
     <string name="Continue">・・・</string>
 
     <!--　ログイン画面　-->
+    <string name="database_connect_loading">データベースへの接続中・・・</string>
     <string name="user_id">ユーザーID</string>
     <string name="password">パスワード</string>
     <string name="login">ログイン</string>
@@ -74,7 +77,7 @@
     <string name="lb_only">但し</string>
     <string name="btn_receipt_pay">会計 + 領収書発行</string>
     <string name="lb_yen">円</string>
-    <string name="price_err_msg">預り金を入力してください。</string>
+    <string name="price_err_msg">預り金が十分ではありません。</string>
     <string name="lb_yen2">¥</string>
     <string name="price_name_err_msg">預り金もしくは但し項目を入力してください。</string>
     <string name="printing_err_title">印刷エラー</string>

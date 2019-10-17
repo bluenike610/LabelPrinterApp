@@ -125,7 +125,13 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 startModeDialog.show();
                 break;
             case R.id.deviceSettingBtn:
-                DeviceSettingDialog deviceSettingDialog = new DeviceSettingDialog(currentActivity);
+                DeviceSettingDialog deviceSettingDialog = new DeviceSettingDialog(currentActivity, new DeviceSettingDialog.DeviceChangeListner() {
+                    @Override
+                    public void OnChangedDevice() {
+                        TextView userInfo = findViewById(R.id.userInfo);
+                        userInfo.setText(cm.getUserInfo());
+                    }
+                });
                 deviceSettingDialog.show();
                 break;
             case R.id.ticketTypeBtn:
@@ -141,7 +147,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                         Queries query = new Queries(null, dbHelper);
                         query.addReceiptInfoWithData(value, only, 1);
 
-//                        checkingPrintState(printer, value, only);
+                        checkingPrintState(printer, value, only);
                     }
                 });
                 receiptDialog.show();

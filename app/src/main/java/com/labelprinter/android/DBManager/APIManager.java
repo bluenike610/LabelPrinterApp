@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.os.StrictMode;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.labelprinter.android.Common.Common;
 import com.labelprinter.android.Common.Config;
 import com.labelprinter.android.Models.PrinterInfo;
 import com.labelprinter.android.Models.TicketInfo;
@@ -62,14 +64,17 @@ public class APIManager {
         }
         catch (SQLException se)
         {
+            Toast.makeText(currentActivity, "Database Error : " + se.getMessage(), Toast.LENGTH_LONG).show();
             return null;
         }
         catch (ClassNotFoundException e)
         {
+            Toast.makeText(currentActivity, "Database Error : " + e.getMessage(), Toast.LENGTH_LONG).show();
             return null;
         }
         catch (Exception e)
         {
+            Toast.makeText(currentActivity, "Database Error : " + e.getMessage(), Toast.LENGTH_LONG).show();
             return null;
         }
         return connection;
@@ -92,6 +97,7 @@ public class APIManager {
                 }
                 return user;
             } catch (SQLException e) {
+                Toast.makeText(currentActivity, "Database Error : " + e.getMessage(), Toast.LENGTH_LONG).show();
                 return null;
             }
         }
@@ -116,6 +122,7 @@ public class APIManager {
                 while (rs.next()) {
                     ContentValues values = new ContentValues();
                     values.put("ticketid", rs.getInt(1));
+                    values.put("tickettype", rs.getInt(1));// test
                     values.put("kenshumei", rs.getString(2));
                     values.put("kakaku", rs.getInt(3));
                     values.put("shohizeiritsu", rs.getString(4));
@@ -264,6 +271,38 @@ public class APIManager {
         }
     }
 
+    public void getCounterFromServer(String device_name) {
+        Connection con = connectionclass();
+        if (con != null) {
+            DbHelper dbHelper = new DbHelper(currentActivity);
+            Queries query = new Queries(null, dbHelper);
+            Statement st = null;
+            try {
+                st = con.createStatement();
+
+                //mst_counter
+                ResultSet rs = st.executeQuery("select * from mst_counter where saibancd = '" + device_name +"'");
+                rs.getMetaData();
+
+                while (rs.next()) {
+                    int receiptNum = query.getEndNumberWithSection(rs.getString(1));
+                    if (receiptNum < rs.getInt(3)) {
+                        ContentValues values = new ContentValues();
+                        values.put("saibankb", rs.getString(1));
+                        values.put("saibancd", device_name);
+                        values.put("genzaino", rs.getInt(3));
+                        values.put("sakuseiuserid", cm.me.getId());
+                        values.put("sakuseinichiji", cm.convertToMilisecondsFromDate(new Date()));
+                        values.put("koshinuserid", cm.me.getId());
+                        values.put("koshinnichiji", cm.convertToMilisecondsFromDate(new Date()));
+                        query.updateNumberMax(values);
+                    }
+                }
+            } catch (SQLException e) {
+            }
+        }
+    }
+
     public boolean syncToServer(Calendar calendar) {//mst_tanmatsu, mst_counter, dat_record, dat_ryoshu, dat_expense, dat_history
         Connection con = connectionclass();
         if (con != null) {
@@ -275,37 +314,39 @@ public class APIManager {
                 st = con.createStatement();
 
                 //mst_tanmatsu
-//                HashMap map = query.getDeviceInfo();
-//                if (map != null) {
-//                    st.executeUpdate("INSERT INTO mst_tanmatsu VALUES(" +
-//                            "'"+ map.get("tanmatsumei") +"', " +
-//                            map.get("tanmatsuno") + ", " +
-//                            "'"+ map.get("hanbaibasho") +"', " +
-//                            "'"+ map.get("sakuseiuserid") +"', " +
-//                            "'"+ map.get("sakuseinichiji") +"', " +
-//                            "'"+ map.get("koshinuserid") +"', " +
-//                            "'"+ map.get("koshinnichiji") + "')");
-//                }
+                HashMap map = query.getDeviceInfo();
+                if (map != null) {
+                    st.executeUpdate("DELETE FROM mst_tanmatsu where tanmatsumei = '" + map.get("tanmatsumei") +"'");
+                    st.executeUpdate("INSERT INTO mst_tanmatsu VALUES(" +
+                            "'"+ map.get("tanmatsumei") +"', " +
+                            map.get("tanmatsuno") + ", " +
+                            "'"+ map.get("hanbaibasho") +"', " +
+                            "'"+ map.get("sakuseiuserid") +"', " +
+                            "'"+ map.get("sakuseinichiji") +"', " +
+                            "'"+ map.get("koshinuserid") +"', " +
+                            "'"+ map.get("koshinnichiji") + "')");
+                }
 
                 //mst_counter
-//                ArrayList<HashMap> list = query.getNumberData(calendar);
-//                if (list.size() > 0) {
-//                    for (HashMap data : list) {
-//                        if (data != null) {
-//                            st.executeUpdate("INSERT INTO mst_counter VALUES(" +
-//                                    "'"+ data.get("saibankb") +"', " +
-//                                    "'"+ data.get("saibancd") +"', " +
-//                                    data.get("genzaino") + ", " +
-//                                    "'"+ data.get("sakuseiuserid") +"', " +
-//                                    "'"+ data.get("sakuseinichiji") +"', " +
-//                                    "'"+ data.get("koshinuserid") +"', " +
-//                                    "'"+ data.get("koshinnichiji") + "')");
-//                        }
-//                    }
-//                }
+                ArrayList<HashMap> list = query.getNumberData(calendar);
+                if (list.size() > 0) {
+                    for (HashMap data : list) {
+                        if (data != null) {
+                            st.executeUpdate("DELETE FROM mst_counter where saibancd = '" + data.get("saibancd") +"'");
+                            st.executeUpdate("INSERT INTO mst_counter VALUES(" +
+                                    "'"+ data.get("saibankb") +"', " +
+                                    "'"+ data.get("saibancd") +"', " +
+                                    data.get("genzaino") + ", " +
+                                    "'"+ data.get("sakuseiuserid") +"', " +
+                                    "'"+ data.get("sakuseinichiji") +"', " +
+                                    "'"+ data.get("koshinuserid") +"', " +
+                                    "'"+ data.get("koshinnichiji") + "')");
+                        }
+                    }
+                }
 
                 //dat_record
-                ArrayList<HashMap> list = query.getSellData(calendar);
+                list = query.getSellData(calendar);
                 if (list.size() > 0) {
                     for (HashMap data : list) {
                         if (data != null) {
@@ -395,6 +436,7 @@ public class APIManager {
                     }
                 }
             } catch (SQLException e) {
+                Toast.makeText(currentActivity, "Database Error : " + e.getMessage(), Toast.LENGTH_LONG).show();
                 return false;
             }
         }
@@ -406,6 +448,8 @@ public class APIManager {
         if (con != null) {
             Statement st = null;
             try {
+                DbHelper dbHelper = new DbHelper(currentActivity);
+                Queries query = new Queries(null, dbHelper);
                 st = con.createStatement();
 
                 DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
@@ -418,32 +462,29 @@ public class APIManager {
                     long endTime = calendar.getTimeInMillis();
 
                     //mst_tanmatsu
-//                    st.executeUpdate("DELETE FROM mst_tanmatsu WHERE koshinnichiji >= " + cm.converToDateTimeFormatFromTime(startTime) + " end koshinnichiji <= " + cm.converToDateTimeFormatFromTime(endTime));
-                    //mst_counter
-//                    st.executeUpdate("DELETE FROM mst_counter WHERE koshinnichiji >= " + cm.converToDateTimeFormatFromTime(startTime) + " end koshinnichiji <= " + cm.converToDateTimeFormatFromTime(endTime));
-                    //dat_record
-                    st.executeUpdate("DELETE FROM dat_record WHERE koshinuserid = '" + cm.me.getId()
-                            + "' and koshinnichiji >= '" + cm.converToDateTimeFormatFromTime(startTime)
+                    st.executeUpdate("DELETE FROM dat_record WHERE tanmatsumei = '"+String.valueOf(query.getDeviceInfo().get("tanmatsumei")) +"' and koshinuserid = '" + cm.me.getId()
+                            + "' and koshinnichiji > '" + cm.converToDateTimeFormatFromTime(startTime)
                             + "' and koshinnichiji <= '" + cm.converToDateTimeFormatFromTime(endTime) + "'");
-                    String sss = "DELETE FROM dat_record WHERE koshinuserid = '" + cm.me.getId()
-                            + "' and koshinnichiji >= '" + cm.converToDateTimeFormatFromTime(startTime)
+                    String sss = "DELETE FROM dat_record WHERE tanmatsumei = '"+String.valueOf(query.getDeviceInfo().get("tanmatsumei")) +"' and koshinuserid = '" + cm.me.getId()
+                            + "' and koshinnichiji > '" + cm.converToDateTimeFormatFromTime(startTime)
                             + "' and koshinnichiji <= '" + cm.converToDateTimeFormatFromTime(endTime) + "'";
                     //dat_ryoshu
-                    st.executeUpdate("DELETE FROM dat_ryoshu WHERE koshinuserid = '" + cm.me.getId()
-                            + "' and koshinnichiji >= '" + cm.converToDateTimeFormatFromTime(startTime)
+                    st.executeUpdate("DELETE FROM dat_ryoshu WHERE tanmatsumei = '"+String.valueOf(query.getDeviceInfo().get("tanmatsumei")) +"' and koshinuserid = '" + cm.me.getId()
+                            + "' and koshinnichiji > '" + cm.converToDateTimeFormatFromTime(startTime)
                             + "' and koshinnichiji <= '" + cm.converToDateTimeFormatFromTime(endTime) + "'");
                     //dat_expense
-                    st.executeUpdate("DELETE FROM dat_expense WHERE koshinuserid = '" + cm.me.getId()
-                            + "' and koshinnichiji >= '" + cm.converToDateTimeFormatFromTime(startTime)
+                    st.executeUpdate("DELETE FROM dat_expense WHERE tanmatsumei = '"+String.valueOf(query.getDeviceInfo().get("tanmatsumei")) +"' and koshinuserid = '" + cm.me.getId()
+                            + "' and koshinnichiji > '" + cm.converToDateTimeFormatFromTime(startTime)
                             + "' and koshinnichiji <= '" + cm.converToDateTimeFormatFromTime(endTime) + "'");
                     //dat_history
-                    st.executeUpdate("DELETE FROM dat_history WHERE koshinuserid = '" + cm.me.getId()
-                            + "' and koshinnichiji >= '" + cm.converToDateTimeFormatFromTime(startTime)
+                    st.executeUpdate("DELETE FROM dat_history WHERE tanmatsumei = '"+String.valueOf(query.getDeviceInfo().get("tanmatsumei")) +"' and koshinuserid = '" + cm.me.getId()
+                            + "' and koshinnichiji > '" + cm.converToDateTimeFormatFromTime(startTime)
                             + "' and koshinnichiji <= '" + cm.converToDateTimeFormatFromTime(endTime) + "'");
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             } catch (SQLException e) {
+                Toast.makeText(currentActivity, "Database Error : " + e.getMessage(), Toast.LENGTH_LONG).show();
                 return false;
             }
         }
@@ -456,6 +497,7 @@ public class APIManager {
             Statement st = null;
             try {
                 st = con.createStatement();
+                st.executeUpdate("DELETE FROM dat_history where tanmatsumei = '" + data.get("tanmatsumei") +"' and filemei = '" + data.get("filemei") + "'");
                 st.executeUpdate("INSERT INTO dat_history (tanmatsumei, filemei, filenaiyo, sakuseiuserid, sakuseinichiji, koshinuserid, koshinnichiji) VALUES(" +
                         "'"+ data.get("tanmatsumei") +"', " +
                         "'"+ data.get("filemei") +"', " +

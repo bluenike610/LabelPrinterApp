@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
@@ -15,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.citizen.sdk.labelprint.LabelPrinter;
@@ -23,6 +25,7 @@ import com.labelprinter.android.Common.DownTimer;
 import com.labelprinter.android.Common.LocalStorageManager;
 import com.labelprinter.android.DBManager.DbHelper;
 import com.labelprinter.android.DBManager.Queries;
+import com.labelprinter.android.Dialogs.DeviceSettingDialog;
 import com.labelprinter.android.Dialogs.ReportingDialog;
 import com.labelprinter.android.Dialogs.TicketNumberInputDlg;
 import com.labelprinter.android.Dialogs.TicketingDlg;
@@ -32,6 +35,7 @@ import com.labelprinter.android.Models.TicketType;
 import com.labelprinter.android.PrinterManager.PrinterManager;
 import com.labelprinter.android.R;
 import com.labelprinter.android.Utils.DialogManager;
+import com.labelprinter.android.Views.TabItemView;
 import com.labelprinter.android.Views.TicketListItemView;
 
 import java.io.File;
@@ -50,10 +54,9 @@ import static com.labelprinter.android.Common.Common.currentActivity;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, TicketNumberInputDlg.TicketNumClickListener, TicketListItemView.TicketItemClickListener {
 
     private LinearLayout ticketListView;
+    private LinearLayout tabItemLayout;
     private ArrayList<ArrayList> ticketViewArr;
-    private ArrayList<LinearLayout> tabLayoutArr;
-    private ArrayList<LinearLayout> tabMaskArr;
-    private ArrayList<TextView> tabViewArr;
+    private ArrayList<TabItemView> tabViewArr;
     private TextView sumPriceTxt;
     private ScrollView ticketScrollView;
     private RelativeLayout loadingLayout;
@@ -66,12 +69,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int selectedPayType;
     private boolean isLoading = false;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onResume() {
         currentActivity = this;
         super.onResume();
 
-        showTabs();
+        initUI();
     }
 
     @Override
@@ -83,26 +87,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         DbHelper dbHelper = new DbHelper(this);
         Queries query = new Queries(null, dbHelper);
         query.setTestData();
-        LocalStorageManager manager = new LocalStorageManager();
-//        if (manager.getLoginStatus() == null) {
-//            Intent intent = new Intent(this, LoginActivity.class);
-//            startActivity(intent);
-//        }else {
-//        }
 
-        initUI();
-    }
-
-    /**
-     *
-     * 画面UIコンポーネントの初期化関数
-     *
-     */
-    private void initUI() {
+        if (!cm.checkDeviceName()) {
+            cm.showAlertDlg(getString(R.string.device_err_title), getString(R.string.device_err_msg), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    DeviceSettingDialog deviceSettingDialog = new DeviceSettingDialog(currentActivity, new DeviceSettingDialog.DeviceChangeListner() {
+                        @Override
+                        public void OnChangedDevice() {
+                            TextView userInfo = findViewById(R.id.userInfo);
+                            userInfo.setText(cm.getUserInfo());
+                        }
+                    });
+                    deviceSettingDialog.show();
+                }
+            }, null);
+        }
 
         ticketViewArr = new ArrayList<>();
-        tabLayoutArr = new ArrayList<>();
-        tabMaskArr = new ArrayList<>();
         tabViewArr = new ArrayList<>();
         ticketingList = new ArrayList<>();
 
@@ -135,12 +137,63 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         items4.add((TextView) findViewById(R.id.ticket45));
         ticketViewArr.add(items4);
 
+        tabItemLayout = findViewById(R.id.tabItemLayout);
+
+        Button systemBtn = findViewById(R.id.btnSystem);
+        systemBtn.setOnClickListener(this);
+
+        Button reportBtn = findViewById(R.id.btnReport);
+        reportBtn.setOnClickListener(this);
+
+        Button clearBtn = findViewById(R.id.btnClear);
+        clearBtn.setOnClickListener(this);
+
+        Button refundBtn = findViewById(R.id.btnRefund);
+        refundBtn.setOnClickListener(this);
+
+        Button reticketingBtn = findViewById(R.id.btnReticketing);
+        reticketingBtn.setOnClickListener(this);
+
+        Button consignBtn = findViewById(R.id.btnConsign);
+        consignBtn.setOnClickListener(this);
+
+        Button receivableBtn = findViewById(R.id.btnReceivable);
+        receivableBtn.setOnClickListener(this);
+
+        Button cashBtn = findViewById(R.id.btnCash);
+        cashBtn.setOnClickListener(this);
+
+        Button selectXmlBtn = findViewById(R.id.selectXML);
+        selectXmlBtn.setOnClickListener(this);
+
+        ticketListView = findViewById(R.id.ticketListLayout);
+        sumPriceTxt = findViewById(R.id.sumPriceTxt);
+
+        ticketScrollView = findViewById(R.id.ticketScroll);
+
+        loadingLayout = findViewById(R.id.loadingLayout);
+        loadingLayout.setVisibility(View.INVISIBLE);
+    }
+
+    /**
+     *
+     * 画面UIコンポーネントの初期化関数
+     *
+     */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void initUI() {
+
+        showTabs();
+        setTicketList();
+    }
+
+    private void updateTicketList(TicketType type) {
         for (int k=0; k<ticketViewArr.size(); k++) {
             ArrayList list = ticketViewArr.get(k);
             for (int i=0; i<list.size(); i++) {
                 TextView view = (TextView) list.get(i);
                 view.setTag(String.valueOf(k) + "," + String.valueOf(i));
-                final TicketModel model = cm.getTicketModelFormPos(k, i);
+                final TicketModel model = cm.getTicketModelFormPos(type.getType(), k, i);
                 if (model !=null) {
                     GradientDrawable bgShape = (GradientDrawable) view.getBackground();
                     bgShape.mutate();
@@ -213,63 +266,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
-
-        tabLayoutArr.add((LinearLayout) findViewById(R.id.ticketTypeLayout1));
-        tabLayoutArr.add((LinearLayout) findViewById(R.id.ticketTypeLayout2));
-        tabLayoutArr.add((LinearLayout) findViewById(R.id.ticketTypeLayout3));
-        tabLayoutArr.add((LinearLayout) findViewById(R.id.ticketTypeLayout4));
-        for (LinearLayout layout : tabLayoutArr) {
-            layout.setOnClickListener(this);
-        }
-
-        tabMaskArr.add((LinearLayout) findViewById(R.id.overLayer1));
-        tabMaskArr.add((LinearLayout) findViewById(R.id.overLayer2));
-        tabMaskArr.add((LinearLayout) findViewById(R.id.overLayer3));
-        tabMaskArr.add((LinearLayout) findViewById(R.id.overLayer4));
-
-        tabViewArr.add((TextView) findViewById(R.id.ticketType1));
-        tabViewArr.add((TextView) findViewById(R.id.ticketType2));
-        tabViewArr.add((TextView) findViewById(R.id.ticketType3));
-        tabViewArr.add((TextView) findViewById(R.id.ticketType4));
-
-        Button systemBtn = findViewById(R.id.btnSystem);
-        systemBtn.setOnClickListener(this);
-
-        Button reportBtn = findViewById(R.id.btnReport);
-        reportBtn.setOnClickListener(this);
-
-        Button clearBtn = findViewById(R.id.btnClear);
-        clearBtn.setOnClickListener(this);
-
-        Button refundBtn = findViewById(R.id.btnRefund);
-        refundBtn.setOnClickListener(this);
-
-        Button reticketingBtn = findViewById(R.id.btnReticketing);
-        reticketingBtn.setOnClickListener(this);
-
-        Button consignBtn = findViewById(R.id.btnConsign);
-        consignBtn.setOnClickListener(this);
-
-        Button receivableBtn = findViewById(R.id.btnReceivable);
-        receivableBtn.setOnClickListener(this);
-
-        Button cashBtn = findViewById(R.id.btnCash);
-        cashBtn.setOnClickListener(this);
-
-        Button selectXmlBtn = findViewById(R.id.selectXML);
-        selectXmlBtn.setOnClickListener(this);
-
-        ticketListView = findViewById(R.id.ticketListLayout);
-        sumPriceTxt = findViewById(R.id.sumPriceTxt);
-
-        ticketScrollView = findViewById(R.id.ticketScroll);
-
-        loadingLayout = findViewById(R.id.loadingLayout);
-        loadingLayout.setVisibility(View.INVISIBLE);
-
-        setTicketList();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void showTabs() {
         TextView userInfo = findViewById(R.id.userInfo);
         userInfo.setText(cm.getUserInfo());
@@ -298,16 +297,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }else {
                 tabList = (ArrayList<TicketType>) cm.ticketTypes.clone();
             }
-            for (int i=0; i<tabViewArr.size(); i++) {
-                if (i > tabList.size()-1) {
-                    tabLayoutArr.get(i).setVisibility(View.INVISIBLE);
-                }else {
-                    tabLayoutArr.get(i).setVisibility(View.VISIBLE);
-                    TicketType type = tabList.get(i);
-                    tabViewArr.get(i).setText(type.getName());
-                }
-
+            tabItemLayout.removeAllViews();
+            for (int i=0; i<tabList.size(); i++) {
+                TicketType type = tabList.get(i);
+                TabItemView itemView = new TabItemView(this, type, i, new TabItemView.TabItemClickListener() {
+                    @Override
+                    public void OnTabItemClicked(int ind) {
+                        tabChanged(ind);
+                    }
+                });
+                tabItemLayout.addView(itemView);
             }
+            TabItemView itemView = (TabItemView) tabItemLayout.getChildAt(selectedTabIndex);
+            itemView.changeBackground(getDrawable(R.drawable.border_main));
+            updateTicketList(tabList.get(selectedTabIndex));
         }
     }
 
@@ -334,16 +337,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             sumPriceTxt.setText("");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void tabChanged(int ind) {
+        TabItemView oldItemView = (TabItemView) tabItemLayout.getChildAt(selectedTabIndex);
+        oldItemView.changeBackground(getDrawable(R.drawable.border_white));
         selectedTabIndex = ind;
-        for (LinearLayout layout : tabLayoutArr) {
-            layout.setBackground(getResources().getDrawable(R.drawable.border_main));
-        }
-        tabLayoutArr.get(ind).setBackground(getResources().getDrawable(R.drawable.border_white));
-        for (LinearLayout layout : tabMaskArr) {
-            layout.setVisibility(View.INVISIBLE);
-        }
-        tabMaskArr.get(ind).setVisibility(View.VISIBLE);
+        TabItemView newItemView = (TabItemView) tabItemLayout.getChildAt(selectedTabIndex);
+        newItemView.changeBackground(getDrawable(R.drawable.border_main));
+        updateTicketList(tabList.get(ind));
         ArrayList<TicketInfo> tempList = (ArrayList<TicketInfo>) ticketingList.clone();
         for (int i=0; i<ticketingList.size(); i++) {
             TicketInfo info = tempList.get(i);
@@ -377,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     ticketingList.clear();
                     setTicketList();
 
-//                    checkingPintState(printer, 1, value, only);
+                    checkingPintState(printer, 1, value, only);
                 }
 
                 @Override
@@ -465,6 +466,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     fileList,
                     null,
                     new DialogInterface.OnClickListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             LocalStorageManager localStorageManager = new LocalStorageManager();
@@ -472,8 +474,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             cm.getTicketInfoFromXml();
 
                             localStorageManager.saveHideTicketType(null);
+                            selectedTabIndex = 0;
                             initUI();
-                            showTabs();
                             tabChanged(0);
                         }
                     });
@@ -492,19 +494,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (isLoading) return;
+        if (!cm.checkDeviceName()) {
+            cm.showAlertDlg(getString(R.string.device_err_title), getString(R.string.device_err_msg), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    DeviceSettingDialog deviceSettingDialog = new DeviceSettingDialog(currentActivity, new DeviceSettingDialog.DeviceChangeListner() {
+                        @Override
+                        public void OnChangedDevice() {
+                            TextView userInfo = findViewById(R.id.userInfo);
+                            userInfo.setText(cm.getUserInfo());
+                        }
+                    });
+                    deviceSettingDialog.show();
+                }
+            }, null);
+            return;
+        }
         switch (v.getId()) {
-            case R.id.ticketTypeLayout1:
-                tabChanged(0);
-                break;
-            case R.id.ticketTypeLayout2:
-                tabChanged(1);
-                break;
-            case R.id.ticketTypeLayout3:
-                tabChanged(2);
-                break;
-            case R.id.ticketTypeLayout4:
-                tabChanged(3);
-                break;
             case R.id.btnSystem:
                 Intent intent = new Intent(currentActivity, SettingActivity.class);
                 startActivity(intent);

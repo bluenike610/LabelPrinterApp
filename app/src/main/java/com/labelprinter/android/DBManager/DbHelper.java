@@ -31,6 +31,7 @@ public class DbHelper extends SQLiteOpenHelper {
          * */
         db.execSQL("CREATE TABLE IF NOT EXISTS mst_ticket(" +
                 "ticketid INTEGER not null, " + //チケット(チケットホルダー等の物品含む）をユニークに表す数字を指定する
+                "tickettype INTEGER not null, " + //チケット(チケットホルダー等の物品含む）をユニークに表す数字を指定する
                 "kenshumei text not null, " + //チケットの名称　「1日　大人」など 発券画面に表示する内容
                 "kakaku INTEGER not null, " + //価格を指定する
                 "shohizeiritsu text not null, " + //消費税率を%で指定する

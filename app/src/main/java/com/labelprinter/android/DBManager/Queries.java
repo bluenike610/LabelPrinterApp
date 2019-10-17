@@ -157,9 +157,9 @@ public class Queries {
                 map.put("tanmatsuno", mCursor.getInt(mCursor.getColumnIndex("tanmatsuno")));
                 map.put("hanbaibasho", mCursor.getString(mCursor.getColumnIndex("hanbaibasho")));
                 map.put("sakuseiuserid", mCursor.getString(mCursor.getColumnIndex("sakuseiuserid")));
-                map.put("sakuseinichiji", mCursor.getDouble(mCursor.getColumnIndex("sakuseinichiji")));
+                map.put("sakuseinichiji", cm.converToDateTimeFormatFromTime((long) mCursor.getDouble(mCursor.getColumnIndex("sakuseinichiji"))));
                 map.put("koshinuserid", mCursor.getString(mCursor.getColumnIndex("koshinuserid")));
-                map.put("koshinnichiji", mCursor.getDouble(mCursor.getColumnIndex("koshinnichiji")));
+                map.put("koshinnichiji", cm.converToDateTimeFormatFromTime((long) mCursor.getDouble(mCursor.getColumnIndex("koshinnichiji"))));
             } while (mCursor.moveToNext());
         }
         mCursor.close();
@@ -184,7 +184,8 @@ public class Queries {
     public int getEndNumberWithSection(String sectionName) {
         int num = 0;
         db = dbHelper.getReadableDatabase();
-        Cursor mCursor = db.rawQuery("select * from mst_counter where saibankb = '" + sectionName + "' and genzaino = (SELECT max(genzaino) FROM mst_counter)", null);
+        Cursor mCursor = db.rawQuery("select * from mst_counter where saibancd = '" + String.valueOf(getDeviceInfo().get("tanmatsumei")) +"' and" + " saibankb = '" + sectionName +
+                "' and genzaino = (SELECT max(genzaino) FROM mst_counter  where saibancd = '" + String.valueOf(getDeviceInfo().get("tanmatsumei")) +"' and" +" saibankb = '" + sectionName + "')", null);
         mCursor.moveToFirst();
         if (!mCursor.isAfterLast()) {
             do {
@@ -211,8 +212,13 @@ public class Queries {
         values.put("sakuseinichiji", cm.convertToMilisecondsFromDate(new Date()));
         values.put("koshinuserid", cm.me.getId());
         values.put("koshinnichiji", cm.convertToMilisecondsFromDate(new Date()));
-        db.insert("mst_counter", null, values);
+        long result = db.insert("mst_counter", null, values);
         return num;
+    }
+
+    public void updateNumberMax(ContentValues values) {
+        db = dbHelper.getWritableDatabase();
+        db.insert("mst_counter", null, values);
     }
 
     public ArrayList<HashMap> getNumberData(Calendar calendar) {
@@ -227,7 +233,8 @@ public class Queries {
             long endTime = calendar.getTimeInMillis();
 
             db = dbHelper.getWritableDatabase();
-            Cursor mCursor = db.rawQuery("select * from mst_counter where koshinnichiji >= " + startTime + " and koshinnichiji <= " + endTime, null);
+            Cursor mCursor = db.rawQuery("select * from mst_counter where saibancd = '" + String.valueOf(getDeviceInfo().get("tanmatsumei")) +
+                    "' and genzaino = (SELECT max(genzaino) FROM mst_counter  where saibancd = '" + String.valueOf(getDeviceInfo().get("tanmatsumei")) + "')", null);
             mCursor.moveToFirst();
             if (!mCursor.isAfterLast()) {
                 do {
@@ -283,7 +290,7 @@ public class Queries {
                     values.put("haraimodoshikb", 0);
                     values.put("uriagekb", String.valueOf(payType));
                 }
-                values.put("shimeno", "0");
+                values.put("shimeno", 0);
                 values.put("sakuseiuserid", cm.me.getId());
                 values.put("sakuseinichiji", cm.convertToMilisecondsFromDate(new Date()));
                 values.put("koshinuserid", cm.me.getId());
@@ -306,7 +313,7 @@ public class Queries {
             long endTime = calendar.getTimeInMillis();
 
             db = dbHelper.getWritableDatabase();
-            Cursor mCursor = db.rawQuery("select * from dat_record where koshinnichiji >= " + startTime + " and koshinnichiji <= " + endTime, null);
+            Cursor mCursor = db.rawQuery("select * from dat_record where tanmatsumei = '"+String.valueOf(getDeviceInfo().get("tanmatsumei"))+"' and koshinnichiji > " + startTime + " and koshinnichiji <= " + endTime, null);
             mCursor.moveToFirst();
             if (!mCursor.isAfterLast()) {
                 do {
@@ -354,7 +361,7 @@ public class Queries {
             long endTime = calendar.getTimeInMillis();
 
             db = dbHelper.getWritableDatabase();
-            Cursor mCursor = db.rawQuery("select ticketid, meisho, hanbaitanka, haraimodoshikb, SUM(uriagesuryo) uriagesuryo from dat_record where koshinnichiji >= " +
+            Cursor mCursor = db.rawQuery("select ticketid, meisho, hanbaitanka, haraimodoshikb, SUM(uriagesuryo) uriagesuryo from dat_record where tanmatsumei = '"+String.valueOf(getDeviceInfo().get("tanmatsumei"))+"' and  koshinnichiji > " +
                     startTime + " and koshinnichiji <= " + endTime + " group by meisho, haraimodoshikb order by ticketid", null);
             mCursor.moveToFirst();
             if (!mCursor.isAfterLast()) {
@@ -412,7 +419,7 @@ public class Queries {
             long endTime = calendar.getTimeInMillis();
 
             db = dbHelper.getWritableDatabase();
-            Cursor mCursor = db.rawQuery("select * from dat_ryoshu where koshinnichiji >= " + startTime + " and koshinnichiji <= " + endTime, null);
+            Cursor mCursor = db.rawQuery("select * from dat_ryoshu where tanmatsumei = '"+String.valueOf(getDeviceInfo().get("tanmatsumei"))+"' and  koshinnichiji > " + startTime + " and koshinnichiji <= " + endTime, null);
             mCursor.moveToFirst();
             if (!mCursor.isAfterLast()) {
                 do {
@@ -440,7 +447,7 @@ public class Queries {
         return list;
     }
 
-    public void addSettlementInfoWithData(int payType, int refundType, int totalNum, int totalValue, int totalTax) {
+    public void addSettlementInfoWithData(Calendar calendar, int payType, int refundType, int totalNum, int totalValue, int totalTax) {
         db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         int num = addNumberWithSection("SEISAN");
@@ -453,7 +460,7 @@ public class Queries {
             values.put("tanmatsumei", "Android");
             values.put("hanbaibasho", "センターハウス2F発券場所1");
         }
-        values.put("shimebi", cm.convertToMilisecondsFromDate(new Date()));
+        values.put("shimebi", cm.convertToMilisecondsFromDate(calendar.getTime()));
         values.put("uriagekb", payType);
         values.put("haraimodoshikb", refundType);
         if (refundType == 1) {
@@ -466,10 +473,10 @@ public class Queries {
             values.put("shohizei", totalTax);
         }
         values.put("sakuseiuserid", cm.me.getId());
-        values.put("sakuseinichiji", cm.convertToMilisecondsFromDate(new Date()));
+        values.put("sakuseinichiji", cm.convertToMilisecondsFromDate(calendar.getTime()));
         values.put("koshinuserid", cm.me.getId());
-        values.put("koshinnichiji", cm.convertToMilisecondsFromDate(new Date()));
-        db.insert("dat_expense", null, values);
+        values.put("koshinnichiji", cm.convertToMilisecondsFromDate(calendar.getTime()));
+        long result =  db.insert("dat_expense", null, values);
     }
 
     public ArrayList<HashMap> getSettlementData(Calendar calendar) {
@@ -484,7 +491,7 @@ public class Queries {
             long endTime = calendar.getTimeInMillis();
 
             db = dbHelper.getWritableDatabase();
-            Cursor mCursor = db.rawQuery("select * from dat_expense where koshinnichiji >= " + startTime + " and koshinnichiji <= " + endTime + " order by uriagekb", null);
+            Cursor mCursor = db.rawQuery("select * from dat_expense where tanmatsumei = '"+String.valueOf(getDeviceInfo().get("tanmatsumei"))+"' and  koshinnichiji > " + startTime + " and koshinnichiji <= " + endTime + " order by uriagekb", null);
             mCursor.moveToFirst();
             if (!mCursor.isAfterLast()) {
                 do {
@@ -532,7 +539,7 @@ public class Queries {
         values.put("koshinnichiji", cm.convertToMilisecondsFromDate(new Date()));
         db.insert("dat_history", null, values);
         APIManager manager = new APIManager();
-//        manager.syncHistoryToServer(values);
+        manager.syncHistoryToServer(values);
     }
 
     public ArrayList<HashMap> getReadXMLData(Calendar calendar) {
@@ -547,7 +554,7 @@ public class Queries {
             long endTime = calendar.getTimeInMillis();
 
             db = dbHelper.getWritableDatabase();
-            Cursor mCursor = db.rawQuery("select * from dat_history where koshinnichiji >= " + startTime + " and koshinnichiji <= " + endTime, null);
+            Cursor mCursor = db.rawQuery("select * from dat_history where tanmatsumei = '"+String.valueOf(getDeviceInfo().get("tanmatsumei"))+"' and  koshinnichiji > " + startTime + " and koshinnichiji <= " + endTime, null);
             mCursor.moveToFirst();
             if (!mCursor.isAfterLast()) {
                 do {
@@ -590,7 +597,7 @@ public class Queries {
 
     public boolean saveByDayEndData (Calendar calendar) {
         boolean isSuccess = true;
-
+        deleteByDayEndData (calendar);
         ArrayList<String> list = getSentionWhitName("URIAGEKB");
         if (list != null) {
             for (String value : list) {
@@ -612,12 +619,12 @@ public class Queries {
                         ContentValues values = new ContentValues();
                         values.put("shimeno", 1);
                         values.put("koshinuserid", cm.me.getId());
-                        values.put("koshinnichiji", cm.convertToMilisecondsFromDate(new Date()));
+//                        values.put("koshinnichiji", cm.convertToMilisecondsFromDate(calendar.getTime()));
                         db.update("dat_record", values, "uriageno = " + mCursor.getInt(mCursor.getColumnIndex("uriageno")), null);
                     } while (mCursor.moveToNext());
                 }
                 mCursor.close();
-                addSettlementInfoWithData(cm.parseInteger(value), 0, totalNum, totalMoney, totalTax);
+                if(totalNum > 0) addSettlementInfoWithData(calendar, cm.parseInteger(value), 0, totalNum, totalMoney, totalTax);
             }
         }
         db = dbHelper.getReadableDatabase();
@@ -637,12 +644,12 @@ public class Queries {
                 ContentValues values = new ContentValues();
                 values.put("shimeno", 1);
                 values.put("koshinuserid", cm.me.getId());
-                values.put("koshinnichiji", cm.convertToMilisecondsFromDate(new Date()));
+//                values.put("koshinnichiji", cm.convertToMilisecondsFromDate(calendar.getTime()));
                 db.update("dat_record", values, "uriageno = " + mCursor.getInt(mCursor.getColumnIndex("uriageno")), null);
             } while (mCursor.moveToNext());
         }
         mCursor.close();
-        addSettlementInfoWithData(5, 1, totalNum, totalMoney, totalTax);
+        if(totalNum > 0) addSettlementInfoWithData(calendar, 5, 1, totalNum, totalMoney, totalTax);
 
         return isSuccess;
     }
@@ -662,10 +669,15 @@ public class Queries {
             ContentValues values = new ContentValues();
             values.put("shimeno", 0);
             values.put("koshinuserid", cm.me.getId());
-            values.put("koshinnichiji", cm.convertToMilisecondsFromDate(new Date()));
-            db.update("dat_record", values, "koshinnichiji >= " + startTime, null);
-            db.delete("mst_counter", "saibankb = 'SEISAN' and koshinnichiji >= " + startTime + " and koshinnichiji <= " + endTime, null);
-            db.delete("dat_expense", "koshinnichiji >= " + startTime, null);
+//            values.put("koshinnichiji", cm.convertToMilisecondsFromDate(new Date()));
+            db.update("dat_record", values, "koshinnichiji > " + startTime + " and koshinnichiji <= " + endTime, null);
+            long result =  db.delete("mst_counter", "saibankb = 'SEISAN' and koshinnichiji > " + startTime + " and koshinnichiji <= " + endTime, null);
+            db.delete("dat_expense", "koshinnichiji > " + startTime + " and koshinnichiji <= " + endTime, null);
+            if (result >0 ) {
+                String sfas = "";
+            }else {
+                String eee = "";
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -701,7 +713,7 @@ public class Queries {
         TicketModel model = new TicketModel();
 
         model.setId(String.valueOf(mCursor.getInt(mCursor.getColumnIndex("ticketid"))));
-//        model.setType(String.valueOf(mCursor.getInt(mCursor.getColumnIndex("ticketid"))));
+        model.setType(String.valueOf(mCursor.getInt(mCursor.getColumnIndex("tickettype"))));
         model.setName(mCursor.getString(mCursor.getColumnIndex("kenshumei")));
         model.setPrice(mCursor.getInt(mCursor.getColumnIndex("kakaku")));
         model.setTaxRatio(Float.valueOf(mCursor.getString(mCursor.getColumnIndex("shohizeiritsu"))));

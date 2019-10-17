@@ -94,47 +94,6 @@ public class Common {
     public static ArrayList<PrinterInfo> printerInfos = new ArrayList<>();
     public static ArrayList<TicketModel> ticketModels = new ArrayList<>();
 
-    public void getStartPattern() {
-        APIManager apiManager = new APIManager();
-        if (checkExistXML()) {//XMLファイル有
-            if (checkLocalDBState()) {//ローカルデータベース接続
-                if (apiManager.connectionclass() != null) {//リモートデータベース接続
-                    StartPattern = 1;
-                    return;
-                }else {//リモートデータベース接続不可
-                    StartPattern = 2;
-                    return;
-                }
-            }else {//ローカルデータベース接続不可
-                if (apiManager.connectionclass() != null) {//リモートデータベース接続
-                    StartPattern = 3;
-                    return;
-                }else {//リモートデータベース接続不可
-                    StartPattern = 4;
-                    return;
-                }
-            }
-        }else {//XMLファイル無
-            if (checkLocalDBState()) {//ローカルデータベース接続
-                if (apiManager.connectionclass() != null) {//リモートデータベース接続
-                    StartPattern = 5;
-                    return;
-                }else {//リモートデータベース接続不可
-                    StartPattern = 6;
-                    return;
-                }
-            }else {//ローカルデータベース接続不可
-                if (apiManager.connectionclass() != null) {//リモートデータベース接続
-                    StartPattern = 7;
-                    return;
-                }else {//リモートデータベース接続不可
-                    StartPattern = 8;
-                    return;
-                }
-            }
-        }
-    }
-
     public boolean checkLocalDBState() {
         boolean exist = false;
         DbHelper dbHelper = new DbHelper(currentActivity);
@@ -144,7 +103,6 @@ public class Common {
     }
 
     public void getConfigInfoFromXml() {
-/*
         String sampleXml = readFromXml(Config.CONFIG_NAME);
         if (!sampleXml.equals("")) {
             JSONObject jsonObject = null;
@@ -160,7 +118,6 @@ public class Common {
                 e.printStackTrace();
             }
         }
-*/
     }
 
     public void getTicketInfoFromXml () {
@@ -281,7 +238,7 @@ public class Common {
                         model.setType(parseJsonString(object,"チケット種類"));
                         model.setName(parseJsonString(object,"券種名"));
                         model.setPrice(parseInteger(parseJsonString(object,"価格")));
-                        model.setTaxRatio(parseInteger(parseJsonString(object,"消費税率")));
+                        model.setTaxRatio(parseFloat(parseJsonString(object,"消費税率")));
                         model.setTax(parseInteger(parseJsonString(object,"消費税額")));
                         JSONObject posObj = object.getJSONObject("位置");
                         model.setRowPos(parseInteger(parseJsonString(posObj, "行")));
@@ -301,7 +258,7 @@ public class Common {
                             model.setType(parseJsonString(object,"チケット種類"));
                             model.setName(parseJsonString(object,"券種名"));
                             model.setPrice(parseInteger(parseJsonString(object,"価格")));
-                            model.setTaxRatio(parseInteger(parseJsonString(object,"消費税率")));
+                            model.setTaxRatio(parseFloat(parseJsonString(object,"消費税率")));
                             model.setTax(parseInteger(parseJsonString(object,"消費税額")));
                             JSONObject posObj = object.getJSONObject("位置");
                             model.setRowPos(parseInteger(parseJsonString(posObj, "行")));
@@ -329,7 +286,7 @@ public class Common {
         ticketModels = query.getTicketModels();
     }
 
-    private boolean checkExistXML() {
+    public boolean checkExistXML() {
         File root = android.os.Environment.getExternalStorageDirectory();
         File dir = new File(root.getAbsolutePath() + "/LabelPrinter");
         if(dir.exists()) {
@@ -360,11 +317,11 @@ public class Common {
                     }
                 }
                 myReader.close();
-//                if (fname.equals(Config.XML_NAME)) {
+                if (cm.me != null) {
                     DbHelper dbHelper = new DbHelper(currentActivity);
                     Queries query = new Queries(null, dbHelper);
                     query.addReadXMLdata(fname, aBuffer);
-//                }
+                }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -374,9 +331,9 @@ public class Common {
         return aBuffer;
     }
 
-    public TicketModel getTicketModelFormPos (int row, int col) {
+    public TicketModel getTicketModelFormPos (String ind, int row, int col) {
         for (TicketModel model : ticketModels) {
-            if (model.getRowPos() == row && model.getColPos() == col)
+            if (model.getType().equals(ind) && model.getRowPos() == row && model.getColPos() == col)
                 return model;
         }
         return null;
@@ -396,6 +353,16 @@ public class Common {
             deviceInfo = map.get("tanmatsumei") + " " + map.get("hanbaibasho");
         String info = cm.me!=null?cm.me.getName():"";
         return deviceInfo + " " + info + " " + dateStr;
+    }
+
+    public boolean checkDeviceName() {
+        String deviceInfo = "";
+        DbHelper dbHelper = new DbHelper(currentActivity);
+        Queries query = new Queries(null, dbHelper);
+        HashMap map = query.getDeviceInfo();
+        if (map != null)
+            deviceInfo = map.get("tanmatsumei") + "";
+        return deviceInfo == "" ? false : true;
     }
 
     /**
@@ -658,7 +625,12 @@ public class Common {
         str = str.replace(" ", "");
         return str.equals("")?0:Integer.parseInt(str);
     }
-    
+
+    public float parseFloat(String str) {
+        str = str.replace(" ", "");
+        return str.equals("")?0:Float.parseFloat(str);
+    }
+
     public String parseJsonString(JSONObject object, String key) {
         String str = "";
         try {

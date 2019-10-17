@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.labelprinter.android.Common.Common;
+import com.labelprinter.android.DBManager.APIManager;
 import com.labelprinter.android.DBManager.DbHelper;
 import com.labelprinter.android.DBManager.Queries;
 import com.labelprinter.android.R;
@@ -36,10 +37,12 @@ public class DeviceSettingDialog extends Dialog {
     private EditText deviceName, deviceNum;
     private String devicePlaceName;
     private HashMap initInfo;
+    private DeviceChangeListner listner;
 
-    public DeviceSettingDialog(@NonNull Context context) {
+    public DeviceSettingDialog(@NonNull Context context, final DeviceChangeListner listner) {
         super(context);
         setContentView(R.layout.device_setting_dialog);
+        this.listner = listner;
 
         deviceName = findViewById(R.id.deviceName);
         deviceNum = findViewById(R.id.deviceNum);
@@ -103,7 +106,7 @@ public class DeviceSettingDialog extends Dialog {
             public void onClick(View v) {
                 if (deviceName.getText().toString().equals("") || deviceName.getText().toString().equals("")) {
                     Common.cm.showAlertDlg(currentActivity.getResources().getString(R.string.input_err_title),
-                            currentActivity.getResources().getString(R.string.input_err_msg), new DialogInterface.OnClickListener() {
+                            currentActivity.getResources().getString(R.string.device_err_msg), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                 }
@@ -129,6 +132,11 @@ public class DeviceSettingDialog extends Dialog {
                     DbHelper dbHelper = new DbHelper(currentActivity);
                     Queries query = new Queries(null, dbHelper);
                     query.addDeviceInfo(values);
+                    if (listner != null)
+                        listner.OnChangedDevice();
+                    APIManager manager = new APIManager();
+                    manager.getCounterFromServer(deviceName.getText().toString());
+
                     dismiss();
                 }
             }
@@ -136,5 +144,9 @@ public class DeviceSettingDialog extends Dialog {
 
         TextView userInfo = findViewById(R.id.userInfo);
         userInfo.setText(cm.getUserInfo());
+    }
+
+    public interface DeviceChangeListner {
+        public abstract void OnChangedDevice();
     }
 }

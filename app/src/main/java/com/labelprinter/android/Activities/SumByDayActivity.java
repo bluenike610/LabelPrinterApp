@@ -101,7 +101,7 @@ public class SumByDayActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (mainList.size() > 0 || subList.size() > 0) {
                     PrinterManager manager = new PrinterManager();
-                    checkingPintState(manager.settlementPrinterStart(titleStr, mainList, subList));
+                    checkingPrintState(manager.settlementPrinterStart(titleStr, mainList, subList));
                 }else {
                     finish();
                 }
@@ -360,7 +360,7 @@ public class SumByDayActivity extends AppCompatActivity {
     }
 
 
-    private void checkingPintState(final LabelPrinter printer) {
+    private void checkingPrintState(final LabelPrinter printer) {
         isLoading = true;
         loadingLayout.setVisibility(View.VISIBLE);
         final DownTimer myTimer = new DownTimer(1, 500);

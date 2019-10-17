@@ -13,9 +13,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 
 import com.labelprinter.android.Common.Common;
+import com.labelprinter.android.Common.DownTimer;
 import com.labelprinter.android.Common.LocalStorageManager;
 import com.labelprinter.android.DBManager.APIManager;
 import com.labelprinter.android.DBManager.DbHelper;
@@ -35,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText userid, password;
     private boolean standalon = false;
+    private RelativeLayout loading;
 
     /** すべての許可のリクエストID */
     private final static int ALL_PERMISSIONS_RESULT = 101;
@@ -70,31 +74,17 @@ public class LoginActivity extends AppCompatActivity {
             cm.getConfigInfoFromXml();
         }
 
-
-
-        Common.cm.getStartPattern();
-        if (StartPattern == 7) {
-            cm.showAlertDlg(getResources().getString(R.string.login_err_title),
-                    getResources().getString(R.string.login_err_msg2),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    }, null);
-        }else if (StartPattern == 8) {
-            cm.showAlertDlg(getResources().getString(R.string.login_err_title),
-                    getResources().getString(R.string.login_err_msg3),
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    }, null);
-        }
-
         userid = findViewById(R.id.userId);
         password = findViewById(R.id.password);
+
+        final LocalStorageManager localStorageManager = new LocalStorageManager();
+        String userId = localStorageManager.getLoginStatus();
+        if (userId != null) {
+            userid.setText(userId);
+        }else {
+            userid.setText("");
+        }
+        password.setText("");
 
         final Button login = findViewById(R.id.buttonSign);
         login.setOnClickListener(new View.OnClickListener() {
@@ -115,24 +105,100 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        LocalStorageManager localStorageManager = new LocalStorageManager();
-        String userId = localStorageManager.getLoginStatus();
-        if (userId != null) {
-            userid.setText(userId);
-        }else {
-            userid.setText("");
-        }
-        password.setText("");
-        String val = localStorageManager.getStartMode();
-        if (val != null) {
-            if (val.equals("online")) {
-                checkServerState();
-            }else {
-                standalon = true;
-                changeStartPattern();
+        loading = findViewById(R.id.loadingLayout);
+        final DownTimer myTimer = new DownTimer(500, 100);
+        myTimer.setOnFinishListener(new DownTimer.OnFinishListener() {
+
+            @Override
+            public void onFinish() {
+                getStartPattern();
+                if (StartPattern == 7) {
+                    cm.showAlertDlg(getResources().getString(R.string.login_err_title),
+                            getResources().getString(R.string.login_err_msg2),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            }, null);
+                }else if (StartPattern == 8) {
+                    cm.showAlertDlg(getResources().getString(R.string.login_err_title),
+                            getResources().getString(R.string.login_err_msg3),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            }, null);
+                }
+                String val = localStorageManager.getStartMode();
+                if (val != null) {
+                    if (val.equals("online")) {
+                        checkServerState();
+                    }else {
+                        standalon = true;
+                        changeStartPattern();
+                    }
+                }else {
+                    checkServerState();
+                }
+                myTimer.initialize();
             }
-        }else {
-            checkServerState();
+
+            @Override
+            public void onTick(int progressValue) {
+
+            }
+        });
+        myTimer.start();
+    }
+
+    private void getStartPattern() {
+        APIManager apiManager = new APIManager();
+        if (cm.checkExistXML()) {//XMLファイル有
+            if (cm.checkLocalDBState()) {//ローカルデータベース接続
+                if (apiManager.connectionclass() != null) {//リモートデータベース接続
+                    StartPattern = 1;
+                    loading.setVisibility(View.GONE);
+                    return;
+                }else {//リモートデータベース接続不可
+                    StartPattern = 2;
+                    loading.setVisibility(View.GONE);
+                    return;
+                }
+            }else {//ローカルデータベース接続不可
+                if (apiManager.connectionclass() != null) {//リモートデータベース接続
+                    StartPattern = 3;
+                    loading.setVisibility(View.GONE);
+                    return;
+                }else {//リモートデータベース接続不可
+                    StartPattern = 4;
+                    loading.setVisibility(View.GONE);
+                    return;
+                }
+            }
+        }else {//XMLファイル無
+            if (cm.checkLocalDBState()) {//ローカルデータベース接続
+                if (apiManager.connectionclass() != null) {//リモートデータベース接続
+                    StartPattern = 5;
+                    loading.setVisibility(View.GONE);
+                    return;
+                }else {//リモートデータベース接続不可
+                    StartPattern = 6;
+                    loading.setVisibility(View.GONE);
+                    return;
+                }
+            }else {//ローカルデータベース接続不可
+                if (apiManager.connectionclass() != null) {//リモートデータベース接続
+                    StartPattern = 7;
+                    loading.setVisibility(View.GONE);
+                    return;
+                }else {//リモートデータベース接続不可
+                    StartPattern = 8;
+                    loading.setVisibility(View.GONE);
+                    return;
+                }
+            }
         }
     }
 
@@ -205,8 +271,8 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }, null);
                 //test
-//                loginFromLocal(id, pass);
-//                cm.getTicketInfoFromXml();
+                loginFromLocal(id, pass);
+                cm.getTicketInfoFromXml();
                 break;
             case 5:
                 loginFromLocal(id, pass);

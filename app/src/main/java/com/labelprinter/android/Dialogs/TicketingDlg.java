@@ -105,15 +105,17 @@ public class TicketingDlg extends Dialog {
                         dismiss();
                     }else {
                         if (type == 4) {
-                            if (preMoney == 0) {
-                                Common.cm.showAlertDlg(currentActivity.getResources().getString(R.string.input_err_title),
-                                        currentActivity.getResources().getString(R.string.price_err_msg), new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
+                            if (preMoney != 0) {
+                                if (preMoney < ticketingMoney) {
+                                    Common.cm.showAlertDlg(currentActivity.getResources().getString(R.string.input_err_title),
+                                            currentActivity.getResources().getString(R.string.price_err_msg), new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
 
-                                            }
-                                        }, null);
-                                return;
+                                                }
+                                            }, null);
+                                    return;
+                                }
                             }
                         }
                         PrinterManager manager = new PrinterManager();
@@ -130,37 +132,41 @@ public class TicketingDlg extends Dialog {
         });
 
         Button ticketingReceiptBtn = findViewById(R.id.ticketingReceiptBtn);
-        ticketingReceiptBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (paymentType == 0) {
-                    linstener.OnRefundTicketingBtnClicked();
-                    dismiss();
-                }else {
-                    if (preMoney == 0 || receiptTxt.getText().toString().equals("")) {
-                        Common.cm.showAlertDlg(currentActivity.getResources().getString(R.string.input_err_title),
-                                currentActivity.getResources().getString(R.string.price_name_err_msg), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                    }
-                                }, null);
-                        return;
+        if (type == 2 || type ==3) {
+            ticketingReceiptBtn.setEnabled(false);
+        }else {
+            ticketingReceiptBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (paymentType == 0) {
+                        linstener.OnRefundTicketingBtnClicked();
+                        dismiss();
                     }else {
-                        if (linstener != null) {
-                            PrinterManager manager = new PrinterManager();
-                            LabelPrinter printer = manager.printerStart(models, ticketingMoney, receiptTxt.getText().toString());
+                        if (preMoney == 0 || receiptTxt.getText().toString().equals("")) {
+                            Common.cm.showAlertDlg(currentActivity.getResources().getString(R.string.input_err_title),
+                                    currentActivity.getResources().getString(R.string.price_name_err_msg), new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
 
-                            //test
-//                            if(printer != null) {
-                                linstener.OnTicketingReceiptBtnClicked(printer, Integer.valueOf((int) preMoney), receiptTxt.getText().toString());
-                                dismiss();
-//                            }
+                                        }
+                                    }, null);
+                            return;
+                        }else {
+                            if (linstener != null) {
+                                PrinterManager manager = new PrinterManager();
+                                LabelPrinter printer = manager.printerStart(models, ticketingMoney, receiptTxt.getText().toString());
+
+                                //test
+//                                if(printer != null) {
+//                                    linstener.OnTicketingReceiptBtnClicked(printer, Integer.valueOf((int) preMoney), receiptTxt.getText().toString());
+//                                    dismiss();
+//                                }
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
 
         ticketingMoneyTxt = findViewById(R.id.ticketingMoney);
         remainMoneyTxt = findViewById(R.id.remainMoney);

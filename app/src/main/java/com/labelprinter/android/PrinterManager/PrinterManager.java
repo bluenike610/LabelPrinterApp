@@ -85,7 +85,8 @@ public class PrinterManager {
 
                             // Print label
 
-                            getDesignFromReceiptInfo(design, receiptMoney, receiptName);
+                            LabelDesign design1 = new LabelDesign();
+                            getDesignFromReceiptInfo(design1, receiptMoney, receiptName);
                             printResult = printer.print(design, 1);
                             if (LabelConst.CLS_SUCCESS != printResult) {
                                 cm.hasPrintingErr = true;
@@ -93,7 +94,7 @@ public class PrinterManager {
                         }
                     }else {
                         // Set Property (Tear Off)
-                        printer.setMediaHandling(LabelConst.CLS_MEDIAHANDLING_TEAROFF);
+                        printer.setMediaHandling(LabelConst.CLS_MEDIAHANDLING_CUT);
 
                         // Print design
                         int printResult = printer.print(design, 1);
@@ -176,18 +177,10 @@ public class PrinterManager {
             printer.setMeasurementUnit(LabelConst.CLS_UNIT_MILLI);
             LabelDesign design = new LabelDesign();
 
-            getDesignFromMainList(design, mainList, title);
+            getDesignFromMainList(design, mainList, subList, title);
 
             printer.setMediaHandling(LabelConst.CLS_MEDIAHANDLING_CUT);
             int printResult = printer.print(design, 1);
-            if (LabelConst.CLS_SUCCESS != printResult) {
-                cm.hasPrintingErr = true;
-            }
-
-            getDesignFromSubList(design, subList, title);
-
-            printer.setMediaHandling(LabelConst.CLS_MEDIAHANDLING_CUT);
-            printResult = printer.print(design, 1);
             if (LabelConst.CLS_SUCCESS != printResult) {
                 cm.hasPrintingErr = true;
             }
@@ -265,38 +258,34 @@ public class PrinterManager {
                             break;
                     }
 
-//                    case 1
-//                    drawTextPtrFont (String data, int locale, int font, int rotation, int hexp, int vexp, int size, int x, int y)
-//                    design.drawTextPtrFont(content,
-//                            LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
-//                            LabelConst.CLS_RT_NORMAL, 1, 1,
-//                            kanjiSize, startX, startY);
-
-//                    case 2
-//                    drawTextDLFont (String data, int encoding, String fontID, int rotation, int hexp, int vexp, int point, int x, int y)
-                    // TrueTypeダウンロードフォント
-//                    design.drawTextDLFont(content,
-//                            LabelConst.CLS_ENC_CDPG_IBM850, "S50",
-//                            LabelConst.CLS_RT_NORMAL, 1, 1, fontSize, startX, startY);
-
-//                    case 3
-//                    drawTextLocalFont (String data, Typeface fontType, int rotation, int hRatio, int vRatio, int point, int style, int x, int y, int resolution, int measurementUnit)
-                    // 解像度指定 203dpi、単位指定 mm
-                    design.drawTextLocalFont(content, Typeface.create(fontName, Typeface.NORMAL),
-                            LabelConst.CLS_RT_NORMAL, 100, 100, fontSize,
-                            style, startX, startY,
-                            LabelConst.CLS_PRT_RES_203, LabelConst.CLS_UNIT_MILLI);
+                    if (info.getPrinterNum() == 3){
+                        content = "発券日 " + nowDate.get(Calendar.YEAR) + "年 ";
+                        design.drawTextLocalFont(content, Typeface.create(fontName, Typeface.NORMAL),
+                                LabelConst.CLS_RT_NORMAL, 100, 100, fontSize,
+                                style, startX, startY,
+                                LabelConst.CLS_PRT_RES_203, LabelConst.CLS_UNIT_MILLI);
+                        content = (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日";
+                        design.drawTextLocalFont(content, Typeface.create(fontName, Typeface.NORMAL),
+                                LabelConst.CLS_RT_NORMAL, 100, 100, fontSize+3,
+                                style, startX+10*fontSize, startY,
+                                LabelConst.CLS_PRT_RES_203, LabelConst.CLS_UNIT_MILLI);
+                    }else {
+                        design.drawTextLocalFont(content, Typeface.create(fontName, Typeface.NORMAL),
+                                LabelConst.CLS_RT_NORMAL, 100, 100, fontSize,
+                                style, startX, startY,
+                                LabelConst.CLS_PRT_RES_203, LabelConst.CLS_UNIT_MILLI);
+                    }
 
                 }else if (info.getPrinterType().equals("IMAGE")) {
                     if (info.getImgData() != null) {
-//                        drawBitmap (String filePath, int rotation, int width, int height, int x, int y)
                         design.drawBitmap (info.getFileName(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
 //                    drawBitmap (String filePath, int rotation, int width, int height, int x, int y, int resolution, int measurementUnit)
 //                            design.drawBitmap (file.getAbsolutePath(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY,
 //                                    LabelConst.CLS_PRT_RES_300, LabelConst.CLS_UNIT_MILLI);
                     }else {
-                        content = info.getFileName();
-                        design.drawNVBitmap (content, 1, 1, startX, startY);
+                        File root = android.os.Environment.getExternalStorageDirectory();
+                        String fname = root.getAbsolutePath() + "/LabelPrinter/Images/" + info.getFileName();
+                        design.drawBitmap (fname, LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
                     }
                 }else if (info.getPrinterType().equals("BARCODE")) {
 //                    drawBarCode (String data, int symbology, int rotation, int thick, int narrow, int height, int x, int y,int showText)
@@ -394,7 +383,7 @@ public class PrinterManager {
         }
     }
 
-    private void getDesignFromMainList(LabelDesign design, ArrayList<HashMap> list, String title) {
+    private void getDesignFromMainList(LabelDesign design, ArrayList<HashMap> mainList, ArrayList<HashMap> subList, String title) {
 
         HashMap header = new HashMap();
         header.put("code", currentActivity.getResources().getString(R.string.lb_code));
@@ -404,20 +393,13 @@ public class PrinterManager {
         header.put("refund", currentActivity.getResources().getString(R.string.lb_refund));
         header.put("total", currentActivity.getResources().getString(R.string.lb_total));
         header.put("price", currentActivity.getResources().getString(R.string.lb_price));
-        list.add(0, header);
+        mainList.add(0, header);
 
         int startY = 0;
-
-        design.drawTextPtrFont(title,
-                LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
-                LabelConst.CLS_RT_NORMAL, 1, 1,
-                LabelConst.CLS_PRT_FNT_KANJI_SIZE_24, 50, startY);
-        startY += 100;
-        design.drawLine (0, startY, 1000, startY, 2);
-        startY += 30;
-
-        for (int i=0; i<list.size(); i++) {
-            HashMap map = new HashMap();
+        for (int i=mainList.size()-1; i>=0; i--) {
+            design.drawLine (0, startY, 1000, startY, 1);
+            startY += 30;
+            HashMap map = mainList.get(i);
             design.drawTextPtrFont(String.valueOf(map.get("code")),
                     LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
                     LabelConst.CLS_RT_NORMAL, 1, 1,
@@ -446,25 +428,15 @@ public class PrinterManager {
                     LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
                     LabelConst.CLS_RT_NORMAL, 1, 1,
                     LabelConst.CLS_PRT_FNT_KANJI_SIZE_16, 700, startY);
-            startY += 70;
+            startY += 50;
+        }
+        design.drawLine (0, startY, 1000, startY, 2);
+        startY += 50;
+
+        for (int i=subList.size()-1; i>=0; i--) {
             design.drawLine (0, startY, 1000, startY, 1);
             startY += 30;
-        }
-    }
-
-    private void getDesignFromSubList(LabelDesign design, ArrayList<HashMap> list, String title) {
-        int startY = 0;
-
-        design.drawTextPtrFont(title,
-                LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
-                LabelConst.CLS_RT_NORMAL, 1, 1,
-                LabelConst.CLS_PRT_FNT_KANJI_SIZE_24, 50, startY);
-        startY += 100;
-        design.drawLine (0, startY, 1000, startY, 2);
-        startY += 30;
-
-        for (int i=0; i<list.size(); i++) {
-            HashMap map = new HashMap();
+            HashMap map = subList.get(i);
             design.drawTextPtrFont(String.valueOf(map.get("title")),
                     LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
                     LabelConst.CLS_RT_NORMAL, 1, 1,
@@ -477,12 +449,15 @@ public class PrinterManager {
                     LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
                     LabelConst.CLS_RT_NORMAL, 1, 1,
                     LabelConst.CLS_PRT_FNT_KANJI_SIZE_16, 310, startY);
-            startY += 70;
-            design.drawLine (0, startY, 1000, startY, 1);
-            startY += 30;
+            startY += 50;
         }
+        design.drawLine (0, startY, 1000, startY, 2);
+        startY += 50;
+        design.drawTextPtrFont(title,
+                LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
+                LabelConst.CLS_RT_NORMAL, 1, 1,
+                LabelConst.CLS_PRT_FNT_KANJI_SIZE_24, 50, startY);
     }
-
 
         /**
          * Permissions
