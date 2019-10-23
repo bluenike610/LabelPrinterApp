@@ -25,6 +25,7 @@ public class PrinterInfo {
     private int barcodeType; //バーコードタイプ
     private int barcodeHeight; //バーコード高さ
     private String barcode; //コード
+    private int whiteFlag; //文字を白抜き
 
     public PrinterInfo () {
 
@@ -126,6 +127,13 @@ public class PrinterInfo {
     }
     public String getFileName() {
         return fileName;
+    }
+
+    public void setWhiteFlag(int val) {
+        whiteFlag = val;
+    }
+    public int getWhiteFlag() {
+        return whiteFlag;
     }
 
     public void setImgData(byte[] val) {

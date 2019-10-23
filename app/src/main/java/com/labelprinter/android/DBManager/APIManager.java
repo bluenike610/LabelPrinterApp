@@ -122,7 +122,6 @@ public class APIManager {
                 while (rs.next()) {
                     ContentValues values = new ContentValues();
                     values.put("ticketid", rs.getInt(1));
-                    values.put("tickettype", rs.getInt(1));// test
                     values.put("kenshumei", rs.getString(2));
                     values.put("kakaku", rs.getInt(3));
                     values.put("shohizeiritsu", rs.getString(4));
@@ -131,8 +130,8 @@ public class APIManager {
                     values.put("haikeishoku", rs.getString(7));
                     values.put("mojishoku", rs.getString(8));
                     values.put("yukokikanbi", rs.getInt(9));
-                    values.put("kikan_fr", rs.getString(10));
-                    values.put("kikan_to", rs.getString(11));
+                    values.put("kikan_fr", cm.convertToMilisecondsFromDate(rs.getDate(10)));
+                    values.put("kikan_to", cm.convertToMilisecondsFromDate(rs.getDate(11)));
                     values.put("sakuseiuserid", rs.getString(12));
                     values.put("sakuseinichiji", cm.convertToMilisecondsFromDate(rs.getDate(13)));
                     values.put("koshinuserid", rs.getString(14));
@@ -172,13 +171,13 @@ public class APIManager {
                     }
                     values.put("barcodetype", rs.getInt(16));
                     values.put("barcodeheight", rs.getInt(17));
-//                    values.put("barcode", rs.getInt(9));
-                    values.put("kikan_fr", rs.getString(18));
-                    values.put("kikan_to", rs.getString(19));
+                    values.put("kikan_fr", cm.convertToMilisecondsFromDate(rs.getDate(18)));
+                    values.put("kikan_to", cm.convertToMilisecondsFromDate(rs.getDate(19)));
                     values.put("sakuseiuserid", rs.getString(20));
                     values.put("sakuseinichiji", cm.convertToMilisecondsFromDate(rs.getDate(21)));
                     values.put("koshinuserid", rs.getString(22));
                     values.put("koshinnichiji", cm.convertToMilisecondsFromDate(rs.getDate(23)));
+                    values.put("shironuki", rs.getInt(24));
 
                     printerInfos.add(values);
                 }
@@ -235,8 +234,8 @@ public class APIManager {
                     values.put("xpos", rs.getInt(2));
                     values.put("ypos", rs.getInt(3));
                     values.put("ticketid", rs.getInt(4));
-                    values.put("kikan_fr", rs.getString(5));
-                    values.put("kikan_to", rs.getString(6));
+                    values.put("kikan_fr", cm.convertToMilisecondsFromDate(rs.getDate(5)));
+                    values.put("kikan_to", cm.convertToMilisecondsFromDate(rs.getDate(6)));
                     values.put("sakuseiuserid", rs.getString(7));
                     values.put("sakuseinichiji", cm.convertToMilisecondsFromDate(rs.getDate(8)));
                     values.put("koshinuserid", rs.getString(9));
@@ -256,8 +255,8 @@ public class APIManager {
                     values.put("tickettypecd", rs.getString(1));
                     values.put("hyojikb", rs.getInt(2));
                     values.put("sortno", rs.getInt(3));
-                    values.put("kikan_fr", rs.getString(4));
-                    values.put("kikan_to", rs.getString(5));
+                    values.put("kikan_fr", cm.convertToMilisecondsFromDate(rs.getDate(4)));
+                    values.put("kikan_to", cm.convertToMilisecondsFromDate(rs.getDate(5)));
                     values.put("sakuseiuserid", rs.getString(6));
                     values.put("sakuseinichiji", cm.convertToMilisecondsFromDate(rs.getDate(7)));
                     values.put("koshinuserid", rs.getString(8));

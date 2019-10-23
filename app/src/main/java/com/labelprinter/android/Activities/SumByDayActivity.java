@@ -82,8 +82,10 @@ public class SumByDayActivity extends AppCompatActivity {
         Queries query = new Queries(null, dbHelper);
         String deviceInfo = "";
         HashMap data = query.getDeviceInfo();
-        if (data != null)
-            deviceInfo = String.valueOf(data.get("hanbaibasho"));
+        if (data != null) {
+            final String[] items = currentActivity.getResources().getStringArray(R.array.device_place);
+            deviceInfo = items[cm.parseInteger((String) data.get("hanbaibasho")) - 1];
+        }
         Date date = nowDate.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd(E) hh:mm", Locale.JAPANESE);
         String dateStr = sdf.format(date);

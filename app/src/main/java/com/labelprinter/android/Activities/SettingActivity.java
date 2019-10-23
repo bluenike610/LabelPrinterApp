@@ -143,9 +143,9 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void OnReceiptBtnClicked(LabelPrinter printer, int value, String only) {
                         //test
-                        DbHelper dbHelper = new DbHelper(currentActivity);
-                        Queries query = new Queries(null, dbHelper);
-                        query.addReceiptInfoWithData(value, only, 1);
+//                        DbHelper dbHelper = new DbHelper(currentActivity);
+//                        Queries query = new Queries(null, dbHelper);
+//                        query.addReceiptInfoWithData(value, only, 1);
 
                         checkingPrintState(printer, value, only);
                     }

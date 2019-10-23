@@ -31,7 +31,6 @@ public class DbHelper extends SQLiteOpenHelper {
          * */
         db.execSQL("CREATE TABLE IF NOT EXISTS mst_ticket(" +
                 "ticketid INTEGER not null, " + //チケット(チケットホルダー等の物品含む）をユニークに表す数字を指定する
-                "tickettype INTEGER not null, " + //チケット(チケットホルダー等の物品含む）をユニークに表す数字を指定する
                 "kenshumei text not null, " + //チケットの名称　「1日　大人」など 発券画面に表示する内容
                 "kakaku INTEGER not null, " + //価格を指定する
                 "shohizeiritsu text not null, " + //消費税率を%で指定する
@@ -40,8 +39,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 "haikeishoku text, " + //チケット発券画面のボタンの背景色を指定。未指定の場合、標準の色を用いる。
                 "mojishoku text, " + //チケット発券画面のボタンの文字色を指定。未指定の場合、標準の色を用いる。
                 "yukokikanbi INTEGER, " + //発券日からの有効期間（日）を指定する
-                "kikan_fr text not null, " + //このレコードが有効な期間の開始日
-                "kikan_to text not null, " + //このレコードが有効な期間の終了日
+                "kikan_fr double not null, " + //このレコードが有効な期間の開始日
+                "kikan_to double not null, " + //このレコードが有効な期間の終了日
                 "sakuseiuserid text not null, " + //新規作成した時のログインユーザーID
                 "sakuseinichiji double not null, " + //新規作成した日時
                 "koshinuserid text not null, " + //更新されたときのログインユーザーID
@@ -72,13 +71,13 @@ public class DbHelper extends SQLiteOpenHelper {
                 "img blob, " + //画像ファイルのバイナリデータをセット。画像ではない場合null
                 "barcodetype INTEGER, " + //バーコードタイプ　CITIZEN Labelプリンターのバーコード種類を参照
                 "barcodeheight INTEGER, " + //バーコードの高さ 0.1mm単位で指定
-//                "barcode INTEGER, " + //バーコード
-                "kikan_fr text not null, " + //このレコードが有効な期間の開始日
-                "kikan_to text not null, " + //このレコードが有効な期間の終了日
+                "kikan_fr double not null, " + //このレコードが有効な期間の開始日
+                "kikan_to double not null, " + //このレコードが有効な期間の終了日
                 "sakuseiuserid text not null, " + //新規作成した時のログインユーザーID
                 "sakuseinichiji double not null, " + //新規作成した日時
                 "koshinuserid text not null, " + //更新されたときのログインユーザーID
                 "koshinnichiji double not null, " + //更新された日時
+                "shironuki INTEGER, " + //文字を白抜きにするか指定する。0:白抜きではない。1:白抜き
                 "PRIMARY KEY ('chohyokb', 'areano', 'kikan_fr'));");
 
         /**
@@ -142,8 +141,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 "xpos INTEGER not null, " + //チケット発券画面の横方向の表示位置を指定。
                 "ypos INTEGER not null, " + //チケット発券画面の縦方向の表示位置を指定。
                 "ticketid INTEGER not null, " + //チケット(チケットホルダー等の物品含む）をユニークに表す数字を指定する
-                "kikan_fr text not null, " + //このレコードが有効な期間の開始日
-                "kikan_to text not null, " + //このレコードが有効な期間の終了日
+                "kikan_fr double not null, " + //このレコードが有効な期間の開始日
+                "kikan_to double not null, " + //このレコードが有効な期間の終了日
                 "sakuseiuserid text not null, " + //新規作成した時のログインユーザーID
                 "sakuseinichiji double not null, " + //新規作成した日時
                 "koshinuserid text not null, " + //更新されたときのログインユーザーID
@@ -160,8 +159,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 "tickettypecd text not null, " + //チケット種類(mst_kbn.kbtype = 'TICKETTYPE')
                 "hyojikb text not null, " + //このレコードが示すタブを表示するか。(mst_kbn.kbtype = 'HYOJIKB')
                 "sortno INTEGER not null, " + //タブの表示順を指定する。
-                "kikan_fr text not null, " + //このレコードが有効な期間の開始日
-                "kikan_to text not null, " + //このレコードが有効な期間の終了日
+                "kikan_fr double not null, " + //このレコードが有効な期間の開始日
+                "kikan_to double not null, " + //このレコードが有効な期間の終了日
                 "sakuseiuserid text not null, " + //新規作成した時のログインユーザーID
                 "sakuseinichiji double not null, " + //新規作成した日時
                 "koshinuserid text not null, " + //更新されたときのログインユーザーID

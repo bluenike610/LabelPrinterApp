@@ -96,17 +96,32 @@ public class Queries {
 
     public ArrayList<TicketModel> getTicketModels() {
         ArrayList<TicketModel> list = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date c_date = null;
+        try {
+            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH));
+            calendar.setTime(c_date);
+            long startTime = calendar.getTimeInMillis();
 
-        db = dbHelper.getReadableDatabase();
-        Cursor mCursor = db.rawQuery("select * from mst_ticket", null);
-        mCursor.moveToFirst();
-        if (!mCursor.isAfterLast()) {
-            do {
-                TicketModel model = formatTicketModel(mCursor);
-                list.add(model);
-            } while (mCursor.moveToNext());
+            db = dbHelper.getReadableDatabase();
+            Cursor mCursor = db.rawQuery("select * from mst_ticket", null);
+            mCursor.moveToFirst();
+            if (!mCursor.isAfterLast()) {
+                do {
+                    double startDay =  mCursor.getDouble(mCursor.getColumnIndex("kikan_fr"));
+                    double endDay =  mCursor.getDouble(mCursor.getColumnIndex("kikan_to"));
+
+                    if (startTime >= startDay && startTime <=endDay ) {
+                        TicketModel model = formatTicketModel(mCursor);
+                        list.add(model);
+                    }
+                } while (mCursor.moveToNext());
+            }
+            mCursor.close();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        mCursor.close();
 
         return list;
     }
@@ -114,33 +129,64 @@ public class Queries {
     public ArrayList<PrinterInfo> getPrinterInfos() {
         ArrayList<PrinterInfo> list = new ArrayList<>();
 
-        db = dbHelper.getReadableDatabase();
-        Cursor mCursor = db.rawQuery("select * from mst_ticketstyle", null);
-        mCursor.moveToFirst();
-        if (!mCursor.isAfterLast()) {
-            do {
-                PrinterInfo model = formatPrinterInfo(mCursor);
-                list.add(model);
-            } while (mCursor.moveToNext());
+        Calendar calendar = Calendar.getInstance();
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date c_date = null;
+        try {
+            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH));
+            calendar.setTime(c_date);
+            long startTime = calendar.getTimeInMillis();
+
+            db = dbHelper.getReadableDatabase();
+            Cursor mCursor = db.rawQuery("select * from mst_ticketstyle", null);
+            mCursor.moveToFirst();
+            if (!mCursor.isAfterLast()) {
+                do {
+                    double startDay =  mCursor.getDouble(mCursor.getColumnIndex("kikan_fr"));
+                    double endDay =  mCursor.getDouble(mCursor.getColumnIndex("kikan_to"));
+
+                    if (startTime >= startDay && startTime <=endDay ) {
+                        PrinterInfo model = formatPrinterInfo(mCursor);
+                        list.add(model);
+                    }
+                } while (mCursor.moveToNext());
+            }
+            mCursor.close();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        mCursor.close();
 
         return list;
     }
 
     public ArrayList<TicketType> getTicketTypes() {
         ArrayList<TicketType> list = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date c_date = null;
+        try {
+            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH));
+            calendar.setTime(c_date);
+            long startTime = calendar.getTimeInMillis();
 
-        db = dbHelper.getReadableDatabase();
-        Cursor mCursor = db.rawQuery("select * from mst_ui_tab", null);
-        mCursor.moveToFirst();
-        if (!mCursor.isAfterLast()) {
-            do {
-                TicketType model = formatTicketType(mCursor);
-                list.add(model);
-            } while (mCursor.moveToNext());
+            db = dbHelper.getReadableDatabase();
+            Cursor mCursor = db.rawQuery("select * from mst_ui_tab", null);
+            mCursor.moveToFirst();
+            if (!mCursor.isAfterLast()) {
+                do {
+                    double startDay =  mCursor.getDouble(mCursor.getColumnIndex("kikan_fr"));
+                    double endDay =  mCursor.getDouble(mCursor.getColumnIndex("kikan_to"));
+
+                    if (startTime >= startDay && startTime <=endDay ) {
+                        TicketType model = formatTicketType(mCursor);
+                        list.add(model);
+                    }
+                } while (mCursor.moveToNext());
+            }
+            mCursor.close();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        mCursor.close();
 
         return list;
     }
@@ -713,7 +759,6 @@ public class Queries {
         TicketModel model = new TicketModel();
 
         model.setId(String.valueOf(mCursor.getInt(mCursor.getColumnIndex("ticketid"))));
-        model.setType(String.valueOf(mCursor.getInt(mCursor.getColumnIndex("tickettype"))));
         model.setName(mCursor.getString(mCursor.getColumnIndex("kenshumei")));
         model.setPrice(mCursor.getInt(mCursor.getColumnIndex("kakaku")));
         model.setTaxRatio(Float.valueOf(mCursor.getString(mCursor.getColumnIndex("shohizeiritsu"))));
@@ -723,6 +768,7 @@ public class Queries {
         mc.moveToFirst();
         if (!mc.isAfterLast()) {
             do {
+                model.setType(mc.getString(mc.getColumnIndex("tickettypecd")));
                 model.setRowPos(mc.getInt(mc.getColumnIndex("xpos")));
                 model.setColPos(mc.getInt(mc.getColumnIndex("ypos")));
             } while (mc.moveToNext());
@@ -762,7 +808,8 @@ public class Queries {
         info.setImgData(mCursor.getBlob(mCursor.getColumnIndex("img")));
         info.setBarcodeType(mCursor.getInt(mCursor.getColumnIndex("barcodetype")));
         info.setBarcodeHeight(mCursor.getInt(mCursor.getColumnIndex("barcodeheight")));
-//        info.setBarcode(String.valueOf(mCursor.getInt(mCursor.getColumnIndex("barcode"))));
+        info.setWhiteFlag(mCursor.getInt(mCursor.getColumnIndex("shironuki")));
+        info.setBarcode(mCursor.getString(mCursor.getColumnIndex("shoshiki")));
 
         return info;
     }

@@ -80,10 +80,10 @@ public class ReceiptDialog extends Dialog {
                         LabelPrinter printer = manager.receiptOnlyPrintStart(money, receiptTxt.getText().toString());
 
                         //test
-//                        if(printer != null) {
-//                            listner.OnReceiptBtnClicked(printer, (int) money, receiptTxt.getText().toString());
-//                            dismiss();
-//                        }
+                        if(printer != null) {
+                            listner.OnReceiptBtnClicked(printer, (int) money, receiptTxt.getText().toString());
+                            dismiss();
+                        }
                     }
                 }
             }

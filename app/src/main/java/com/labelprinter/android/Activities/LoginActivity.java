@@ -271,8 +271,8 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }, null);
                 //test
-                loginFromLocal(id, pass);
-                cm.getTicketInfoFromXml();
+//                loginFromLocal(id, pass);
+//                cm.getTicketInfoFromXml();
                 break;
             case 5:
                 loginFromLocal(id, pass);

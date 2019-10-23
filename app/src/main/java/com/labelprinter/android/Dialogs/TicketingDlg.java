@@ -122,10 +122,10 @@ public class TicketingDlg extends Dialog {
                         LabelPrinter printer = manager.printerStart(models, 0, "");
 
                         //test
-//                        if(printer != null) {
+                        if(printer != null) {
                             linstener.OnTicketingBtnClicked(printer);
                             dismiss();
-//                        }
+                        }
                     }
                 }
             }
@@ -157,10 +157,10 @@ public class TicketingDlg extends Dialog {
                                 LabelPrinter printer = manager.printerStart(models, ticketingMoney, receiptTxt.getText().toString());
 
                                 //test
-//                                if(printer != null) {
-//                                    linstener.OnTicketingReceiptBtnClicked(printer, Integer.valueOf((int) preMoney), receiptTxt.getText().toString());
-//                                    dismiss();
-//                                }
+                                if(printer != null) {
+                                    linstener.OnTicketingReceiptBtnClicked(printer, Integer.valueOf((int) preMoney), receiptTxt.getText().toString());
+                                    dismiss();
+                                }
                             }
                         }
                     }

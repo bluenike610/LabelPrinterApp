@@ -201,6 +201,7 @@ public class Common {
                     info.setBarcodeType(parseInteger(parseJsonString(object,"バーコードタイプ")));
                     info.setBarcodeHeight(parseInteger(parseJsonString(object,"バーコード高さ")));
                     info.setBarcode(parseJsonString(object,"コード"));
+                    info.setWhiteFlag(parseInteger(parseJsonString(object,"白抜")));
                     printerInfos.add(info);
                 }else if (json instanceof JSONArray) {
                     JSONArray printInfo = printInfoObj.getJSONArray("印字設定");
@@ -224,6 +225,7 @@ public class Common {
                         info.setBarcodeType(parseInteger(parseJsonString(object,"バーコードタイプ")));
                         info.setBarcodeHeight(parseInteger(parseJsonString(object,"バーコード高さ")));
                         info.setBarcode(parseJsonString(object,"コード"));
+                        info.setWhiteFlag(parseInteger(parseJsonString(object,"白抜")));
                         printerInfos.add(info);
                     }
                 }
@@ -349,8 +351,10 @@ public class Common {
         Queries query = new Queries(null, dbHelper);
         HashMap map = query.getDeviceInfo();
         String deviceInfo = "";
-        if (map != null)
-            deviceInfo = map.get("tanmatsumei") + " " + map.get("hanbaibasho");
+        if (map != null) {
+            final String[] items = currentActivity.getResources().getStringArray(R.array.device_place);
+            deviceInfo = map.get("tanmatsumei") + " " + items[parseInteger((String) map.get("hanbaibasho")) - 1];
+        }
         String info = cm.me!=null?cm.me.getName():"";
         return deviceInfo + " " + info + " " + dateStr;
     }

@@ -38,6 +38,8 @@ public class DeviceSettingDialog extends Dialog {
     private String devicePlaceName;
     private HashMap initInfo;
     private DeviceChangeListner listner;
+    private int selectedIndex = 0;
+
 
     public DeviceSettingDialog(@NonNull Context context, final DeviceChangeListner listner) {
         super(context);
@@ -80,9 +82,8 @@ public class DeviceSettingDialog extends Dialog {
         };
 
         devicePlaceName = "";
-        int selectedIndex = 0;
         if (initInfo != null) {
-            selectedIndex = dataAdapter.getPosition(String.valueOf(initInfo.get("hanbaibasho")));
+            selectedIndex = cm.parseInteger((String) initInfo.get("hanbaibasho")) - 1;
         }
         dataAdapter.setDropDownViewResource(R.layout.spinner_text);
         Spinner devicePlace = findViewById(R.id.devicePlace);
@@ -91,6 +92,7 @@ public class DeviceSettingDialog extends Dialog {
         devicePlace.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedIndex = position + 1;
                 devicePlaceName = items[position];
             }
 
@@ -116,7 +118,7 @@ public class DeviceSettingDialog extends Dialog {
                     ContentValues values = new ContentValues();
                     values.put("tanmatsumei", deviceName.getText().toString());
                     values.put("tanmatsuno", cm.parseInteger(deviceNum.getText().toString()));
-                    values.put("hanbaibasho", devicePlaceName);
+                    values.put("hanbaibasho", selectedIndex);
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(new Date());
                     if (initInfo != null) {

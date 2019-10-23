@@ -66,7 +66,7 @@ public class PrinterManager {
                     LabelDesign design = new LabelDesign();
 
                     // Design label
-                    getDesignFromTicketInfo(design, model);
+                    getDesignFromTicketInfo(printer, design, model);
                     cm.hasPrintingErr = false;
 
                     if (infoNum == ticketInfos.size()-1 && modelNum == info.getNum()-1) {
@@ -86,7 +86,7 @@ public class PrinterManager {
                             // Print label
 
                             LabelDesign design1 = new LabelDesign();
-                            getDesignFromReceiptInfo(design1, receiptMoney, receiptName);
+                            getDesignFromReceiptInfo(printer, design1, receiptMoney, receiptName);
                             printResult = printer.print(design, 1);
                             if (LabelConst.CLS_SUCCESS != printResult) {
                                 cm.hasPrintingErr = true;
@@ -142,7 +142,7 @@ public class PrinterManager {
 
             // Print label
 
-            getDesignFromReceiptInfo(design, receiptMoney, receiptName);
+            getDesignFromReceiptInfo(printer, design, receiptMoney, receiptName);
             cm.hasPrintingErr = false;
             int printResult = printer.print(design, 1);
             if (LabelConst.CLS_SUCCESS != printResult) {
@@ -196,7 +196,7 @@ public class PrinterManager {
         return printer;
     }
 
-    private void getDesignFromTicketInfo (LabelDesign design, TicketModel model) {
+    private void getDesignFromTicketInfo (LabelPrinter printer, LabelDesign design, TicketModel model) {
 
         if (cm.printerInfos.size() >0) {
             for (PrinterInfo info : cm.printerInfos) {
@@ -236,65 +236,31 @@ public class PrinterManager {
                 int endX = (int) (info.getEndX()); // mm
                 int endY = (int) (info.getEndY()); // mm
 
-                if (info.getPrinterType().equals("TEXT")) {
-                    switch (info.getPrinterNum()) {
-                        case 1: //チケット定義情報の券種名を示す 券種名(1日　大人など）を示す
-                            content = model.getName() + " " + model.getPrice();
-                            break;
-                        case 2: //発券日(当日)を示す
-                            content = nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日";
-                            break;
-                        case 3: //発券日(当日)を示す
-                            content = "発券日 " + nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日";
-                            break;
-                        case 4: //連絡先
-                            content = info.getFormat();
-                            break;
-                        case 8:
-                            content = "";
-                            break;
-                        default:
-                            content = "";
-                            break;
-                    }
+                if (info.getWhiteFlag() == 1) {
+                    design.fillRect(startX, startY, endX - startX, endY - startY, LabelConst.CLS_SHADED_PTN_1);
+                }
 
-                    if (info.getPrinterNum() == 3){
-                        content = "発券日 " + nowDate.get(Calendar.YEAR) + "年 ";
-                        design.drawTextLocalFont(content, Typeface.create(fontName, Typeface.NORMAL),
-                                LabelConst.CLS_RT_NORMAL, 100, 100, fontSize,
-                                style, startX, startY,
-                                LabelConst.CLS_PRT_RES_203, LabelConst.CLS_UNIT_MILLI);
-                        content = (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日";
-                        design.drawTextLocalFont(content, Typeface.create(fontName, Typeface.NORMAL),
-                                LabelConst.CLS_RT_NORMAL, 100, 100, fontSize+3,
-                                style, startX+10*fontSize, startY,
-                                LabelConst.CLS_PRT_RES_203, LabelConst.CLS_UNIT_MILLI);
-                    }else {
-                        design.drawTextLocalFont(content, Typeface.create(fontName, Typeface.NORMAL),
-                                LabelConst.CLS_RT_NORMAL, 100, 100, fontSize,
-                                style, startX, startY,
-                                LabelConst.CLS_PRT_RES_203, LabelConst.CLS_UNIT_MILLI);
-                    }
+                if (info.getPrinterType().equals("TEXT")) {
+                    content = fillterPrintItem(info.getFormat(), model);
+                    design.drawTextLocalFont(content, Typeface.create(fontName, Typeface.NORMAL),
+                            LabelConst.CLS_RT_NORMAL, 100, 100, fontSize,
+                            style, startX, startY,
+                            LabelConst.CLS_PRT_RES_203, LabelConst.CLS_UNIT_MILLI);
 
                 }else if (info.getPrinterType().equals("IMAGE")) {
                     if (info.getImgData() != null) {
                         design.drawBitmap (info.getFileName(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
-//                    drawBitmap (String filePath, int rotation, int width, int height, int x, int y, int resolution, int measurementUnit)
-//                            design.drawBitmap (file.getAbsolutePath(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY,
-//                                    LabelConst.CLS_PRT_RES_300, LabelConst.CLS_UNIT_MILLI);
                     }else {
                         File root = android.os.Environment.getExternalStorageDirectory();
                         String fname = root.getAbsolutePath() + "/LabelPrinter/Images/" + info.getFileName();
                         design.drawBitmap (fname, LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
                     }
                 }else if (info.getPrinterType().equals("BARCODE")) {
-//                    drawBarCode (String data, int symbology, int rotation, int thick, int narrow, int height, int x, int y,int showText)
                     content = info.getBarcode();
                     design.drawBarCode(content, info.getBarcodeType(),
                             LabelConst.CLS_RT_NORMAL, 5, 2, info.getBarcodeHeight(), startX, startY,
                             LabelConst.CLS_BCS_TEXT_SHOW);
                 }else if (info.getPrinterType().equals("LINE")) {
-//                    drawLine (int x1, int y1, int x2, int y2, int thickness)
                     design.drawLine (startX, startY, endX, endY, 1);
                 }
             }
@@ -310,7 +276,7 @@ public class PrinterManager {
         }
     }
 
-    private void getDesignFromReceiptInfo (LabelDesign design, long receiptMoney, String receiptName) {
+    private void getDesignFromReceiptInfo (LabelPrinter printer, LabelDesign design, long receiptMoney, String receiptName) {
         if (cm.printerInfos.size() >0) {
             for (PrinterInfo info : cm.printerInfos) {
                 if (info.getType().equals("TICKET") || info.getIsShown().equals("0"))
@@ -339,30 +305,22 @@ public class PrinterManager {
                 int endX = (int) (info.getEndX()); // mm
                 int endY = (int) (info.getEndY()); // mm
 
+                if (info.getWhiteFlag() == 1) {
+                    design.fillRect(startX, startY, endX - startX, endY - startY, LabelConst.CLS_SHADED_PTN_1);
+                }
+
                 if (info.getPrinterType().equals("TEXT")) {
-                    switch (info.getPrinterNum()) {
-                        case 1: //領収書
-                            content = info.getFormat();
-                            break;
-                        case 2:
-                            content = info.getFormat();
-                            break;
-                        case 3:
-                            content = "領収金額　： " + receiptMoney;
-                            break;
-                        case 5:
-                            content = "但し　： " + receiptName;
-                            break;
-                        case 7:
-                            DbHelper dbHelper = new DbHelper(currentActivity);
-                            Queries query = new Queries(null, dbHelper);
-                            int receiptNum = query.getEndNumberWithSection("RYOSHUSHO") + 1;
-                            content = "No　： " + receiptNum;
-                            break;
-                        default:
-                            content = "";
-                            break;
+                    content = info.getFormat();
+                    if (content.contains("{KINGAKU}")) {
+                        content = content.replace("{KINGAKU}", receiptMoney + "");
                     }
+                    if (content.contains("{TADASHIGAKI}")) {
+                        content = content.replace("{TADASHIGAKI}", receiptName);
+                    }
+                    if (content.contains("{RYOSHUSHONO}")) {
+                        content = content.replace("{RYOSHUSHONO}", receiptName);
+                    }
+
                     design.drawTextLocalFont(content, Typeface.create(fontName, Typeface.NORMAL),
                             LabelConst.CLS_RT_NORMAL, 100, 100, fontSize,
                             style, startX, startY,
@@ -459,10 +417,59 @@ public class PrinterManager {
                 LabelConst.CLS_PRT_FNT_KANJI_SIZE_24, 50, startY);
     }
 
-        /**
-         * Permissions
-         * @see <a href="https://developer.android.com/guide/topics/security/permissions#perm-groups">Dangerous permissions and permission groups.</a>
-         */
+    private String fillterPrintItem (String item, TicketModel model) {
+        String fillterStr = item;
+        Calendar nowDate = Calendar.getInstance();
+        if (fillterStr.contains("{HAKKENBI}")) {
+            fillterStr = fillterStr.replace("{HAKKENBI}", nowDate.get(Calendar.YEAR) + "年/" + (nowDate.get(Calendar.MONTH)+1) + "月/" + nowDate.get(Calendar.DAY_OF_MONTH) + "日");
+        }
+        if (fillterStr.contains("(HAKKENBI2}")) {
+            fillterStr = fillterStr.replace("{HAKKENBI2}", nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日");
+        }
+        if (fillterStr.contains("{HAKKENBI-YEA}")) {
+            fillterStr = fillterStr.replace("{HAKKENBI-YEA}", nowDate.get(Calendar.YEAR) + "年");
+        }
+        if (fillterStr.contains("{HAKKENBI-MON}")) {
+            fillterStr = fillterStr.replace("{HAKKENBI-MON}", (nowDate.get(Calendar.MONTH)+1) + "月");
+        }
+        if (fillterStr.contains("{HAKKENBI-DAY}")) {
+            fillterStr = fillterStr.replace("{HAKKENBI-DAY}", nowDate.get(Calendar.DAY_OF_MONTH) + "日");
+        }
+        if (fillterStr.contains("{YUKOKIGEN}")) {
+            fillterStr = fillterStr.replace("{YUKOKIGEN}", model.getEndDays() + "日 " + nowDate.get(Calendar.YEAR) + "年/" + (nowDate.get(Calendar.MONTH)+1) + "月/" + nowDate.get(Calendar.DAY_OF_MONTH) + "日");
+        }
+        if (fillterStr.contains("{YUKOKIGEN2}")) {
+            fillterStr = fillterStr.replace("{YUKOKIGEN2}", model.getEndDays() + "日 " + nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日");
+        }
+        if (fillterStr.contains("{YUKOKIGEN-YEA}")) {
+            fillterStr = fillterStr.replace("{YUKOKIGEN-YEA}", model.getEndDays() + "日 " + nowDate.get(Calendar.YEAR) + "年");
+        }
+        if (fillterStr.contains("{YUKOKIGEN-MON}")) {
+            fillterStr = fillterStr.replace("{YUKOKIGEN-MON}", model.getEndDays() + "日 " + (nowDate.get(Calendar.MONTH)+1) + "月");
+        }
+        if (fillterStr.contains("{YUKOKIGEN-DAY}")) {
+            fillterStr = fillterStr.replace("{YUKOKIGEN-DAY}", model.getEndDays() + "日 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日");
+        }
+        if (fillterStr.contains("{KENSHUMEI}")) {
+            fillterStr = fillterStr.replace("{KENSHUMEI}", model.getName());
+        }
+        if (fillterStr.contains("{TANKA}")) {
+            fillterStr = fillterStr.replace("{TANKA}", model.getPrice() + "");
+        }
+        if (fillterStr.contains("{KAKAKU}")) {
+            fillterStr = fillterStr.replace("{KAKAKU}", model.getPrice() + "");
+        }
+        if (fillterStr.contains("{GENZAINICHIJI}")) {
+            fillterStr = fillterStr.replace("{GENZAINICHIJI}", nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日");
+        }
+        return fillterStr;
+    }
+
+
+            /**
+             * Permissions
+             * @see <a href="https://developer.android.com/guide/topics/security/permissions#perm-groups">Dangerous permissions and permission groups.</a>
+             */
     final String[] permissions = {
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
