@@ -248,9 +248,9 @@ public class LoginActivity extends AppCompatActivity {
         APIManager apiManager = new APIManager();
         switch (StartPattern) {
             case 1:
+                apiManager.syncFromServer();
                 loginFromLocal(id, pass);
                 cm.getTicketInfoFromXml();
-                apiManager.syncFromServer();
                 break;
             case 2:
                 loginFromLocal(id, pass);
@@ -275,8 +275,8 @@ public class LoginActivity extends AppCompatActivity {
 //                cm.getTicketInfoFromXml();
                 break;
             case 5:
-                loginFromLocal(id, pass);
                 apiManager.syncFromServer();
+                loginFromLocal(id, pass);
                 cm.getTicketInfoFromLocal();
                 break;
             case 6:
@@ -292,7 +292,8 @@ public class LoginActivity extends AppCompatActivity {
         DbHelper dbHelper = new DbHelper(currentActivity);
         Queries query = new Queries(null, dbHelper);
         LocalStorageManager manager = new LocalStorageManager();
-        User user = query.getUserInfo(id, cm.getHashCodeFromPass(pass));
+        String hashPass = cm.getHashCodeFromPass(pass);
+        User user = query.getUserInfo(id, hashPass);
         // test
 //        User user = new User();
 //        user.setId("1");
@@ -321,7 +322,8 @@ public class LoginActivity extends AppCompatActivity {
         Queries query = new Queries(null, dbHelper);
         LocalStorageManager manager = new LocalStorageManager();
         APIManager apiManager = new APIManager();
-        User user = apiManager.loginToServer(id, cm.getHashCodeFromPass(pass));
+        String hashPass = cm.getHashCodeFromPass(pass);
+        User user = apiManager.loginToServer(id, hashPass);
         // test
 //        User user = new User();
 //        user.setId("1");
