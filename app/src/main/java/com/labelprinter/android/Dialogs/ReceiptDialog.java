@@ -64,7 +64,7 @@ public class ReceiptDialog extends Dialog {
         findViewById(R.id.ticketingReceiptBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (receiptTxt.getText().toString().equals("") || money == 0) {
+                if (money == 0) {
                     Common.cm.showAlertDlg(currentActivity.getResources().getString(R.string.input_err_title),
                             currentActivity.getResources().getString(R.string.receipt_name_err_msg), new DialogInterface.OnClickListener() {
                                 @Override

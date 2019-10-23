@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 
 import com.labelprinter.android.Common.Common;
+import com.labelprinter.android.Common.Config;
 import com.labelprinter.android.Common.DownTimer;
 import com.labelprinter.android.Common.LocalStorageManager;
 import com.labelprinter.android.DBManager.APIManager;
@@ -246,6 +247,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login(String id, String pass) {
         APIManager apiManager = new APIManager();
+        LocalStorageManager localStorageManager = new LocalStorageManager();
+        String fname =  localStorageManager.getXMLFile();
         switch (StartPattern) {
             case 1:
                 apiManager.syncFromServer();
@@ -277,11 +280,19 @@ public class LoginActivity extends AppCompatActivity {
             case 5:
                 apiManager.syncFromServer();
                 loginFromLocal(id, pass);
-                cm.getTicketInfoFromLocal();
+                if (fname == null) {
+                    cm.getTicketInfoFromLocal();
+                }else {
+                    cm.getTicketInfoFromXml();
+                }
                 break;
             case 6:
                 loginFromLocal(id, pass);
-                cm.getTicketInfoFromLocal();
+                if (fname == null) {
+                    cm.getTicketInfoFromLocal();
+                }else {
+                    cm.getTicketInfoFromXml();
+                }
                 break;
             default:
                 break;

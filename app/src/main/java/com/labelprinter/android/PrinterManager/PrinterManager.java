@@ -232,9 +232,9 @@ public class PrinterManager {
                 }
 
                 int startX = (int) (info.getStartX()); // mm
-                int startY = (int) (info.getStartY()); // mm
+                int startY = (int) (info.getEndY()); // mm
                 int endX = (int) (info.getEndX()); // mm
-                int endY = (int) (info.getEndY()); // mm
+                int endY = (int) (info.getStartY()); // mm
 
                 if (info.getWhiteFlag() == 1) {
                     design.fillRect(startX, startY, endX - startX, endY - startY, LabelConst.CLS_SHADED_PTN_1);
@@ -248,13 +248,13 @@ public class PrinterManager {
                             LabelConst.CLS_PRT_RES_203, LabelConst.CLS_UNIT_MILLI);
 
                 }else if (info.getPrinterType().equals("IMAGE")) {
-                    if (info.getImgData() != null) {
-                        design.drawBitmap (info.getFileName(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
-                    }else {
+//                    if (info.getImgData() != null) {
+//                        design.drawBitmap (info.getFileName(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
+//                    }else {
                         File root = android.os.Environment.getExternalStorageDirectory();
-                        String fname = root.getAbsolutePath() + "/LabelPrinter/Images/" + info.getFileName();
+                        String fname = root.getAbsolutePath() + "/LabelPrinter/Images/ticket_img.png";
                         design.drawBitmap (fname, LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
-                    }
+//                    }
                 }else if (info.getPrinterType().equals("BARCODE")) {
                     content = info.getBarcode();
                     design.drawBarCode(content, info.getBarcodeType(),
@@ -282,7 +282,6 @@ public class PrinterManager {
                 if (info.getType().equals("TICKET") || info.getIsShown().equals("0"))
                     continue;
                 String content = "";
-                Calendar nowDate = Calendar.getInstance();
 
                 String fontName = info.getFont();
                 int fontSize = (int) info.getFontSize();
@@ -301,9 +300,9 @@ public class PrinterManager {
                 }
 
                 int startX = (int) (info.getStartX()); // mm
-                int startY = (int) (info.getStartY()); // mm
+                int startY = (int) (info.getEndY()); // mm
                 int endX = (int) (info.getEndX()); // mm
-                int endY = (int) (info.getEndY()); // mm
+                int endY = (int) (info.getStartY()); // mm
 
                 if (info.getWhiteFlag() == 1) {
                     design.fillRect(startX, startY, endX - startX, endY - startY, LabelConst.CLS_SHADED_PTN_1);
@@ -312,13 +311,16 @@ public class PrinterManager {
                 if (info.getPrinterType().equals("TEXT")) {
                     content = info.getFormat();
                     if (content.contains("{KINGAKU}")) {
-                        content = content.replace("{KINGAKU}", receiptMoney + "");
+                        content = content.replace("{KINGAKU}", "¥" + cm.numberFormat((int) receiptMoney) + "");
                     }
                     if (content.contains("{TADASHIGAKI}")) {
                         content = content.replace("{TADASHIGAKI}", receiptName);
                     }
                     if (content.contains("{RYOSHUSHONO}")) {
-                        content = content.replace("{RYOSHUSHONO}", receiptName);
+                        DbHelper dbHelper = new DbHelper(currentActivity);
+                        Queries query = new Queries(null, dbHelper);
+                        int receiptNum = query.getEndNumberWithSection("RYOSHUSHO") + 1;
+                        content = content.replace("{RYOSHUSHONO}", receiptNum + "");
                     }
 
                     design.drawTextLocalFont(content, Typeface.create(fontName, Typeface.NORMAL),
@@ -358,34 +360,51 @@ public class PrinterManager {
             design.drawLine (0, startY, 1000, startY, 1);
             startY += 30;
             HashMap map = mainList.get(i);
-            design.drawTextPtrFont(String.valueOf(map.get("code")),
-                    LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
-                    LabelConst.CLS_RT_NORMAL, 1, 1,
-                    LabelConst.CLS_PRT_FNT_KANJI_SIZE_16, 10, startY);
-            design.drawTextPtrFont(String.valueOf(map.get("type")),
-                    LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
-                    LabelConst.CLS_RT_NORMAL, 1, 1,
-                    LabelConst.CLS_PRT_FNT_KANJI_SIZE_16, 90, startY);
-            design.drawTextPtrFont(String.valueOf(map.get("unit")),
-                    LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
-                    LabelConst.CLS_RT_NORMAL, 1, 1,
-                    LabelConst.CLS_PRT_FNT_KANJI_SIZE_16, 290, startY);
-            design.drawTextPtrFont(String.valueOf(map.get("sell")),
-                    LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
-                    LabelConst.CLS_RT_NORMAL, 1, 1,
-                    LabelConst.CLS_PRT_FNT_KANJI_SIZE_16, 440, startY);
-            design.drawTextPtrFont(String.valueOf(map.get("refund")),
-                    LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
-                    LabelConst.CLS_RT_NORMAL, 1, 1,
-                    LabelConst.CLS_PRT_FNT_KANJI_SIZE_16, 520, startY);
-            design.drawTextPtrFont(String.valueOf(map.get("total")),
-                    LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
-                    LabelConst.CLS_RT_NORMAL, 1, 1,
-                    LabelConst.CLS_PRT_FNT_KANJI_SIZE_16, 600, startY);
-            design.drawTextPtrFont(String.valueOf(map.get("price")),
-                    LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
-                    LabelConst.CLS_RT_NORMAL, 1, 1,
-                    LabelConst.CLS_PRT_FNT_KANJI_SIZE_16, 700, startY);
+            if (i == 0) {
+                design.drawTextLocalFont(String.valueOf(map.get("code")), Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_FNT_BOLD, 10, startY);
+                design.drawTextLocalFont(String.valueOf(map.get("type")), Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_FNT_BOLD, 90, startY);
+                design.drawTextLocalFont(String.valueOf(map.get("unit")), Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_FNT_BOLD, 290, startY);
+                design.drawTextLocalFont(String.valueOf(map.get("sell")), Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_FNT_BOLD, 440, startY);
+                design.drawTextLocalFont(String.valueOf(map.get("refund")), Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_FNT_BOLD, 520, startY);
+                design.drawTextLocalFont(String.valueOf(map.get("total")), Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_FNT_BOLD, 600, startY);
+                design.drawTextLocalFont(String.valueOf(map.get("price")), Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_FNT_BOLD, 700, startY);
+            }else {
+                design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("code"))), Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_FNT_BOLD, 10, startY);
+                design.drawTextLocalFont(String.valueOf(map.get("type")), Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_FNT_BOLD, 90, startY);
+                design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("unit"))), Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_FNT_BOLD, 290, startY);
+                design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("sell"))), Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_FNT_BOLD, 440, startY);
+                design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("refund"))), Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_FNT_BOLD, 520, startY);
+                design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("total"))), Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_FNT_BOLD, 600, startY);
+                design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("price"))), Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_FNT_BOLD, 700, startY);
+            }
             startY += 50;
         }
         design.drawLine (0, startY, 1000, startY, 2);
@@ -395,72 +414,68 @@ public class PrinterManager {
             design.drawLine (0, startY, 1000, startY, 1);
             startY += 30;
             HashMap map = subList.get(i);
-            design.drawTextPtrFont(String.valueOf(map.get("title")),
-                    LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
-                    LabelConst.CLS_RT_NORMAL, 1, 1,
-                    LabelConst.CLS_PRT_FNT_KANJI_SIZE_16, 10, startY);
-            design.drawTextPtrFont(String.valueOf(map.get("num")),
-                    LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
-                    LabelConst.CLS_RT_NORMAL, 1, 1,
-                    LabelConst.CLS_PRT_FNT_KANJI_SIZE_16, 210, startY);
-            design.drawTextPtrFont(String.valueOf(map.get("price")),
-                    LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
-                    LabelConst.CLS_RT_NORMAL, 1, 1,
-                    LabelConst.CLS_PRT_FNT_KANJI_SIZE_16, 310, startY);
+            design.drawTextLocalFont(String.valueOf(map.get("title")), Typeface.SERIF,
+                    LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                    LabelConst.CLS_FNT_BOLD, 10, startY);
+            design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("num"))), Typeface.SERIF,
+                    LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                    LabelConst.CLS_FNT_BOLD, 210, startY);
+            design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("price"))), Typeface.SERIF,
+                    LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                    LabelConst.CLS_FNT_BOLD, 310, startY);
             startY += 50;
         }
         design.drawLine (0, startY, 1000, startY, 2);
         startY += 50;
-        design.drawTextPtrFont(title,
-                LabelConst.CLS_LOCALE_JP, LabelConst.CLS_PRT_FNT_KANJI,
-                LabelConst.CLS_RT_NORMAL, 1, 1,
-                LabelConst.CLS_PRT_FNT_KANJI_SIZE_24, 50, startY);
+        design.drawTextLocalFont(title, Typeface.SERIF,
+                LabelConst.CLS_RT_NORMAL, 100, 100, 24,
+                LabelConst.CLS_FNT_BOLD, 50, startY);
     }
 
     private String fillterPrintItem (String item, TicketModel model) {
         String fillterStr = item;
         Calendar nowDate = Calendar.getInstance();
         if (fillterStr.contains("{HAKKENBI}")) {
-            fillterStr = fillterStr.replace("{HAKKENBI}", nowDate.get(Calendar.YEAR) + "年/" + (nowDate.get(Calendar.MONTH)+1) + "月/" + nowDate.get(Calendar.DAY_OF_MONTH) + "日");
+            fillterStr = fillterStr.replace("{HAKKENBI}", nowDate.get(Calendar.YEAR) + "/" + (nowDate.get(Calendar.MONTH)+1) + "/" + nowDate.get(Calendar.DAY_OF_MONTH) + "");
         }
         if (fillterStr.contains("(HAKKENBI2}")) {
-            fillterStr = fillterStr.replace("{HAKKENBI2}", nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日");
+            fillterStr = fillterStr.replace("{HAKKENBI2}", nowDate.get(Calendar.YEAR) + " " + (nowDate.get(Calendar.MONTH)+1) + " " + nowDate.get(Calendar.DAY_OF_MONTH) + "");
         }
         if (fillterStr.contains("{HAKKENBI-YEA}")) {
-            fillterStr = fillterStr.replace("{HAKKENBI-YEA}", nowDate.get(Calendar.YEAR) + "年");
+            fillterStr = fillterStr.replace("{HAKKENBI-YEA}", nowDate.get(Calendar.YEAR) + "");
         }
         if (fillterStr.contains("{HAKKENBI-MON}")) {
-            fillterStr = fillterStr.replace("{HAKKENBI-MON}", (nowDate.get(Calendar.MONTH)+1) + "月");
+            fillterStr = fillterStr.replace("{HAKKENBI-MON}", (nowDate.get(Calendar.MONTH)+1) + "");
         }
         if (fillterStr.contains("{HAKKENBI-DAY}")) {
-            fillterStr = fillterStr.replace("{HAKKENBI-DAY}", nowDate.get(Calendar.DAY_OF_MONTH) + "日");
+            fillterStr = fillterStr.replace("{HAKKENBI-DAY}", nowDate.get(Calendar.DAY_OF_MONTH) + "");
         }
         if (fillterStr.contains("{YUKOKIGEN}")) {
-            fillterStr = fillterStr.replace("{YUKOKIGEN}", model.getEndDays() + "日 " + nowDate.get(Calendar.YEAR) + "年/" + (nowDate.get(Calendar.MONTH)+1) + "月/" + nowDate.get(Calendar.DAY_OF_MONTH) + "日");
+            fillterStr = fillterStr.replace("{YUKOKIGEN}", model.getEndDays() + "日 " + nowDate.get(Calendar.YEAR) + "/" + (nowDate.get(Calendar.MONTH)+1) + "/" + nowDate.get(Calendar.DAY_OF_MONTH) + "");
         }
         if (fillterStr.contains("{YUKOKIGEN2}")) {
-            fillterStr = fillterStr.replace("{YUKOKIGEN2}", model.getEndDays() + "日 " + nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日");
+            fillterStr = fillterStr.replace("{YUKOKIGEN2}", model.getEndDays() + "日 " + nowDate.get(Calendar.YEAR) + " " + (nowDate.get(Calendar.MONTH)+1) + " " + nowDate.get(Calendar.DAY_OF_MONTH) + "");
         }
         if (fillterStr.contains("{YUKOKIGEN-YEA}")) {
-            fillterStr = fillterStr.replace("{YUKOKIGEN-YEA}", model.getEndDays() + "日 " + nowDate.get(Calendar.YEAR) + "年");
+            fillterStr = fillterStr.replace("{YUKOKIGEN-YEA}", model.getEndDays() + "日 " + nowDate.get(Calendar.YEAR) + "");
         }
         if (fillterStr.contains("{YUKOKIGEN-MON}")) {
-            fillterStr = fillterStr.replace("{YUKOKIGEN-MON}", model.getEndDays() + "日 " + (nowDate.get(Calendar.MONTH)+1) + "月");
+            fillterStr = fillterStr.replace("{YUKOKIGEN-MON}", model.getEndDays() + "日 " + (nowDate.get(Calendar.MONTH)+1) + "");
         }
         if (fillterStr.contains("{YUKOKIGEN-DAY}")) {
-            fillterStr = fillterStr.replace("{YUKOKIGEN-DAY}", model.getEndDays() + "日 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日");
+            fillterStr = fillterStr.replace("{YUKOKIGEN-DAY}", model.getEndDays() + "日 " + nowDate.get(Calendar.DAY_OF_MONTH) + "");
         }
         if (fillterStr.contains("{KENSHUMEI}")) {
             fillterStr = fillterStr.replace("{KENSHUMEI}", model.getName());
         }
         if (fillterStr.contains("{TANKA}")) {
-            fillterStr = fillterStr.replace("{TANKA}", model.getPrice() + "");
+            fillterStr = fillterStr.replace("{TANKA}", "¥" + cm.numberFormat(model.getPrice()) + "");
         }
         if (fillterStr.contains("{KAKAKU}")) {
-            fillterStr = fillterStr.replace("{KAKAKU}", model.getPrice() + "");
+            fillterStr = fillterStr.replace("{KAKAKU}", "¥" + cm.numberFormat(model.getPrice()) + "");
         }
         if (fillterStr.contains("{GENZAINICHIJI}")) {
-            fillterStr = fillterStr.replace("{GENZAINICHIJI}", nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日");
+            fillterStr = fillterStr.replace("{GENZAINICHIJI}", nowDate.get(Calendar.YEAR) + " " + (nowDate.get(Calendar.MONTH)+1) + " " + nowDate.get(Calendar.DAY_OF_MONTH) + "");
         }
         return fillterStr;
     }

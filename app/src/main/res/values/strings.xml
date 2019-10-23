@@ -121,7 +121,7 @@
     <string name="btn_registry">登録</string>
     <string name="lb_receipt_money">領収金額</string>
     <string name="btn_receipt_only">領収書発行</string>
-    <string name="receipt_name_err_msg">領収金額もしくは但し項目を入力してください。</string>
+    <string name="receipt_name_err_msg">領収金額を入力してください。</string>
 
     <string-array name="days_array">
         <item>月</item>

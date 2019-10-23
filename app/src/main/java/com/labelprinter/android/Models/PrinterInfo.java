@@ -144,7 +144,7 @@ public class PrinterInfo {
         if(!dir.exists()) {
             dir.mkdirs();
         }
-        File file = new File(dir, "img_" + calendar.getTimeInMillis() + ".png");
+        File file = new File(dir, "ticket_img.png");
         if (val != null) {
             String fname = cm.writeToFile(val, file.getAbsolutePath());
             if (!fname.equals("")) {
