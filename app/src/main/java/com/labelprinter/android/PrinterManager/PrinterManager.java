@@ -319,7 +319,7 @@ public class PrinterManager {
                     if (content.contains("{RYOSHUSHONO}")) {
                         DbHelper dbHelper = new DbHelper(currentActivity);
                         Queries query = new Queries(null, dbHelper);
-                        int receiptNum = query.getEndNumberWithSection("RYOSHUSHO") + 1;
+                        int receiptNum = query.getEndNumberWithSection("RYOSHUSHO");
                         content = content.replace("{RYOSHUSHONO}", receiptNum + "");
                     }
 
@@ -357,78 +357,80 @@ public class PrinterManager {
 
         int startY = 0;
         for (int i=mainList.size()-1; i>=0; i--) {
-            design.drawLine (0, startY, 1000, startY, 1);
-            startY += 30;
+            design.drawLine (0, startY, 1000, startY, 2);
+            startY += 20;
             HashMap map = mainList.get(i);
             if (i == 0) {
                 design.drawTextLocalFont(String.valueOf(map.get("code")), Typeface.SERIF,
-                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 6,
                         LabelConst.CLS_FNT_BOLD, 10, startY);
                 design.drawTextLocalFont(String.valueOf(map.get("type")), Typeface.SERIF,
-                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 6,
                         LabelConst.CLS_FNT_BOLD, 90, startY);
                 design.drawTextLocalFont(String.valueOf(map.get("unit")), Typeface.SERIF,
-                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 6,
                         LabelConst.CLS_FNT_BOLD, 290, startY);
                 design.drawTextLocalFont(String.valueOf(map.get("sell")), Typeface.SERIF,
-                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 6,
                         LabelConst.CLS_FNT_BOLD, 440, startY);
                 design.drawTextLocalFont(String.valueOf(map.get("refund")), Typeface.SERIF,
-                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 6,
                         LabelConst.CLS_FNT_BOLD, 520, startY);
                 design.drawTextLocalFont(String.valueOf(map.get("total")), Typeface.SERIF,
-                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 6,
                         LabelConst.CLS_FNT_BOLD, 600, startY);
                 design.drawTextLocalFont(String.valueOf(map.get("price")), Typeface.SERIF,
-                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 6,
                         LabelConst.CLS_FNT_BOLD, 700, startY);
             }else {
-                design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("code"))), Typeface.SERIF,
-                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                if (!String.valueOf(map.get("code")).equals(""))
+                    design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("code"))), Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 6,
                         LabelConst.CLS_FNT_BOLD, 10, startY);
                 design.drawTextLocalFont(String.valueOf(map.get("type")), Typeface.SERIF,
-                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 6,
                         LabelConst.CLS_FNT_BOLD, 90, startY);
-                design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("unit"))), Typeface.SERIF,
-                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                if (!String.valueOf(map.get("unit")).equals(""))
+                    design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("unit"))), Typeface.SERIF,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 6,
                         LabelConst.CLS_FNT_BOLD, 290, startY);
                 design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("sell"))), Typeface.SERIF,
-                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 6,
                         LabelConst.CLS_FNT_BOLD, 440, startY);
                 design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("refund"))), Typeface.SERIF,
-                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 6,
                         LabelConst.CLS_FNT_BOLD, 520, startY);
                 design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("total"))), Typeface.SERIF,
-                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 6,
                         LabelConst.CLS_FNT_BOLD, 600, startY);
                 design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("price"))), Typeface.SERIF,
-                        LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                        LabelConst.CLS_RT_NORMAL, 100, 100, 6,
                         LabelConst.CLS_FNT_BOLD, 700, startY);
             }
-            startY += 50;
+            startY += 60;
         }
-        design.drawLine (0, startY, 1000, startY, 2);
+        design.drawLine (0, startY, 1000, startY, 3);
         startY += 50;
 
         for (int i=subList.size()-1; i>=0; i--) {
-            design.drawLine (0, startY, 1000, startY, 1);
-            startY += 30;
+            design.drawLine (0, startY, 1000, startY, 2);
+            startY += 20;
             HashMap map = subList.get(i);
             design.drawTextLocalFont(String.valueOf(map.get("title")), Typeface.SERIF,
-                    LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                    LabelConst.CLS_RT_NORMAL, 100, 100, 6,
                     LabelConst.CLS_FNT_BOLD, 10, startY);
-            design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("num"))), Typeface.SERIF,
-                    LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+            design.drawTextLocalFont(String.valueOf(map.get("num")), Typeface.SERIF,
+                    LabelConst.CLS_RT_NORMAL, 100, 100, 6,
                     LabelConst.CLS_FNT_BOLD, 210, startY);
             design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("price"))), Typeface.SERIF,
-                    LabelConst.CLS_RT_NORMAL, 100, 100, 16,
+                    LabelConst.CLS_RT_NORMAL, 100, 100, 6,
                     LabelConst.CLS_FNT_BOLD, 310, startY);
-            startY += 50;
+            startY += 60;
         }
-        design.drawLine (0, startY, 1000, startY, 2);
+        design.drawLine (0, startY, 1000, startY, 3);
         startY += 50;
         design.drawTextLocalFont(title, Typeface.SERIF,
-                LabelConst.CLS_RT_NORMAL, 100, 100, 24,
+                LabelConst.CLS_RT_NORMAL, 100, 100, 10,
                 LabelConst.CLS_FNT_BOLD, 50, startY);
     }
 

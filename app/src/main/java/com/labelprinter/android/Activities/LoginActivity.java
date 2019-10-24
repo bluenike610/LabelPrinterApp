@@ -27,6 +27,7 @@ import com.labelprinter.android.DBManager.Queries;
 import com.labelprinter.android.Models.User;
 import com.labelprinter.android.R;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import static com.labelprinter.android.Common.Common.StartPattern;
@@ -246,6 +247,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(String id, String pass) {
+        loading.setVisibility(View.VISIBLE);
         APIManager apiManager = new APIManager();
         LocalStorageManager localStorageManager = new LocalStorageManager();
         String fname =  localStorageManager.getXMLFile();
@@ -265,6 +267,7 @@ public class LoginActivity extends AppCompatActivity {
                 cm.getTicketInfoFromXml();
                 break;
             case 4:
+                loading.setVisibility(View.GONE);
                 cm.showAlertDlg(getResources().getString(R.string.login_err_title),
                         getResources().getString(R.string.login_err_msg1),
                         new DialogInterface.OnClickListener() {
@@ -273,26 +276,34 @@ public class LoginActivity extends AppCompatActivity {
                                 finish();
                             }
                         }, null);
-                //test
+                //test`
 //                loginFromLocal(id, pass);
 //                cm.getTicketInfoFromXml();
                 break;
             case 5:
                 apiManager.syncFromServer();
                 loginFromLocal(id, pass);
-                if (fname == null) {
-                    cm.getTicketInfoFromLocal();
-                }else {
-                    cm.getTicketInfoFromXml();
+                if (fname != null) {
+                    File root = android.os.Environment.getExternalStorageDirectory();
+                    File dir = new File(root.getAbsolutePath() + "/LabelPrinter/" + fname);
+                    if(dir.exists()) {
+                        cm.getTicketInfoFromXml();
+                        return;
+                    }
                 }
+                cm.getTicketInfoFromLocal();
                 break;
             case 6:
                 loginFromLocal(id, pass);
-                if (fname == null) {
-                    cm.getTicketInfoFromLocal();
-                }else {
-                    cm.getTicketInfoFromXml();
+                if (fname != null) {
+                    File root = android.os.Environment.getExternalStorageDirectory();
+                    File dir = new File(root.getAbsolutePath() + "/LabelPrinter/" + fname);
+                    if(dir.exists()) {
+                        cm.getTicketInfoFromXml();
+                        return;
+                    }
                 }
+                cm.getTicketInfoFromLocal();
                 break;
             default:
                 break;
@@ -313,10 +324,12 @@ public class LoginActivity extends AppCompatActivity {
         if (user != null) {
             manager.saveLoginInfo(user.getId());
             cm.me = user;
+            loading.setVisibility(View.GONE);
             Intent intent = new Intent(currentActivity, MainActivity.class);
             startActivity(intent);
             finish();
         }else {
+            loading.setVisibility(View.GONE);
             cm.showAlertDlg(getResources().getString(R.string.login_err_title),
                     getResources().getString(R.string.login_err_msg),
                     new DialogInterface.OnClickListener() {
@@ -345,10 +358,12 @@ public class LoginActivity extends AppCompatActivity {
             query.addUserInfo(user);
             manager.saveLoginInfo(user.getId());
             cm.me = user;
+            loading.setVisibility(View.GONE);
             Intent intent = new Intent(cm.currentActivity, MainActivity.class);
             startActivity(intent);
             finish();
         }else {
+            loading.setVisibility(View.GONE);
             cm.showAlertDlg(getResources().getString(R.string.login_err_title),
                     getResources().getString(R.string.login_err_msg),
                     new DialogInterface.OnClickListener() {
