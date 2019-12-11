@@ -4,6 +4,8 @@ public class TicketModel {
     private String id;
     private String type;
     private String name;
+    private String namePr;
+    private String nameAge;
     private int price;
     private float taxRatio;
     private int tax;
@@ -13,6 +15,8 @@ public class TicketModel {
     private String bgColor;
     private int order;
     private int endDays;
+    private int halfDay;
+    private int profileNo;
 
     public TicketModel () {
 
@@ -37,6 +41,20 @@ public class TicketModel {
     }
     public String getName() {
         return name;
+    }
+
+    public void setNamePr(String val) {
+        namePr = val;
+    }
+    public String getNamePr() {
+        return namePr;
+    }
+
+    public void setNameAge(String val) {
+        nameAge = val;
+    }
+    public String getNameAge() {
+        return nameAge;
     }
 
     public void setPrice(int val) {
@@ -100,5 +118,17 @@ public class TicketModel {
     }
     public int getEndDays() {
         return endDays;
+    }
+    public void setHalfDay(int val) {
+        halfDay = val;
+    }
+    public int getHalfDay() {
+        return halfDay;
+    }
+    public void setProfileNo(int val) {
+        profileNo = val;
+    }
+    public int getProfileNo() {
+        return profileNo;
     }
 }

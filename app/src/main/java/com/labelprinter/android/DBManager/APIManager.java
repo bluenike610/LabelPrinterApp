@@ -60,7 +60,10 @@ public class APIManager {
                     + ":" + Config.SERVER_PORT
                     + ";DatabaseName="
                     + Config.DB_NAME;
+            String name = Config.USER_NAME;
+            String pass = Config.PASSWORD;
             connection = DriverManager.getConnection(url, Config.USER_NAME, Config.PASSWORD);
+
         }
         catch (SQLException se)
         {
@@ -123,19 +126,23 @@ public class APIManager {
                     ContentValues values = new ContentValues();
                     values.put("ticketid", rs.getInt(1));
                     values.put("kenshumei", rs.getString(2));
-                    values.put("kakaku", rs.getInt(3));
-                    values.put("shohizeiritsu", rs.getString(4));
-                    values.put("shohizeigaku", rs.getInt(5));
-                    values.put("seisansortno", rs.getInt(6));
-                    values.put("haikeishoku", rs.getString(7));
-                    values.put("mojishoku", rs.getString(8));
-                    values.put("yukokikanbi", rs.getInt(9));
-                    values.put("kikan_fr", cm.convertToMilisecondsFromDate(rs.getDate(10)));
-                    values.put("kikan_to", cm.convertToMilisecondsFromDate(rs.getDate(11)));
-                    values.put("sakuseiuserid", rs.getString(12));
-                    values.put("sakuseinichiji", cm.convertToMilisecondsFromDate(rs.getDate(13)));
-                    values.put("koshinuserid", rs.getString(14));
-                    values.put("koshinnichiji", cm.convertToMilisecondsFromDate(rs.getDate(15)));
+                    values.put("kenshumeiinji", rs.getString(3));
+                    values.put("nenreiso", rs.getString(4));
+                    values.put("kakaku", rs.getInt(5));
+                    values.put("shohizeiritsu", rs.getString(6));
+                    values.put("shohizeigaku", rs.getInt(7));
+                    values.put("seisansortno", rs.getInt(8));
+                    values.put("haikeishoku", rs.getString(9));
+                    values.put("mojishoku", rs.getString(10));
+                    values.put("yukokikanbi", rs.getInt(11));
+                    values.put("hannichikasan", rs.getInt(12));
+                    values.put("profileno", rs.getInt(13));
+                    values.put("kikan_fr", cm.convertToMilisecondsFromDate(rs.getDate(14)));
+                    values.put("kikan_to", cm.convertToMilisecondsFromDate(rs.getDate(15)));
+                    values.put("sakuseiuserid", rs.getString(16));
+                    values.put("sakuseinichiji", cm.convertToMilisecondsFromDate(rs.getDate(17)));
+                    values.put("koshinuserid", rs.getString(18));
+                    values.put("koshinnichiji", cm.convertToMilisecondsFromDate(rs.getDate(19)));
 
                     ticketModels.add(values);
                 }
@@ -148,36 +155,37 @@ public class APIManager {
                 ArrayList<ContentValues> printerInfos = new ArrayList<>();
                 while (rs.next()) {
                     ContentValues values = new ContentValues();
-                    values.put("chohyokb", rs.getString(1));
-                    values.put("areano", rs.getInt(2));
-                    values.put("hyojikb", rs.getString(3));
-                    values.put("injishubetsu", rs.getString(4));
-                    values.put("fontmei", rs.getString(5));
-                    values.put("fontsize", rs.getInt(6));
-                    values.put("fontstyle_shatai", rs.getInt(7));
-                    values.put("fontstyle_bold", rs.getInt(8));
-                    values.put("shoshiki", rs.getString(9));
-                    values.put("xposfrom", rs.getInt(10));
-                    values.put("yposfrom", rs.getInt(11));
-                    values.put("xposto", rs.getInt(12));
-                    values.put("yposto", rs.getInt(13));
-                    values.put("filemei", rs.getString(14));
-                    Blob blob = rs.getBlob(15);
+                    values.put("profileno", rs.getInt(1));
+                    values.put("chohyokb", rs.getString(2));
+                    values.put("areano", rs.getInt(3));
+                    values.put("hyojikb", rs.getString(4));
+                    values.put("injishubetsu", rs.getString(5));
+                    values.put("fontmei", rs.getString(6));
+                    values.put("fontsize", rs.getInt(7));
+                    values.put("fontstyle_shatai", rs.getInt(8));
+                    values.put("fontstyle_bold", rs.getInt(9));
+                    values.put("shoshiki", rs.getString(10));
+                    values.put("xposfrom", rs.getInt(11));
+                    values.put("yposfrom", rs.getInt(12));
+                    values.put("xposto", rs.getInt(13));
+                    values.put("yposto", rs.getInt(14));
+                    values.put("filemei", rs.getString(15));
+                    Blob blob = rs.getBlob(16);
                     if (blob != null) {
                         int blobLength = (int) blob.length();
                         byte[] blobAsBytes = blob.getBytes(1, blobLength);
                         values.put("img", blobAsBytes);
 //                        blob.free();
                     }
-                    values.put("barcodetype", rs.getInt(16));
-                    values.put("barcodeheight", rs.getInt(17));
-                    values.put("kikan_fr", cm.convertToMilisecondsFromDate(rs.getDate(18)));
-                    values.put("kikan_to", cm.convertToMilisecondsFromDate(rs.getDate(19)));
-                    values.put("sakuseiuserid", rs.getString(20));
-                    values.put("sakuseinichiji", cm.convertToMilisecondsFromDate(rs.getDate(21)));
-                    values.put("koshinuserid", rs.getString(22));
-                    values.put("koshinnichiji", cm.convertToMilisecondsFromDate(rs.getDate(23)));
-                    values.put("shironuki", rs.getInt(24));
+                    values.put("barcodetype", rs.getInt(17));
+                    values.put("barcodeheight", rs.getInt(18));
+                    values.put("kikan_fr", cm.convertToMilisecondsFromDate(rs.getDate(19)));
+                    values.put("kikan_to", cm.convertToMilisecondsFromDate(rs.getDate(20)));
+                    values.put("sakuseiuserid", rs.getString(21));
+                    values.put("sakuseinichiji", cm.convertToMilisecondsFromDate(rs.getDate(22)));
+                    values.put("koshinuserid", rs.getString(23));
+                    values.put("koshinnichiji", cm.convertToMilisecondsFromDate(rs.getDate(24)));
+                    values.put("shironuki", rs.getInt(25));
 
                     printerInfos.add(values);
                 }
@@ -453,10 +461,10 @@ public class APIManager {
 
                 DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
                 try {
-                    Date c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH)+" 00:00");
+                    Date c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 00:00");
                     calendar.setTime(c_date);
                     long startTime = calendar.getTimeInMillis();
-                    c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH)+" 23:59");
+                    c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 23:59");
                     calendar.setTime(c_date);
                     long endTime = calendar.getTimeInMillis();
 

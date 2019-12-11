@@ -184,6 +184,7 @@ public class Common {
                 if (json instanceof JSONObject) {
                     JSONObject object = printInfoObj.getJSONObject("印字設定");
                     PrinterInfo info = new PrinterInfo();
+                    info.setProfileNo(parseInteger(parseJsonString(object,"プロファイルNo")));
                     info.setType(parseJsonString(object,"帳票区分"));
                     info.setPrinterNum(parseInteger(parseJsonString(object,"印字番号")));
                     info.setPrinterType(parseJsonString(object,"印字種別"));
@@ -208,6 +209,7 @@ public class Common {
                     for (int i=0; i<printInfo.length(); i++) {
                         JSONObject object = printInfo.getJSONObject(i);
                         PrinterInfo info = new PrinterInfo();
+                        info.setProfileNo(parseInteger(parseJsonString(object,"プロファイルNo")));
                         info.setType(parseJsonString(object,"帳票区分"));
                         info.setPrinterNum(parseInteger(parseJsonString(object,"印字番号")));
                         info.setPrinterType(parseJsonString(object,"印字種別"));
@@ -239,6 +241,8 @@ public class Common {
                         model.setId(parseJsonString(object,"ID"));
                         model.setType(parseJsonString(object,"チケット種類"));
                         model.setName(parseJsonString(object,"券種名"));
+                        model.setNamePr(parseJsonString(object,"券種名印字"));
+                        model.setNameAge(parseJsonString(object,"年齢層"));
                         model.setPrice(parseInteger(parseJsonString(object,"価格")));
                         model.setTaxRatio(parseFloat(parseJsonString(object,"消費税率")));
                         model.setTax(parseInteger(parseJsonString(object,"消費税額")));
@@ -250,6 +254,8 @@ public class Common {
                         model.setBgColor(parseJsonString(colorObj, "背景"));
                         model.setOrder(parseInteger(parseJsonString(object,"清算表示順")));
                         model.setEndDays(parseInteger(parseJsonString(object,"有効期間日")));
+                        model.setHalfDay(parseInteger(parseJsonString(object,"半日加算")));
+                        model.setProfileNo(parseInteger(parseJsonString(object,"プロファイルNo")));
                         ticketModels.add(model);
                     }else if (json instanceof JSONArray) {
                         JSONArray ticketList = ticketObject.getJSONArray("Item");
@@ -259,6 +265,8 @@ public class Common {
                             model.setId(parseJsonString(object,"ID"));
                             model.setType(parseJsonString(object,"チケット種類"));
                             model.setName(parseJsonString(object,"券種名"));
+                            model.setNamePr(parseJsonString(object,"券種名印字"));
+                            model.setNameAge(parseJsonString(object,"年齢層"));
                             model.setPrice(parseInteger(parseJsonString(object,"価格")));
                             model.setTaxRatio(parseFloat(parseJsonString(object,"消費税率")));
                             model.setTax(parseInteger(parseJsonString(object,"消費税額")));
@@ -270,6 +278,8 @@ public class Common {
                             model.setBgColor(parseJsonString(colorObj, "背景"));
                             model.setOrder(parseInteger(parseJsonString(object,"清算表示順")));
                             model.setEndDays(parseInteger(parseJsonString(object,"有効期間日")));
+                            model.setHalfDay(parseInteger(parseJsonString(object,"半日加算")));
+                            model.setProfileNo(parseInteger(parseJsonString(object,"プロファイルNo")));
                             ticketModels.add(model);
                         }
                     }
@@ -277,6 +287,8 @@ public class Common {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }else {
+            cm.getTicketInfoFromLocal();
         }
     }
 

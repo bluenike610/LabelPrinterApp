@@ -276,7 +276,7 @@ public class LoginActivity extends AppCompatActivity {
                                 finish();
                             }
                         }, null);
-                //test`
+                //test
 //                loginFromLocal(id, pass);
 //                cm.getTicketInfoFromXml();
                 break;

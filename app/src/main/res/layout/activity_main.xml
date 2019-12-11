@@ -451,7 +451,7 @@
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
                             android:background="@drawable/border_ticket_bg"
-                            android:textSize="@dimen/screen_label_text_font"
+                            android:textSize="@dimen/ticket_btn_text_font"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             android:gravity="center"/>
@@ -642,7 +642,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="20dp"
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/normal_button"
+                android:background="@drawable/disable_button"
                 android:textSize="@dimen/screen_btn_text_font"
                 android:text="@string/btn_consign"
                 android:gravity="center"

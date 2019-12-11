@@ -40,6 +40,8 @@ import com.labelprinter.android.Views.TicketListItemView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static com.labelprinter.android.Common.Common.cm;
@@ -217,9 +219,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                                         @Override
                                         public void OnConfirmBtnClicked(int num) {
-                                            info.setNum(num);
-                                            ticketingList.add(info);
-                                            setTicketList();
+                                            addTicketInfoWithFilter(num, info);
                                         }
                                     });
                                     dlg.show();
@@ -232,27 +232,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         @Override
                         public void onClick(View v) {
                             if (model.getPrice() != 0) {
-                                if (ticketingList.size() > 0) {
-                                    TicketInfo oldInfo = ticketingList.get(ticketingList.size()-1);
-                                    if (oldInfo.getModel().getName().equals(model.getName())) {
-                                        int num = oldInfo.getNum();
-                                        oldInfo.setNum(num+1);
-                                        ticketingList.set(ticketingList.size()-1, oldInfo);
-                                    }else {
-                                        TicketInfo info = new TicketInfo();
-                                        info.setModel(model);
-                                        info.setType(tabList.get(selectedTabIndex));
-                                        info.setNum(1);
-                                        ticketingList.add(info);
-                                    }
-                                }else {
-                                    TicketInfo info = new TicketInfo();
-                                    info.setModel(model);
-                                    info.setType(tabList.get(selectedTabIndex));
-                                    info.setNum(1);
-                                    ticketingList.add(info);
-                                }
-                                setTicketList();
+                                TicketInfo info = new TicketInfo();
+                                info.setModel(model);
+                                info.setType(tabList.get(selectedTabIndex));
+                                info.setNum(1);
+                                addTicketInfoWithFilter(1, info);
                             }
                         }
                     });
@@ -266,6 +250,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }
+    }
+
+    private void addTicketInfoWithFilter(int num, TicketInfo newInfo) {
+        Boolean isExsist = false;
+        if (ticketingList.size() > 0) {
+            for (int kk=0; kk<ticketingList.size(); kk++) {
+                TicketInfo oldInfo = ticketingList.get(kk);
+                if (oldInfo.getModel().getName().equals(newInfo.getModel().getName())) {
+                    int oldNum = oldInfo.getNum();
+                    oldInfo.setNum(oldNum + num);
+                    ticketingList.set(kk, oldInfo);
+                    isExsist = true;
+                    break;
+                }
+            }
+        }
+        if (!isExsist) {
+            ticketingList.add(newInfo);
+        }
+        setTicketList();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -535,8 +539,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.btnConsign:
-                showTicketingDlg(2);
-                selectedPayType = 4;
+//                showTicketingDlg(2);
+//                selectedPayType = 4;
                 break;
             case R.id.btnReceivable:
                 showTicketingDlg(3);

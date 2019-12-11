@@ -132,7 +132,7 @@ public class TicketingDlg extends Dialog {
         });
 
         Button ticketingReceiptBtn = findViewById(R.id.ticketingReceiptBtn);
-        if (type == 2 || type ==3) {
+        if (type == 2) {
             ticketingReceiptBtn.setEnabled(false);
         }else {
             ticketingReceiptBtn.setOnClickListener(new View.OnClickListener() {
@@ -142,25 +142,14 @@ public class TicketingDlg extends Dialog {
                         linstener.OnRefundTicketingBtnClicked();
                         dismiss();
                     }else {
-                        if (preMoney == 0 || receiptTxt.getText().toString().equals("")) {
-                            Common.cm.showAlertDlg(currentActivity.getResources().getString(R.string.input_err_title),
-                                    currentActivity.getResources().getString(R.string.price_name_err_msg), new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
+                        if (linstener != null) {
+                            PrinterManager manager = new PrinterManager();
+                            LabelPrinter printer = manager.printerStart(models, ticketingMoney, receiptTxt.getText().toString());
 
-                                        }
-                                    }, null);
-                            return;
-                        }else {
-                            if (linstener != null) {
-                                PrinterManager manager = new PrinterManager();
-                                LabelPrinter printer = manager.printerStart(models, ticketingMoney, receiptTxt.getText().toString());
-
-                                //test
-                                if(printer != null) {
-                                    linstener.OnTicketingReceiptBtnClicked(printer, Integer.valueOf((int) preMoney), receiptTxt.getText().toString());
-                                    dismiss();
-                                }
+                            //test
+                            if(printer != null) {
+                                linstener.OnTicketingReceiptBtnClicked(printer, Integer.valueOf((int) preMoney), receiptTxt.getText().toString());
+                                dismiss();
                             }
                         }
                     }

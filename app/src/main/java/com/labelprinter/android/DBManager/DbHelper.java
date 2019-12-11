@@ -32,6 +32,8 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS mst_ticket(" +
                 "ticketid INTEGER not null, " + //チケット(チケットホルダー等の物品含む）をユニークに表す数字を指定する
                 "kenshumei text not null, " + //チケットの名称　「1日　大人」など 発券画面に表示する内容
+                "kenshumeiinji text not null, " + //チケットの名称　「スノーエスカレータ」など チケットに印字する内容
+                "nenreiso text not null, " + //チケットの年齢層　「幼児、小人、大人、シニア」を文字列を指定する
                 "kakaku INTEGER not null, " + //価格を指定する
                 "shohizeiritsu text not null, " + //消費税率を%で指定する
                 "shohizeigaku INTEGER not null, " + //内税消費税額を指定する
@@ -39,6 +41,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 "haikeishoku text, " + //チケット発券画面のボタンの背景色を指定。未指定の場合、標準の色を用いる。
                 "mojishoku text, " + //チケット発券画面のボタンの文字色を指定。未指定の場合、標準の色を用いる。
                 "yukokikanbi INTEGER, " + //発券日からの有効期間（日）を指定する
+                "hannichikasan INTEGER, " + //n.5日券の場合に指定する。1:n.5日券 0 またはnull : n日券
+                "profileno INTEGER, " + //チケットの印字プロファイルNoを指定する。
                 "kikan_fr double not null, " + //このレコードが有効な期間の開始日
                 "kikan_to double not null, " + //このレコードが有効な期間の終了日
                 "sakuseiuserid text not null, " + //新規作成した時のログインユーザーID
@@ -54,6 +58,7 @@ public class DbHelper extends SQLiteOpenHelper {
          * 	クライアントからサーバーへのコピーはしない。
          * */
         db.execSQL("CREATE TABLE IF NOT EXISTS mst_ticketstyle(" +
+                "profileno INTEGER, " + //チケットの印字プロファイルNoを指定する。
                 "chohyokb text not null, " + //帳票の区分を示す(mst_kbn.kbtype = 'CHOHYOKB')
                 "areano INTEGER not null, " + //印字エリアを示す番号
                 "hyojikb text not null, " + //印字するかを指定する。(mst_kbn.kbtype = 'HYOJIKB')

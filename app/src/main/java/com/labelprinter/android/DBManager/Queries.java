@@ -100,7 +100,7 @@ public class Queries {
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date c_date = null;
         try {
-            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH));
+            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE));
             calendar.setTime(c_date);
             long startTime = calendar.getTimeInMillis();
 
@@ -133,7 +133,7 @@ public class Queries {
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date c_date = null;
         try {
-            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH));
+            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE));
             calendar.setTime(c_date);
             long startTime = calendar.getTimeInMillis();
 
@@ -165,7 +165,7 @@ public class Queries {
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Date c_date = null;
         try {
-            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH));
+            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE));
             calendar.setTime(c_date);
             long startTime = calendar.getTimeInMillis();
 
@@ -271,10 +271,10 @@ public class Queries {
         ArrayList<HashMap> list = new ArrayList<>();
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         try {
-            Date c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH)+" 00:00");
+            Date c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 00:00");
             calendar.setTime(c_date);
             long startTime = calendar.getTimeInMillis();
-            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH)+" 23:59");
+            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 23:59");
             calendar.setTime(c_date);
             long endTime = calendar.getTimeInMillis();
 
@@ -351,10 +351,10 @@ public class Queries {
         ArrayList<HashMap> list = new ArrayList<>();
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         try {
-            Date c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH)+" 00:00");
+            Date c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 00:00");
             calendar.setTime(c_date);
             long startTime = calendar.getTimeInMillis();
-            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH)+" 23:59");
+            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 23:59");
             calendar.setTime(c_date);
             long endTime = calendar.getTimeInMillis();
 
@@ -399,10 +399,10 @@ public class Queries {
         ArrayList<HashMap> list = new ArrayList<>();
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         try {
-            Date c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH)+" 00:00");
+            Date c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 00:00");
             calendar.setTime(c_date);
             long startTime = calendar.getTimeInMillis();
-            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH)+" 23:59");
+            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 23:59");
             calendar.setTime(c_date);
             long endTime = calendar.getTimeInMillis();
 
@@ -457,10 +457,10 @@ public class Queries {
         ArrayList<HashMap> list = new ArrayList<>();
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         try {
-            Date c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH)+" 00:00");
+            Date c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 00:00");
             calendar.setTime(c_date);
             long startTime = calendar.getTimeInMillis();
-            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH)+" 23:59");
+            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 23:59");
             calendar.setTime(c_date);
             long endTime = calendar.getTimeInMillis();
 
@@ -529,10 +529,10 @@ public class Queries {
         ArrayList<HashMap> list = new ArrayList<>();
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         try {
-            Date c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH)+" 00:00");
+            Date c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 00:00");
             calendar.setTime(c_date);
             long startTime = calendar.getTimeInMillis();
-            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH)+" 23:59");
+            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 23:59");
             calendar.setTime(c_date);
             long endTime = calendar.getTimeInMillis();
 
@@ -592,10 +592,10 @@ public class Queries {
         ArrayList<HashMap> list = new ArrayList<>();
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         try {
-            Date c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH)+" 00:00");
+            Date c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 00:00");
             calendar.setTime(c_date);
             long startTime = calendar.getTimeInMillis();
-            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH)+" 23:59");
+            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 23:59");
             calendar.setTime(c_date);
             long endTime = calendar.getTimeInMillis();
 
@@ -704,10 +704,10 @@ public class Queries {
         boolean isSuccess = true;
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
         try {
-            Date c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH)+" 00:00");
+            Date c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 00:00");
             calendar.setTime(c_date);
             long startTime = calendar.getTimeInMillis();
-            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DAY_OF_MONTH)+" 23:59");
+            c_date = dateFormatter.parse(calendar.get(Calendar.YEAR)+"-"+(calendar.get(Calendar.MONTH)+1)+"-"+calendar.get(Calendar.DATE)+" 23:59");
             calendar.setTime(c_date);
             long endTime = calendar.getTimeInMillis();
 
@@ -760,6 +760,8 @@ public class Queries {
 
         model.setId(String.valueOf(mCursor.getInt(mCursor.getColumnIndex("ticketid"))));
         model.setName(mCursor.getString(mCursor.getColumnIndex("kenshumei")));
+        model.setNamePr(mCursor.getString(mCursor.getColumnIndex("kenshumeiinji")));
+        model.setNameAge(mCursor.getString(mCursor.getColumnIndex("nenreiso")));
         model.setPrice(mCursor.getInt(mCursor.getColumnIndex("kakaku")));
         model.setTaxRatio(Float.valueOf(mCursor.getString(mCursor.getColumnIndex("shohizeiritsu"))));
         model.setTax(mCursor.getInt(mCursor.getColumnIndex("shohizeigaku")));
@@ -769,8 +771,8 @@ public class Queries {
         if (!mc.isAfterLast()) {
             do {
                 model.setType(mc.getString(mc.getColumnIndex("tickettypecd")));
-                model.setRowPos(mc.getInt(mc.getColumnIndex("xpos")));
-                model.setColPos(mc.getInt(mc.getColumnIndex("ypos")));
+                model.setRowPos(mc.getInt(mc.getColumnIndex("ypos")));
+                model.setColPos(mc.getInt(mc.getColumnIndex("xpos")));
             } while (mc.moveToNext());
         }
         mc.close();
@@ -778,6 +780,8 @@ public class Queries {
         model.setBgColor(mCursor.getString(mCursor.getColumnIndex("haikeishoku")));
         model.setOrder(mCursor.getInt(mCursor.getColumnIndex("seisansortno")));
         model.setEndDays(mCursor.getInt(mCursor.getColumnIndex("yukokikanbi")));
+        model.setHalfDay(mCursor.getInt(mCursor.getColumnIndex("hannichikasan")));
+        model.setProfileNo(mCursor.getInt(mCursor.getColumnIndex("profileno")));
 
         return model;
     }
@@ -791,6 +795,7 @@ public class Queries {
     public PrinterInfo formatPrinterInfo(Cursor mCursor) {
         PrinterInfo info = new PrinterInfo();
 
+        info.setProfileNo(mCursor.getInt(mCursor.getColumnIndex("profileno")));
         info.setType(mCursor.getString(mCursor.getColumnIndex("chohyokb")));
         info.setPrinterNum(mCursor.getInt(mCursor.getColumnIndex("areano")));
         info.setPrinterType(mCursor.getString(mCursor.getColumnIndex("injishubetsu")));
@@ -823,8 +828,16 @@ public class Queries {
     public TicketType formatTicketType(Cursor mCursor) {
         TicketType model = new TicketType();
 
-//        model.setType(String.valueOf(mCursor.getInt(mCursor.getColumnIndex("ticketid"))));
-        model.setName(mCursor.getString(mCursor.getColumnIndex("tickettypecd")));
+        model.setType(mCursor.getString(mCursor.getColumnIndex("tickettypecd")));
+        db = dbHelper.getReadableDatabase();
+        Cursor mc = db.rawQuery("select * from mst_kbn where kbtype = 'TICKETTYPE' and kbcd = '" + mCursor.getString(mCursor.getColumnIndex("tickettypecd")) + "'", null);
+        mc.moveToFirst();
+        if (!mc.isAfterLast()) {
+            do {
+                model.setName(mc.getString(mc.getColumnIndex("kbmei")));
+            } while (mc.moveToNext());
+        }
+        mc.close();
         model.setOrder(mCursor.getInt(mCursor.getColumnIndex("sortno")));
         model.setIsShown(mCursor.getString(mCursor.getColumnIndex("hyojikb")));
 

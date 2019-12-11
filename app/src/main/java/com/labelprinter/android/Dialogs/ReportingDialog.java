@@ -59,7 +59,7 @@ public class ReportingDialog extends Dialog implements View.OnClickListener {
         nowDate = Calendar.getInstance();
         dateTxt = findViewById(R.id.dateTxt);
         dateTxt.setOnClickListener(this);
-        dateTxt.setText(nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日");
+        dateTxt.setText(nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DATE) + "日");
 
         infoTxt = findViewById(R.id.infoTxt);
 
@@ -88,7 +88,7 @@ public class ReportingDialog extends Dialog implements View.OnClickListener {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(y, m, d);
                 nowDate = calendar;
-                dateTxt.setText(nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DAY_OF_MONTH) + "日");
+                dateTxt.setText(nowDate.get(Calendar.YEAR) + "年 " + (nowDate.get(Calendar.MONTH)+1) + "月 " + nowDate.get(Calendar.DATE) + "日");
             }
         }, year, month, day);
         dlg.show();

@@ -7,6 +7,7 @@ import java.util.Date;
 import static com.labelprinter.android.Common.Common.cm;
 
 public class PrinterInfo {
+    private int profileNo;
     private String type; //帳票区分
     private int printerNum; //印字番号
     private String printerType; //印字種別
@@ -29,6 +30,13 @@ public class PrinterInfo {
 
     public PrinterInfo () {
 
+    }
+
+    public void setProfileNo(int val) {
+        profileNo = val;
+    }
+    public int getProfileNo() {
+        return profileNo;
     }
 
     public void setType(String val) {
