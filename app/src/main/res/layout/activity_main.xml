@@ -22,10 +22,12 @@
 
             <LinearLayout
                 android:id="@+id/buttonGroup"
-                android:layout_width="400dp"
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:orientation="horizontal"
                 android:layout_marginBottom="-2dp"
+                android:layout_toLeftOf="@+id/selectXML"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/border_white">
 
                 <HorizontalScrollView

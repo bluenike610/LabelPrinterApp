@@ -66,6 +66,9 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
 
         loadingLayout = findViewById(R.id.loadingLayout);
         loadingLayout.setVisibility(View.INVISIBLE);
+
+        TextView versionInfoTxt = findViewById(R.id.versionTxt);
+        versionInfoTxt.setText(getResources().getString(R.string.build_date));
     }
 
     private void checkingPrintState(final LabelPrinter printer, final int value, final String only) {
