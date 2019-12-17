@@ -41,7 +41,7 @@
                 android:layout_marginRight="20dp"
                 android:orientation="vertical">
 
-                <com.labelprinter.android.Views.SettlementMainItemView
+                <com.labelprintertest.android.Views.SettlementMainItemView
                     android:id="@+id/mainHeaderView"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"/>
@@ -75,7 +75,7 @@
                     android:layout_above="@+id/printBtn"
                     android:orientation="vertical">
 
-                    <!--<com.labelprinter.android.Views.SettlementSubItemView-->
+                    <!--<labelprintertesttest.android.Views.SettlementSubItemView-->
                         <!--android:id="@+id/subHeaderView"-->
                         <!--android:layout_width="match_parent"-->
                         <!--android:layout_height="40dp"/>-->

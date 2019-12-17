@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--　共通　-->
-    <string name="app_name">チケット発券システム</string>
+    <string name="app_name">チケット発券Ver2.0</string>
     <string name="OK">OK</string>
     <string name="Cancel">キャンセル</string>
     <string name="YES">はい</string>
@@ -122,7 +122,7 @@
     <string name="lb_receipt_money">領収金額</string>
     <string name="btn_receipt_only">領収書発行</string>
     <string name="receipt_name_err_msg">領収金額を入力してください。</string>
-    <string name="build_date">ファイルバージョン:2019.12.13.13:20</string>
+    <string name="build_date">ファイルバージョン:2019.12.18.00:10</string>
 
     <string-array name="days_array">
         <item>月</item>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.labelprinter.android">
+    package="com.labelprintertest.android">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
 
     <application
-        android:name=".Application.MyApplication"
+        android:name="com.labelprintertest.android.Application.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -24,10 +24,10 @@
             android:name="io.fabric.ApiKey"
             android:value="ef766e15076b127e2d65965b5351a0ff8f89022d"
             />
-        <activity android:name=".Activities.SettingActivity" android:screenOrientation="landscape"></activity>
-        <activity android:name=".Activities.SumByDayActivity" android:screenOrientation="landscape" />
+        <activity android:name="com.labelprintertest.android.Activities.SettingActivity" android:screenOrientation="landscape"></activity>
+        <activity android:name="com.labelprintertest.android.Activities.SumByDayActivity" android:screenOrientation="landscape" />
         <activity
-            android:name=".Activities.LoginActivity"
+            android:name="com.labelprintertest.android.Activities.LoginActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.MainActivity"
+            android:name="com.labelprintertest.android.Activities.MainActivity"
             android:screenOrientation="landscape" />
     </application>
 
