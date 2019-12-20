@@ -279,6 +279,18 @@ public class Common {
         DbHelper dbHelper = new DbHelper(currentActivity);
         Queries query = new Queries(null, dbHelper);
         ticketTypes = query.getTicketTypes();
+        if (ticketTypes.size() >= 2) {
+            for (int i = 0; i < ticketTypes.size(); i++) {
+                for (int j = i + 1; j < ticketTypes.size(); j++) {
+                    TicketType type1 = ticketTypes.get(i);
+                    TicketType type2 = ticketTypes.get(j);
+                    if (type1.getOrder() > type2.getOrder()) {
+                        ticketTypes.set(i, type2);
+                        ticketTypes.set(j, type1);
+                    }
+                }
+            }
+        }
         printerInfos = query.getPrinterInfos();
         ticketModels = query.getTicketModels();
     }
