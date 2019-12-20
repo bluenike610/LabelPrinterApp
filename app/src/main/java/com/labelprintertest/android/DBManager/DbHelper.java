@@ -82,8 +82,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 "sakuseinichiji double not null, " + //新規作成した日時
                 "koshinuserid text not null, " + //更新されたときのログインユーザーID
                 "koshinnichiji double not null, " + //更新された日時
-                "shironuki INTEGER, " + //文字を白抜きにするか指定する。0:白抜きではない。1:白抜き
-                "PRIMARY KEY ('chohyokb', 'areano', 'kikan_fr'));");
+                "shironuki INTEGER" + //文字を白抜きにするか指定する。0:白抜きではない。1:白抜き
+                ");");
 
         /**
          *   ログインユーザーの定義

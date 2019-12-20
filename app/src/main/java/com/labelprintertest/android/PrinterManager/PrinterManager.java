@@ -21,6 +21,7 @@ import com.labelprintertest.android.Models.TicketModel;
 import com.labelprintertest.android.R;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -220,16 +221,18 @@ public class PrinterManager {
                 int endX = (int) (info.getEndX()); // mm
                 int endY = (int) (info.getStartY()); // mm
 
-                if (info.getWhiteFlag() == 1) {
-                    design.fillRect(startX, startY, endX - startX, endY - startY, LabelConst.CLS_SHADED_PTN_1);
-                }
-
                 if (info.getPrinterType().equals("TEXT")) {
                     content = fillterPrintItem(info.getFormat(), model);
+                    if (info.getWhiteFlag() == 1) {
+                        if (content.length() > 0) {
+                            design.fillRect(startX, startY, fontSize * content.length(), endY - startY, LabelConst.CLS_SHADED_PTN_1);
+                        }
+                    }
                     design.drawTextLocalFont(content, Typeface.create(fontName, Typeface.NORMAL),
                             LabelConst.CLS_RT_NORMAL, 100, 100, fontSize,
                             style, startX, startY,
                             LabelConst.CLS_PRT_RES_203, LabelConst.CLS_UNIT_MILLI);
+
 
                 }else if (info.getPrinterType().equals("IMAGE")) {
 //                    if (info.getImgData() != null) {
@@ -288,10 +291,6 @@ public class PrinterManager {
                 int endX = (int) (info.getEndX()); // mm
                 int endY = (int) (info.getStartY()); // mm
 
-                if (info.getWhiteFlag() == 1) {
-                    design.fillRect(startX, startY, endX - startX, endY - startY, LabelConst.CLS_SHADED_PTN_1);
-                }
-
                 if (info.getPrinterType().equals("TEXT")) {
                     content = info.getFormat();
                     if (content.contains("{KINGAKU}")) {
@@ -306,11 +305,30 @@ public class PrinterManager {
                         int receiptNum = query.getEndNumberWithSection("RYOSHUSHO");
                         content = content.replace("{RYOSHUSHONO}", receiptNum + "");
                     }
+                    Calendar nowDate = Calendar.getInstance();
+                    nowDate.setTime(new Date());
 
+                    if (content.contains("{GENZAINICHIJI}")) {
+                        SimpleDateFormat f = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        content = content.replace("{GENZAINICHIJI}", f.format(nowDate.getTime()));
+                    }
+                    if (info.getWhiteFlag() == 1) {
+                        if (content.length() > 0) {
+                            design.fillRect(startX, startY, fontSize * content.length(), endY - startY, LabelConst.CLS_SHADED_PTN_1);
+                        }
+                    }
                     design.drawTextLocalFont(content, Typeface.create(fontName, Typeface.NORMAL),
                             LabelConst.CLS_RT_NORMAL, 100, 100, fontSize,
                             style, startX, startY,
                             LabelConst.CLS_PRT_RES_203, LabelConst.CLS_UNIT_MILLI);
+                }else if (info.getPrinterType().equals("IMAGE")) {
+//                    if (info.getImgData() != null) {
+//                        design.drawBitmap (info.getFileName(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
+//                    }else {
+                    File root = android.os.Environment.getExternalStorageDirectory();
+                    String fname = root.getAbsolutePath() + "/LabelPrinter/Images/ticket_img.png";
+                    design.drawBitmap (fname, LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
+//                    }
                 }else if (info.getPrinterType().equals("LINE")) {
                     design.drawLine (startX, startY, endX, endY, 1);
                 }
@@ -438,7 +456,10 @@ public class PrinterManager {
         }
 
         nowDate.setTime(new Date());
-        long month = 3600 * 24 * model.getEndDays() * 1000L;
+        int end = model.getEndDays();
+        if (end > 0)
+            end = end - 1;
+        long month = 3600 * 24 * end * 1000L;
         Calendar endDate = Calendar.getInstance();
         endDate.setTimeInMillis(nowDate.getTimeInMillis() + month);
 
@@ -459,7 +480,9 @@ public class PrinterManager {
         }
         if (fillterStr.contains("{YUKOKIGEN-AMPM}")) {
             if (model.getHalfDay() == 1) {
-                int currentHour = nowDate.get(Calendar.HOUR);
+                SimpleDateFormat f = new SimpleDateFormat("HH");
+                String hour = f.format(nowDate.getTime());
+                int currentHour = Integer.valueOf(hour);
                 if (currentHour <= 12) {
                     fillterStr = fillterStr.replace("{YUKOKIGEN-AMPM}", "午前");
                 }else {
@@ -485,7 +508,8 @@ public class PrinterManager {
             fillterStr = fillterStr.replace("{KAKAKU}", "¥" + cm.numberFormat(model.getPrice()) + "");
         }
         if (fillterStr.contains("{GENZAINICHIJI}")) {
-            fillterStr = fillterStr.replace("{GENZAINICHIJI}", nowDate.get(Calendar.YEAR) + " " + (nowDate.get(Calendar.MONTH)+1) + " " + nowDate.get(Calendar.DATE) + "");
+            SimpleDateFormat f = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            fillterStr = fillterStr.replace("{GENZAINICHIJI}", f.format(nowDate.getTime()));
         }
         return fillterStr;
     }

@@ -139,7 +139,7 @@ public class APIManager {
                     ticketModels.add(values);
                 }
                 query.addTableFromServer("mst_ticket", ticketModels);
-                Toast.makeText(currentActivity, "mst_ticket Database Rows = " + ticketModels.size(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(currentActivity, "mst_ticket Database Rows = " + ticketModels.size(), Toast.LENGTH_LONG).show();
 
                 //mst_ticketstyle
                 rs = st.executeQuery("select * from mst_ticketstyle");
@@ -245,7 +245,7 @@ public class APIManager {
                     tabTickets.add(values);
                 }
                 query.addTableFromServer("mst_ui_tabticket", tabTickets);
-                Toast.makeText(currentActivity, "mst_ui_tabticket Database Rows = " + ticketModels.size(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(currentActivity, "mst_ui_tabticket Database Rows = " + ticketModels.size(), Toast.LENGTH_LONG).show();
 
                 //mst_ui_tab
                 rs = st.executeQuery("select * from mst_ui_tab");

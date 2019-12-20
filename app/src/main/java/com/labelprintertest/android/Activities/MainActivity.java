@@ -36,7 +36,10 @@ import com.labelprintertest.android.Views.TabItemView;
 import com.labelprintertest.android.Views.TicketListItemView;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import static com.labelprintertest.android.Common.Common.cm;
 import static com.labelprintertest.android.Common.Common.currentActivity;
@@ -195,13 +198,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     bgShape.mutate();
                     bgShape.setColor(Color.parseColor(model.getBgColor()));
                     view.setTextColor(Color.parseColor(model.getFgColor()));
-                    if (model.getPrice() > 0)
+                    view.setText("");
+//                    if (model.getPrice() > 0)
                         view.setText(model.getName() + "\n" + "\n" + getResources().getString(R.string.lb_yen2) + model.getPrice());
                     view.setOnLongClickListener(new View.OnLongClickListener() {
                         @Override
                         public boolean onLongClick(View v) {
                             if (!isLoading) {
-                                if (model.getPrice() != 0) {
+//                                if (model.getPrice() != 0) {
                                     final TicketInfo info = new TicketInfo();
                                     info.setModel(model);
                                     info.setNum(0);
@@ -217,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         }
                                     });
                                     dlg.show();
-                                }
+//                                }
                             }
                             return false;
                         }
@@ -225,13 +229,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (model.getPrice() != 0) {
+//                            if (model.getPrice() != 0) {
                                 TicketInfo info = new TicketInfo();
                                 info.setModel(model);
                                 info.setType(tabList.get(selectedTabIndex));
                                 info.setNum(1);
                                 addTicketInfoWithFilter(1, info);
-                            }
+//                            }
                         }
                     });
                 }else {
@@ -369,14 +373,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void OnTicketingReceiptBtnClicked(LabelPrinter printer, int value, String only) { //to print
                     //test
-                    DbHelper dbHelper = new DbHelper(currentActivity);
-                    Queries query = new Queries(null, dbHelper);
-                    query.addSellInfoWithData(ticketingList, selectedPayType);
-                    query.addReceiptInfoWithData(value, only, selectedPayType);
-                    ticketingList.clear();
-                    setTicketList();
+//                    DbHelper dbHelper = new DbHelper(currentActivity);
+//                    Queries query = new Queries(null, dbHelper);
+//                    query.addSellInfoWithData(ticketingList, selectedPayType);
+//                    query.addReceiptInfoWithData(value, only, selectedPayType);
+//                    ticketingList.clear();
+//                    setTicketList();
 
-//                    checkingPintState(printer, 1, value, only);
+                    checkingPintState(printer, 1, value, only);
                 }
 
                 @Override

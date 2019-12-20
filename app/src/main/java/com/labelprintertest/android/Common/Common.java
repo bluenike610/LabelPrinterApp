@@ -38,6 +38,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -148,18 +149,13 @@ public class Common {
 
                 // for sort
                 if (ticketTypes.size() >= 2) {
-                    boolean sorted = false;
-                    TicketType temp = new TicketType();
-                    while(!sorted) {
-                        sorted = true;
-                        for (int i = 0; i < ticketTypes.size() - 1; i++) {
+                    for (int i = 0; i < ticketTypes.size(); i++) {
+                        for (int j = i + 1; j < ticketTypes.size(); j++) {
                             TicketType type1 = ticketTypes.get(i);
-                            TicketType type2 = ticketTypes.get(i+1);
+                            TicketType type2 = ticketTypes.get(j);
                             if (type1.getOrder() > type2.getOrder()) {
-                                temp = type1;
-                                type1 = type2;
-                                type2 = temp;
-                                sorted = false;
+                                ticketTypes.set(i, type2);
+                                ticketTypes.set(j, type1);
                             }
                         }
                     }
