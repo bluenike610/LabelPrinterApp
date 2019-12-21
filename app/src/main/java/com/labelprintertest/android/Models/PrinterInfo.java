@@ -131,7 +131,12 @@ public class PrinterInfo {
     }
 
     public void setFileName(String val) {
-        fileName = val;
+        if (val != null) {
+            String[] arr = val.split("\\\\");
+            fileName = "/LabelPrinter/Images/" + arr[arr.length-1];
+        }else {
+            fileName = "";
+        }
     }
     public String getFileName() {
         return fileName;
@@ -152,7 +157,12 @@ public class PrinterInfo {
         if(!dir.exists()) {
             dir.mkdirs();
         }
-        File file = new File(dir, "ticket_img.png");
+        String imgName = "";
+        if (type.equals("TICKET"))
+            imgName = "ticket_img.png";
+        else
+            imgName = "receipt_img.png";
+        File file = new File(dir, imgName);
         if (val != null) {
             String fname = cm.writeToFile(val, file.getAbsolutePath());
             if (!fname.equals("")) {

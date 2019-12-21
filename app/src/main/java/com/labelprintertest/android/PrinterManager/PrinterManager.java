@@ -225,7 +225,7 @@ public class PrinterManager {
                     content = fillterPrintItem(info.getFormat(), model);
                     if (info.getWhiteFlag() == 1) {
                         if (content.length() > 0) {
-                            design.fillRect(startX, startY, fontSize * content.length(), endY - startY, LabelConst.CLS_SHADED_PTN_1);
+                            design.fillRect(startX, startY, (int) (fontSize * content.length() * 3.78f), endY - startY, LabelConst.CLS_SHADED_PTN_1);
                         }
                     }
                     design.drawTextLocalFont(content, Typeface.create(fontName, Typeface.NORMAL),
@@ -235,13 +235,13 @@ public class PrinterManager {
 
 
                 }else if (info.getPrinterType().equals("IMAGE")) {
-//                    if (info.getImgData() != null) {
-//                        design.drawBitmap (info.getFileName(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
+                    if (info.getImgData() != null) {
+                        design.drawBitmap (info.getFileName(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
 //                    }else {
-                        File root = android.os.Environment.getExternalStorageDirectory();
-                        String fname = root.getAbsolutePath() + "/LabelPrinter/Images/ticket_img.png";
-                        design.drawBitmap (fname, LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
-//                    }
+//                        File root = android.os.Environment.getExternalStorageDirectory();
+//                        String fname = root.getAbsolutePath() + "/LabelPrinter/Images/ticket_img.png";
+//                        design.drawBitmap (fname, LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
+                    }
                 }else if (info.getPrinterType().equals("BARCODE")) {
                     content = info.getBarcode();
                     design.drawBarCode(content, info.getBarcodeType(),
@@ -314,7 +314,7 @@ public class PrinterManager {
                     }
                     if (info.getWhiteFlag() == 1) {
                         if (content.length() > 0) {
-                            design.fillRect(startX, startY, fontSize * content.length(), endY - startY, LabelConst.CLS_SHADED_PTN_1);
+                            design.fillRect(startX, startY, (int) (fontSize * content.length() * 3.78f), endY - startY, LabelConst.CLS_SHADED_PTN_1);
                         }
                     }
                     design.drawTextLocalFont(content, Typeface.create(fontName, Typeface.NORMAL),
@@ -322,13 +322,13 @@ public class PrinterManager {
                             style, startX, startY,
                             LabelConst.CLS_PRT_RES_203, LabelConst.CLS_UNIT_MILLI);
                 }else if (info.getPrinterType().equals("IMAGE")) {
-//                    if (info.getImgData() != null) {
-//                        design.drawBitmap (info.getFileName(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
+                    if (info.getImgData() != null) {
+                        design.drawBitmap (info.getFileName(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
 //                    }else {
-                    File root = android.os.Environment.getExternalStorageDirectory();
-                    String fname = root.getAbsolutePath() + "/LabelPrinter/Images/ticket_img.png";
-                    design.drawBitmap (fname, LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
-//                    }
+//                    File root = android.os.Environment.getExternalStorageDirectory();
+//                    String fname = root.getAbsolutePath() + "/LabelPrinter/Images/receipt_img.png";
+//                    design.drawBitmap (fname, LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
+                    }
                 }else if (info.getPrinterType().equals("LINE")) {
                     design.drawLine (startX, startY, endX, endY, 1);
                 }
