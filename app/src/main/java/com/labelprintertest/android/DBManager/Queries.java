@@ -809,8 +809,8 @@ public class Queries {
         info.setStartY(mCursor.getInt(mCursor.getColumnIndex("yposfrom")));
         info.setEndX(mCursor.getInt(mCursor.getColumnIndex("xposto")));
         info.setEndY(mCursor.getInt(mCursor.getColumnIndex("yposto")));
-        info.setFileName(mCursor.getString(mCursor.getColumnIndex("filemei")));
-        info.setImgData(mCursor.getBlob(mCursor.getColumnIndex("img")));
+        info.setImgData(mCursor.getBlob(mCursor.getColumnIndex("img")), mCursor.getString(mCursor.getColumnIndex("filemei")));
+//        info.setFileName(mCursor.getString(mCursor.getColumnIndex("filemei")));
         info.setBarcodeType(mCursor.getInt(mCursor.getColumnIndex("barcodetype")));
         info.setBarcodeHeight(mCursor.getInt(mCursor.getColumnIndex("barcodeheight")));
         info.setWhiteFlag(mCursor.getInt(mCursor.getColumnIndex("shironuki")));

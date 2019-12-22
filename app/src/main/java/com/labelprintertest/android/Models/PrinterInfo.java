@@ -131,12 +131,7 @@ public class PrinterInfo {
     }
 
     public void setFileName(String val) {
-        if (val != null) {
-            String[] arr = val.split("\\\\");
-            fileName = "/LabelPrinter/Images/" + arr[arr.length-1];
-        }else {
-            fileName = "";
-        }
+        fileName = val;
     }
     public String getFileName() {
         return fileName;
@@ -149,7 +144,14 @@ public class PrinterInfo {
         return whiteFlag;
     }
 
-    public void setImgData(byte[] val) {
+    public void setImgData(byte[] val, String fileName) {
+        String originName = "";
+        if (fileName != null && !fileName.equals("")) {
+            String[] arr = fileName.split("\\\\");
+            originName = arr[arr.length-1];
+        }else {
+            originName = "";
+        }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         File root = android.os.Environment.getExternalStorageDirectory();
@@ -157,12 +159,12 @@ public class PrinterInfo {
         if(!dir.exists()) {
             dir.mkdirs();
         }
-        String imgName = "";
-        if (type.equals("TICKET"))
-            imgName = "ticket_img.png";
-        else
-            imgName = "receipt_img.png";
-        File file = new File(dir, imgName);
+//        String imgName = "";
+//        if (type.equals("TICKET"))
+//            imgName = "ticket_img.png";
+//        else
+//            imgName = "receipt_img.png";
+        File file = new File(dir, originName);
         if (val != null) {
             String fname = cm.writeToFile(val, file.getAbsolutePath());
             if (!fname.equals("")) {

@@ -236,7 +236,8 @@ public class PrinterManager {
 
                 }else if (info.getPrinterType().equals("IMAGE")) {
                     if (info.getImgData() != null) {
-                        design.drawBitmap (info.getFileName(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
+                        String fname = info.getFileName();
+                        design.drawBitmap (fname, LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
 //                    }else {
 //                        File root = android.os.Environment.getExternalStorageDirectory();
 //                        String fname = root.getAbsolutePath() + "/LabelPrinter/Images/ticket_img.png";
@@ -323,7 +324,8 @@ public class PrinterManager {
                             LabelConst.CLS_PRT_RES_203, LabelConst.CLS_UNIT_MILLI);
                 }else if (info.getPrinterType().equals("IMAGE")) {
                     if (info.getImgData() != null) {
-                        design.drawBitmap (info.getFileName(), LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
+                        String fname = info.getFileName();
+                        design.drawBitmap (fname, LabelConst.CLS_RT_NORMAL, endX - startX, endY - startY, startX, startY);
 //                    }else {
 //                    File root = android.os.Environment.getExternalStorageDirectory();
 //                    String fname = root.getAbsolutePath() + "/LabelPrinter/Images/receipt_img.png";
