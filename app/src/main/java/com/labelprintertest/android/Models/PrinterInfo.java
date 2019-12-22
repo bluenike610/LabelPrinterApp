@@ -171,6 +171,9 @@ public class PrinterInfo {
                 setFileName(fname);
             }
             imgData = val;
+        }else {
+            String fname = file.getAbsolutePath();
+            setFileName(fname);
         }
     }
     public byte[] getImgData() {

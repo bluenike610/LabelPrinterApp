@@ -181,7 +181,7 @@ public class Common {
                     info.setStartY(parseInteger(parseJsonString(object,"Y始点")));
                     info.setEndX(parseInteger(parseJsonString(object,"X終点")));
                     info.setEndY(parseInteger(parseJsonString(object,"Y終点")));
-                    info.setFileName(parseJsonString(object,"ファイル名"));
+                    info.setImgData(null, parseJsonString(object,"ファイル名"));
                     info.setBarcodeType(parseInteger(parseJsonString(object,"バーコードタイプ")));
                     info.setBarcodeHeight(parseInteger(parseJsonString(object,"バーコード高さ")));
                     info.setBarcode(parseJsonString(object,"コード"));
@@ -206,7 +206,7 @@ public class Common {
                         info.setStartY(parseInteger(parseJsonString(object,"Y始点")));
                         info.setEndX(parseInteger(parseJsonString(object,"X終点")));
                         info.setEndY(parseInteger(parseJsonString(object,"Y終点")));
-                        info.setFileName(parseJsonString(object,"ファイル名"));
+                        info.setImgData(null, parseJsonString(object,"ファイル名"));
                         info.setBarcodeType(parseInteger(parseJsonString(object,"バーコードタイプ")));
                         info.setBarcodeHeight(parseInteger(parseJsonString(object,"バーコード高さ")));
                         info.setBarcode(parseJsonString(object,"コード"));
