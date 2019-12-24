@@ -483,9 +483,12 @@ public class PrinterManager {
         if (fillterStr.contains("{YUKOKIGEN-AMPM}")) {
             if (model.getHalfDay() == 1) {
                 SimpleDateFormat f = new SimpleDateFormat("HH");
+                SimpleDateFormat fm = new SimpleDateFormat("mm");
                 String hour = f.format(nowDate.getTime());
+                String min = fm.format(nowDate.getTime());
                 int currentHour = Integer.valueOf(hour);
-                if (currentHour <= 12) {
+                int currentMin = Integer.valueOf(min);
+                if (currentHour <= 9 || (currentHour <= 9 && currentMin <= 50)) {
                     fillterStr = fillterStr.replace("{YUKOKIGEN-AMPM}", "午前");
                 }else {
                     fillterStr = fillterStr.replace("{YUKOKIGEN-AMPM}", "午後");

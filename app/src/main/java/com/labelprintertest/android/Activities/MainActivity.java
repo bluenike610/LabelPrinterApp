@@ -265,6 +265,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         if (!isExsist) {
+            newInfo.setNum(num);
             ticketingList.add(newInfo);
         }
         setTicketList();
