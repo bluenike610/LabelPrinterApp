@@ -77,6 +77,7 @@ public class Common {
 
     public static boolean hasPrintingErr = false;
 
+    public static String endInfoStr = "";
 
     public static ArrayList<TicketType> ticketTypes = new ArrayList<>();
     public static ArrayList<PrinterInfo> printerInfos = new ArrayList<>();

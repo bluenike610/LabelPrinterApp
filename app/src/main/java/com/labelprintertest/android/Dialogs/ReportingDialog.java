@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.labelprintertest.android.Activities.SumByDayActivity;
+import com.labelprintertest.android.Common.Common;
 import com.labelprintertest.android.Common.LocalStorageManager;
 import com.labelprintertest.android.DBManager.APIManager;
 import com.labelprintertest.android.DBManager.DbHelper;
@@ -63,6 +64,7 @@ public class ReportingDialog extends Dialog implements View.OnClickListener {
         TextView userInfo = findViewById(R.id.userInfo);
         userInfo.setText(cm.getUserInfo());
 
+        infoTxt.setText(Common.endInfoStr);
 
     }
 
@@ -99,10 +101,12 @@ public class ReportingDialog extends Dialog implements View.OnClickListener {
         if (!isByEndSum) byEndStr = "";
         String daySendStr = " " + currentActivity.getResources().getString(R.string.btn_day_sum_send) + currentActivity.getResources().getString(R.string.lb_completed);
         if (!isDaySumSend) daySendStr = "";
-        if (byEndStr.equals("") && daySendStr.equals(""))
-            infoTxt.setText("");
-        else
-            infoTxt.setText(dateStr + byEndStr + daySendStr);
+        if (byEndStr.equals("") && daySendStr.equals("")) {
+            Common.endInfoStr = "";
+        }else {
+            Common.endInfoStr = dateStr + byEndStr + daySendStr;
+        }
+        infoTxt.setText(Common.endInfoStr);
     }
 
     private boolean saveByDayEndData () {
