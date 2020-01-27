@@ -114,7 +114,11 @@ public class TicketingDlg extends Dialog {
             public void onClick(View v) {
                 if (linstener != null) {
                     if (paymentType == 0) {
-                        linstener.OnRefundTicketingBtnClicked();
+                        if (cashRd.isChecked()) {//現金払戻し
+                            linstener.OnRefundTicketingBtnClicked(1);
+                        }else {//売掛払戻し
+                            linstener.OnRefundTicketingBtnClicked(2);
+                        }
                         DisableButton();
 //                        dismiss();
                     }else {
@@ -154,7 +158,11 @@ public class TicketingDlg extends Dialog {
                 @Override
                 public void onClick(View v) {
                     if (paymentType == 0) {
-                        linstener.OnRefundTicketingBtnClicked();
+                        if (cashRd.isChecked()) {//現金払戻し
+                            linstener.OnRefundTicketingBtnClicked(1);
+                        }else {//売掛払戻し
+                            linstener.OnRefundTicketingBtnClicked(2);
+                        }
                         DisableButton();
 //                        dismiss();
                     }else {
@@ -218,6 +226,6 @@ public class TicketingDlg extends Dialog {
     public interface TicketingLinstener {
         public abstract void OnTicketingBtnClicked(LabelPrinter printer);
         public abstract void OnTicketingReceiptBtnClicked(LabelPrinter printer, int value, String only);
-        public abstract void OnRefundTicketingBtnClicked();
+        public abstract void OnRefundTicketingBtnClicked(int refund_type);
     }
 }

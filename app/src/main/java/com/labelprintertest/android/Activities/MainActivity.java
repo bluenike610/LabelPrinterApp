@@ -366,7 +366,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //test
 //                    DbHelper dbHelper = new DbHelper(currentActivity);
 //                    Queries query = new Queries(null, dbHelper);
-//                    query.addSellInfoWithData(ticketingList, selectedPayType);
+//                    query.addSellInfoWithData(ticketingList, selectedPayType, 0);
 //                    ticketingList.clear();
 //                    setTicketList();
 
@@ -378,7 +378,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //test
 //                    DbHelper dbHelper = new DbHelper(currentActivity);
 //                    Queries query = new Queries(null, dbHelper);
-//                    query.addSellInfoWithData(ticketingList, selectedPayType);
+//                    query.addSellInfoWithData(ticketingList, selectedPayType, 0);
 //                    query.addReceiptInfoWithData(value, only, selectedPayType);
 //                    ticketingList.clear();
 //                    setTicketList();
@@ -387,10 +387,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 @Override
-                public void OnRefundTicketingBtnClicked() {
+                public void OnRefundTicketingBtnClicked(int refund_type) {
                     DbHelper dbHelper = new DbHelper(currentActivity);
                     Queries query = new Queries(null, dbHelper);
-                    query.addSellInfoWithData(ticketingList, selectedPayType);
+                    query.addSellInfoWithData(ticketingList, selectedPayType, refund_type);
                     ticketingList.clear();
                     setTicketList();
                 }
@@ -428,7 +428,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         if (receiptOption != 2) {
                             DbHelper dbHelper = new DbHelper(currentActivity);
                             Queries query = new Queries(null, dbHelper);
-                            query.addSellInfoWithData(ticketingList, selectedPayType);
+                            query.addSellInfoWithData(ticketingList, selectedPayType, 0);
                             if (receiptOption == 1)
                                 query.addReceiptInfoWithData(receiptValue, receiptOnlyStr, selectedPayType);
                         }

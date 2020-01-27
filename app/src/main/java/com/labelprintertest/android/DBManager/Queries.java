@@ -303,7 +303,7 @@ public class Queries {
         return list;
     }
 
-    public void addSellInfoWithData(ArrayList<TicketInfo> list, int payType) {
+    public void addSellInfoWithData(ArrayList<TicketInfo> list, int payType, int refundType) {
         if (list.size() > 0) {
             db = dbHelper.getWritableDatabase();
             int ind = 0;
@@ -329,13 +329,8 @@ public class Queries {
                 values.put("shohizeigaku", info.getModel().getTax());
                 values.put("tickettypecd", info.getType().getType());
                 values.put("meisho", info.getModel().getName());
-                if (payType == 5) {
-                    values.put("haraimodoshikb", 1);
-                    values.put("uriagekb", String.valueOf(payType));
-                }else {
-                    values.put("haraimodoshikb", 0);
-                    values.put("uriagekb", String.valueOf(payType));
-                }
+                values.put("haraimodoshikb", refundType);
+                values.put("uriagekb", String.valueOf(payType));
                 values.put("shimeno", 0);
                 values.put("sakuseiuserid", cm.me.getId());
                 values.put("sakuseinichiji", cm.convertToMilisecondsFromDate(new Date()));
@@ -522,14 +517,14 @@ public class Queries {
         values.put("shimebi", cm.convertToMilisecondsFromDate(calendar.getTime()));
         values.put("uriagekb", payType);
         values.put("haraimodoshikb", refundType);
-        if (refundType == 1) {
-            values.put("suryo", totalNum * (-1));
-            values.put("kingaku", totalValue * (-1));
-            values.put("shohizei", totalTax * (-1));
-        }else {
+        if (refundType == 0) {
             values.put("suryo", totalNum);
             values.put("kingaku", totalValue);
             values.put("shohizei", totalTax);
+        }else {
+            values.put("suryo", totalNum * (-1));
+            values.put("kingaku", totalValue * (-1));
+            values.put("shohizei", totalTax * (-1));
         }
         values.put("sakuseiuserid", cm.me.getId());
         values.put("sakuseinichiji", cm.convertToMilisecondsFromDate(calendar.getTime()));
@@ -709,6 +704,29 @@ public class Queries {
         }
         mCursor.close();
         if(totalNum > 0) addSettlementInfoWithData(calendar, 5, 1, totalNum, totalMoney, totalTax);
+
+        mCursor = db.rawQuery("select * from dat_record where " +
+                "haraimodoshikb = '2'" +
+                " and shimeno = 0", null);
+        totalNum = 0;
+        totalMoney = 0;
+        totalTax = 0;
+        mCursor.moveToFirst();
+        if (!mCursor.isAfterLast()) {
+            do {
+                totalNum += mCursor.getInt(mCursor.getColumnIndex("uriagesuryo"));
+                totalMoney += mCursor.getInt(mCursor.getColumnIndex("hanbaikingaku"));
+                totalTax += mCursor.getInt(mCursor.getColumnIndex("shohizeigaku"));
+                db = dbHelper.getWritableDatabase();
+                ContentValues values = new ContentValues();
+                values.put("shimeno", 1);
+                values.put("koshinuserid", cm.me.getId());
+//                values.put("koshinnichiji", cm.convertToMilisecondsFromDate(calendar.getTime()));
+                db.update("dat_record", values, "uriageno = " + mCursor.getInt(mCursor.getColumnIndex("uriageno")), null);
+            } while (mCursor.moveToNext());
+        }
+        mCursor.close();
+        if(totalNum > 0) addSettlementInfoWithData(calendar, 5, 2, totalNum, totalMoney, totalTax);
 
         return isSuccess;
     }

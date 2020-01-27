@@ -187,12 +187,12 @@ public class SumByDayActivity extends AppCompatActivity {
                         int unit = (int) data.get("hanbaitanka");
                         int num = (int) data.get("uriagesuryo");
                         map.put("unit", unit);
-                        if (data.get("haraimodoshikb").equals("1")) {
-                            map.put("sell", 0);
-                            map.put("refund", -num);
-                        }else {
+                        if (data.get("haraimodoshikb").equals("0")) {
                             map.put("sell", num);
                             map.put("refund", 0);
+                        }else {
+                            map.put("sell", 0);
+                            map.put("refund", -num);
                         }
                         map.put("total", num);
                         map.put("price", unit * num);
@@ -220,12 +220,12 @@ public class SumByDayActivity extends AppCompatActivity {
                     int unit = (int) data.get("hanbaitanka");
                     int num = (int) data.get("uriagesuryo");
                     map.put("unit", unit);
-                    if (data.get("haraimodoshikb").equals("1")) {
-                        map.put("sell", 0);
-                        map.put("refund", -num);
-                    }else {
+                    if (data.get("haraimodoshikb").equals("0")) {
                         map.put("sell", num);
                         map.put("refund", 0);
+                    }else {
+                        map.put("sell", 0);
+                        map.put("refund", -num);
                     }
                     map.put("total", num);
                     map.put("price", unit * num);
@@ -246,9 +246,9 @@ public class SumByDayActivity extends AppCompatActivity {
         if (list.size() > 0) {
             subList.clear();
             subListLayout.removeAllViews();
-            int num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0;
-            int price1 = 0, price2 = 0, price3 = 0, price4 = 0, price5 = 0;
-            int tax1 = 0, tax2 = 0, tax3 = 0, tax4 = 0, tax5 = 0;
+            int num1 = 0, num2 = 0, num3 = 0, num4 = 0, num5 = 0, num6 = 0;
+            int price1 = 0, price2 = 0, price3 = 0, price4 = 0, price5 = 0, price6 = 0;
+            int tax1 = 0, tax2 = 0, tax3 = 0, tax4 = 0, tax5 = 0, tax6 = 0;
             for (HashMap data : list) {
                 int payType = (int) data.get("uriagekb");
                 if (payType == 1) {// 現金売上
@@ -268,9 +268,16 @@ public class SumByDayActivity extends AppCompatActivity {
                     price4 = (int) data.get("kingaku");
                     tax4 = (int) data.get("shohizei");
                 }else if (payType == 5) {// 払戻
-                    num5 = (int) data.get("suryo");
-                    price5 = (int) data.get("kingaku");
-                    tax5 = (int) data.get("shohizei");
+                    String refundType = (String) data.get("haraimodoshikb");
+                    if (refundType.equals("1")) {
+                        num5 = (int) data.get("suryo");
+                        price5 = (int) data.get("kingaku");
+                        tax5 = (int) data.get("shohizei");
+                    }else if (refundType.equals("2")){
+                        num6 = (int) data.get("suryo");
+                        price6 = (int) data.get("kingaku");
+                        tax6 = (int) data.get("shohizei");
+                    }
                 }
             }
             SettlementSubItemView view_1 = new SettlementSubItemView(currentActivity);
@@ -285,8 +292,8 @@ public class SumByDayActivity extends AppCompatActivity {
             SettlementSubItemView view_2 = new SettlementSubItemView(currentActivity);
             HashMap map_2 = new HashMap();
             map_2.put("title", "売掛売上");
-            map_2.put("num", num2);
-            map_2.put("price", price2);
+            map_2.put("num", num2+num6);
+            map_2.put("price", price2+price6);
             view_2.initUI(map_2);
             subListLayout.addView(view_2);
             subList.add(map_2);
@@ -322,8 +329,8 @@ public class SumByDayActivity extends AppCompatActivity {
             SettlementSubItemView view1 = new SettlementSubItemView(currentActivity);
             HashMap map1 = new HashMap();
             map1.put("title", "売上合計");
-            map1.put("num", num1+num5+num2);
-            map1.put("price", price1+price5+price2);
+            map1.put("num", num1+num5+num2+num6);
+            map1.put("price", price1+price5+price2+price6);
 
             view1.initUI(map1);
             subListLayout.addView(view1);
@@ -332,8 +339,8 @@ public class SumByDayActivity extends AppCompatActivity {
             SettlementSubItemView view2 = new SettlementSubItemView(currentActivity);
             HashMap map2 = new HashMap();
             map2.put("title", "売掛合計");
-            map2.put("num", num2+num4);
-            map2.put("price", price2+price4);
+            map2.put("num", num2+num4+num6);
+            map2.put("price", price2+price4+price6);
 
             view2.initUI(map2);
             subListLayout.addView(view2);
@@ -343,7 +350,7 @@ public class SumByDayActivity extends AppCompatActivity {
             HashMap map3 = new HashMap();
             map3.put("title", "税金合計");
             map3.put("num", "0");
-            map3.put("price", price1+price2+price3+price4+price5);
+            map3.put("price", price1+price2+price3+price4+price5+price6);
 
             view3.initUI(map3);
             subListLayout.addView(view3);
@@ -353,7 +360,7 @@ public class SumByDayActivity extends AppCompatActivity {
             HashMap map4 = new HashMap();
             map4.put("title", "税抜き合計");
             map4.put("num", "0");
-            map4.put("price", price1+price2+price3+price4+price5-(tax1+tax2+tax3+tax4+tax5));
+            map4.put("price", price1+price2+price3+price4+price5+price6-(tax1+tax2+tax3+tax4+tax5+tax6));
 
             view4.initUI(map4);
             subListLayout.addView(view4);
