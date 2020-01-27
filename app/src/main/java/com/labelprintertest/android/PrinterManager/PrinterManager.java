@@ -21,6 +21,7 @@ import com.labelprintertest.android.Models.TicketModel;
 import com.labelprintertest.android.R;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,7 +42,7 @@ public class PrinterManager {
         getPermissions(permissions);
     }
 
-    public LabelPrinter printerStart(ArrayList<TicketInfo> infos, long receiptMoney, String receiptName) {
+    public LabelPrinter printerStart(ArrayList<TicketInfo> infos, long receiptMoney, String receiptName, int payType) {
         this.ticketInfos = infos;
         // Constructor
         LabelPrinter printer = new LabelPrinter();
@@ -66,7 +67,7 @@ public class PrinterManager {
                     LabelDesign design = new LabelDesign();
 
                     // Design label
-                    getDesignFromTicketInfo(printer, design, model);
+                    getDesignFromTicketInfo(printer, design, model, payType);
                     cm.hasPrintingErr = false;
 
                     // Set Property (Tear Off)
@@ -181,7 +182,7 @@ public class PrinterManager {
         return printer;
     }
 
-    private void getDesignFromTicketInfo (LabelPrinter printer, LabelDesign design, TicketModel model) {
+    private void getDesignFromTicketInfo (LabelPrinter printer, LabelDesign design, TicketModel model, int payType) {
 
         if (cm.printerInfos.size() >0) {
             for (PrinterInfo info : cm.printerInfos) {
@@ -222,7 +223,7 @@ public class PrinterManager {
                 int endY = (int) (info.getStartY()); // mm
 
                 if (info.getPrinterType().equals("TEXT")) {
-                    content = fillterPrintItem(info.getFormat(), model);
+                    content = fillterPrintItem(info.getFormat(), model, payType);
                     if (info.getWhiteFlag() == 1) {
                         if (content.length() > 0) {
                             design.fillRect(startX, startY, (int) (fontSize * content.length() * 3.78f), endY - startY, LabelConst.CLS_SHADED_PTN_1);
@@ -438,7 +439,7 @@ public class PrinterManager {
                 LabelConst.CLS_FNT_BOLD, 50, startY);
     }
 
-    private String fillterPrintItem (String item, TicketModel model) {
+    private String fillterPrintItem (String item, TicketModel model, int payType) {
         String fillterStr = item;
         Calendar nowDate = Calendar.getInstance();
         if (fillterStr.contains("{HAKKENBI}")) {
@@ -482,16 +483,20 @@ public class PrinterManager {
         }
         if (fillterStr.contains("{YUKOKIGEN-AMPM}")) {
             if (model.getHalfDay() == 1) {
-                SimpleDateFormat f = new SimpleDateFormat("HH");
-                SimpleDateFormat fm = new SimpleDateFormat("mm");
-                String hour = f.format(nowDate.getTime());
-                String min = fm.format(nowDate.getTime());
-                int currentHour = Integer.valueOf(hour);
-                int currentMin = Integer.valueOf(min);
-                if (currentHour <= 9 || (currentHour <= 9 && currentMin <= 50)) {
+                SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                try {
+                    Date limitTime = f.parse(nowDate.get(Calendar.YEAR) + "-" + (nowDate.get(Calendar.MONTH) + 1) + "-" + nowDate.get(Calendar.DATE) + " " + "09:50");
+                    Calendar limitDate = Calendar.getInstance();
+                    limitDate.setTime(limitTime);
+                    long nowSec = nowDate.getTimeInMillis();
+                    long limitSec = limitDate.getTimeInMillis();
+                    if (nowSec > limitSec) {
+                        fillterStr = fillterStr.replace("{YUKOKIGEN-AMPM}", "午前");
+                    }else {
+                        fillterStr = fillterStr.replace("{YUKOKIGEN-AMPM}", "午後");
+                    }
+                } catch (ParseException e) {
                     fillterStr = fillterStr.replace("{YUKOKIGEN-AMPM}", "午前");
-                }else {
-                    fillterStr = fillterStr.replace("{YUKOKIGEN-AMPM}", "午後");
                 }
             }else {
                 fillterStr = fillterStr.replace("{YUKOKIGEN-AMPM}", "");
@@ -516,6 +521,24 @@ public class PrinterManager {
             SimpleDateFormat f = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             fillterStr = fillterStr.replace("{GENZAINICHIJI}", f.format(nowDate.getTime()));
         }
+
+        if (fillterStr.contains("{TANMATSUNO}")) {
+            DbHelper dbHelper = new DbHelper(currentActivity);
+            Queries query = new Queries(null, dbHelper);
+            HashMap initInfo = query.getDeviceInfo();
+
+            if (initInfo == null) {
+                fillterStr = fillterStr.replace("{TANMATSUNO}", "0");
+            }else {
+                fillterStr = fillterStr.replace("{TANMATSUNO}", initInfo.get("tanmatsuno").toString());
+            }
+        }
+
+        if (payType == 2) {
+            if (fillterStr.contains("{URIKAKEMARK}"))
+                fillterStr = fillterStr.replace("{URIKAKEMARK}", "●");
+        }
+
         return fillterStr;
     }
 

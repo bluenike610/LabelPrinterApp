@@ -61,6 +61,21 @@
                     android:text="@string/btn_cash"
                     android:textColor="@color/black"/>
 
+                <Button
+                    android:id="@+id/ticketingCloseBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textColor="@color/black"
+                    android:background="@drawable/normal_button"
+                    android:textSize="25dp"
+                    android:focusedByDefault="true"
+                    android:text="@string/btn_to_ticket"
+                    android:textStyle="bold"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"/>
+
                 <LinearLayout
                     android:id="@+id/ticketingLayout"
                     android:layout_marginTop="10dp"
@@ -76,7 +91,7 @@
                         android:layout_weight="1"
                         android:textSize="@dimen/screen_label_text_font"
                         android:text="@string/ticketing_money"
-                        android:gravity="left|bottom"
+                        android:gravity="left|center"
                         android:textColor="@color/black"/>
 
                     <TextView
@@ -105,7 +120,7 @@
                         android:layout_weight="1"
                         android:textSize="@dimen/screen_label_text_font"
                         android:text="@string/pre_money"
-                        android:gravity="left|bottom"
+                        android:gravity="left|center"
                         android:textColor="@color/black"/>
 
                     <RelativeLayout
@@ -145,7 +160,7 @@
                             android:id="@+id/lbYen"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:gravity="right|bottom"
+                            android:gravity="right|center"
                             android:textSize="@dimen/screen_label_text_font"
                             android:text="@string/lb_yen"
                             android:textColor="@color/black"
@@ -169,7 +184,7 @@
                         android:layout_weight="1"
                         android:textSize="@dimen/screen_label_text_font"
                         android:text="@string/remain_money"
-                        android:gravity="left|bottom"
+                        android:gravity="left|center"
                         android:textColor="@color/black"/>
 
                     <TextView
@@ -177,10 +192,43 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
-                        android:gravity="right|bottom"
+                        android:gravity="right|center"
                         android:textSize="40sp"
                         android:textStyle="bold"
                         android:textColor="@color/black"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/refundLayout"
+                    android:layout_marginTop="30dp"
+                    android:layout_below="@+id/ticketingLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:orientation="vertical">
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp">
+
+                        <RadioButton
+                            android:id="@+id/cashRd"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/btn_cash"
+                            android:textSize="20dp"
+                            android:checked="true"/>
+
+                        <RadioButton
+                            android:id="@+id/receivableRd"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/btn_receivable"
+                            android:textSize="20dp"
+                            android:layout_marginTop="20dp"/>
+
+                    </RadioGroup>
 
                 </LinearLayout>
 

@@ -639,25 +639,6 @@
             android:layout_weight="1">
 
             <Button
-                android:id="@+id/btnConsign"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/disable_button"
-                android:textSize="@dimen/screen_btn_text_font"
-                android:text="@string/btn_consign"
-                android:gravity="center"
-                android:layout_marginRight="10dp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <Button
                 android:id="@+id/btnReceivable"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -668,6 +649,25 @@
                 android:gravity="center"
                 android:text="@string/btn_receivable"
                 android:textSize="@dimen/screen_btn_text_font" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/btnConsign"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/disable_button"
+                android:textSize="@dimen/screen_btn_text_font"
+                android:text="@string/btn_consign"
+                android:gravity="center"
+                android:layout_marginRight="10dp"/>
 
         </LinearLayout>
 

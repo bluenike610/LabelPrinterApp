@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -37,6 +38,9 @@ public class TicketingDlg extends Dialog {
     private long preMoney = 0;
     private TextView ticketingMoneyTxt, remainMoneyTxt;
     private EditText preMoneyTxt, receiptTxt;
+    private Button ticketingBtn, ticketingReceiptBtn;
+    private LinearLayout preMoneyLayout, remainMoneyLayout, refundLayout;
+    private RadioButton cashRd, receivableRd;
 
     public TicketingDlg(@NonNull Context context, final int type, ArrayList<TicketInfo> datas, final TicketingLinstener linstener) {
         super(context);
@@ -50,11 +54,25 @@ public class TicketingDlg extends Dialog {
         TextView paymentTypeTxt = findViewById(R.id.cashLb);
         paymentTypeTxt.setText(context.getResources().getStringArray(R.array.TicketingType)[paymentType]);
 
+        preMoneyLayout = findViewById(R.id.preMoneyLayout);
+        remainMoneyLayout = findViewById(R.id.remainMoneyLayout);
+        refundLayout = findViewById(R.id.refundLayout);
+
         TextView ticketingMoneyLb = findViewById(R.id.ticketingMoneyLb);
-        if (paymentType == 0)
+        if (paymentType == 0) {
+            preMoneyLayout.setVisibility(View.INVISIBLE);
+            remainMoneyLayout.setVisibility(View.INVISIBLE);
+            refundLayout.setVisibility(View.VISIBLE);
             ticketingMoneyLb.setText(R.string.refund_money);
-        else
+        }else {
+            preMoneyLayout.setVisibility(View.VISIBLE);
+            remainMoneyLayout.setVisibility(View.VISIBLE);
+            refundLayout.setVisibility(View.INVISIBLE);
             ticketingMoneyLb.setText(R.string.ticketing_money);
+        }
+
+        cashRd = findViewById(R.id.cashRd);
+        receivableRd = findViewById(R.id.receivableRd);
 
         preMoneyTxt = findViewById(R.id.preMoney);
         receiptTxt = findViewById(R.id.receiptTxt);
@@ -90,14 +108,15 @@ public class TicketingDlg extends Dialog {
 //            receiptTxt.setEnabled(false);
         }
 
-        Button ticketingBtn = findViewById(R.id.ticketingBtn);
+        ticketingBtn = findViewById(R.id.ticketingBtn);
         ticketingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (linstener != null) {
                     if (paymentType == 0) {
                         linstener.OnRefundTicketingBtnClicked();
-                        dismiss();
+                        DisableButton();
+//                        dismiss();
                     }else {
                         if (type == 4) {
                             if (preMoney != 0) {
@@ -114,19 +133,20 @@ public class TicketingDlg extends Dialog {
                             }
                         }
                         PrinterManager manager = new PrinterManager();
-                        LabelPrinter printer = manager.printerStart(models, 0, "");
+                        LabelPrinter printer = manager.printerStart(models, 0, "", paymentType);
 
                         //test
                         if(printer != null) {
                             linstener.OnTicketingBtnClicked(printer);
-                            dismiss();
+                            DisableButton();
+//                        dismiss();
                         }
                     }
                 }
             }
         });
 
-        Button ticketingReceiptBtn = findViewById(R.id.ticketingReceiptBtn);
+        ticketingReceiptBtn = findViewById(R.id.ticketingReceiptBtn);
         if (type == 2) {
             ticketingReceiptBtn.setEnabled(false);
         }else {
@@ -135,22 +155,32 @@ public class TicketingDlg extends Dialog {
                 public void onClick(View v) {
                     if (paymentType == 0) {
                         linstener.OnRefundTicketingBtnClicked();
-                        dismiss();
+                        DisableButton();
+//                        dismiss();
                     }else {
                         if (linstener != null) {
                             PrinterManager manager = new PrinterManager();
-                            LabelPrinter printer = manager.printerStart(models, ticketingMoney, receiptTxt.getText().toString());
+                            LabelPrinter printer = manager.printerStart(models, ticketingMoney, receiptTxt.getText().toString(), paymentType);
 
                             //test
                             if(printer != null) {
                                 linstener.OnTicketingReceiptBtnClicked(printer, Integer.valueOf((int) preMoney), receiptTxt.getText().toString());
-                                dismiss();
+                                DisableButton();
+//                                dismiss();
                             }
                         }
                     }
                 }
             });
         }
+
+        Button closeBtn = findViewById(R.id.ticketingCloseBtn);
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
         ticketingMoneyTxt = findViewById(R.id.ticketingMoney);
         remainMoneyTxt = findViewById(R.id.remainMoney);
@@ -178,6 +208,11 @@ public class TicketingDlg extends Dialog {
         }
         ticketingMoney = price;
         if (price > 0) ticketingMoneyTxt.setText(cm.numberFormat(price) + currentActivity.getResources().getString(R.string.lb_yen));
+    }
+
+    private void DisableButton(){
+        ticketingBtn.setEnabled(false);
+        ticketingReceiptBtn.setEnabled(false);
     }
 
     public interface TicketingLinstener {

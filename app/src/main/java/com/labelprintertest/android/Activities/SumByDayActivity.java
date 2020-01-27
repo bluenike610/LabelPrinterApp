@@ -162,14 +162,14 @@ public class SumByDayActivity extends AppCompatActivity {
         for (HashMap data : preList) {
             if (ind < preList.size()-1) {
                 HashMap data2 = preList.get(ind+1);
-                if (data.get("meisho").equals(data2.get("meisho"))) {
+                if (data.get("meisho").equals(data2.get("meisho")) && data.get("ticketid").equals(data2.get("ticketid"))) {
                     preNum = (int) data.get("uriagesuryo");
                     ind ++;
                     continue;
                 }else {
                     if (preNum > 0) {
                         HashMap map = new HashMap();
-                        map.put("code", data.get("ticketid"));
+                        map.put("code", data.get("tickettypename"));
                         map.put("type", data.get("meisho"));
                         int unit = (int) data.get("hanbaitanka");
                         map.put("unit", unit);
@@ -182,7 +182,7 @@ public class SumByDayActivity extends AppCompatActivity {
                         preNum = 0;
                     }else {
                         HashMap map = new HashMap();
-                        map.put("code", data.get("ticketid"));
+                        map.put("code", data.get("tickettypename"));
                         map.put("type", data.get("meisho"));
                         int unit = (int) data.get("hanbaitanka");
                         int num = (int) data.get("uriagesuryo");
@@ -202,7 +202,7 @@ public class SumByDayActivity extends AppCompatActivity {
             }else {
                 if (preNum > 0) {
                     HashMap map = new HashMap();
-                    map.put("code", data.get("ticketid"));
+                    map.put("code", data.get("tickettypename"));
                     map.put("type", data.get("meisho"));
                     int unit = (int) data.get("hanbaitanka");
                     map.put("unit", unit);
@@ -215,7 +215,7 @@ public class SumByDayActivity extends AppCompatActivity {
                     preNum = 0;
                 }else {
                     HashMap map = new HashMap();
-                    map.put("code", data.get("ticketid"));
+                    map.put("code", data.get("tickettypename"));
                     map.put("type", data.get("meisho"));
                     int unit = (int) data.get("hanbaitanka");
                     int num = (int) data.get("uriagesuryo");
@@ -251,23 +251,23 @@ public class SumByDayActivity extends AppCompatActivity {
             int tax1 = 0, tax2 = 0, tax3 = 0, tax4 = 0, tax5 = 0;
             for (HashMap data : list) {
                 int payType = (int) data.get("uriagekb");
-                if (payType == 1) {
+                if (payType == 1) {// 現金売上
                     num1 = (int) data.get("suryo");
                     price1 = (int) data.get("kingaku");
                     tax1 = (int) data.get("shohizei");
-                }else if (payType == 2) {
+                }else if (payType == 2) {// 売掛売上
                     num2 = (int) data.get("suryo");
                     price2 = (int) data.get("kingaku");
                     tax2 = (int) data.get("shohizei");
-                }else if (payType == 3) {
+                }else if (payType == 3) {// 雑収入
                     num3 = (int) data.get("suryo");
                     price3 = (int) data.get("kingaku");
                     tax3 = (int) data.get("shohizei");
-                }else if (payType == 4) {
+                }else if (payType == 4) {// 委託
                     num4 = (int) data.get("suryo");
                     price4 = (int) data.get("kingaku");
                     tax4 = (int) data.get("shohizei");
-                }else if (payType == 5) {
+                }else if (payType == 5) {// 払戻
                     num5 = (int) data.get("suryo");
                     price5 = (int) data.get("kingaku");
                     tax5 = (int) data.get("shohizei");
@@ -284,7 +284,7 @@ public class SumByDayActivity extends AppCompatActivity {
 
             SettlementSubItemView view_2 = new SettlementSubItemView(currentActivity);
             HashMap map_2 = new HashMap();
-            map_2.put("title", "一般売掛");
+            map_2.put("title", "売掛売上");
             map_2.put("num", num2);
             map_2.put("price", price2);
             view_2.initUI(map_2);
@@ -322,8 +322,8 @@ public class SumByDayActivity extends AppCompatActivity {
             SettlementSubItemView view1 = new SettlementSubItemView(currentActivity);
             HashMap map1 = new HashMap();
             map1.put("title", "売上合計");
-            map1.put("num", num1+num5);
-            map1.put("price", price1+price5);
+            map1.put("num", num1+num5+num2);
+            map1.put("price", price1+price5+price2);
 
             view1.initUI(map1);
             subListLayout.addView(view1);

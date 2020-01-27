@@ -36,7 +36,9 @@ import com.labelprintertest.android.Views.TabItemView;
 import com.labelprintertest.android.Views.TicketListItemView;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -255,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (ticketingList.size() > 0) {
             for (int kk=0; kk<ticketingList.size(); kk++) {
                 TicketInfo oldInfo = ticketingList.get(kk);
-                if (oldInfo.getModel().getName().equals(newInfo.getModel().getName())) {
+                if (oldInfo.getModel().getId().equals(newInfo.getModel().getId())) {
                     int oldNum = oldInfo.getNum();
                     oldInfo.setNum(oldNum + num);
                     ticketingList.set(kk, oldInfo);
@@ -348,12 +350,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TabItemView newItemView = (TabItemView) tabItemLayout.getChildAt(selectedTabIndex);
         newItemView.changeBackground(getDrawable(R.drawable.border_main));
         updateTicketList(tabList.get(ind));
-        ArrayList<TicketInfo> tempList = (ArrayList<TicketInfo>) ticketingList.clone();
-        for (int i=0; i<ticketingList.size(); i++) {
-            TicketInfo info = tempList.get(i);
-            info.setType(tabList.get(ind));
-            ticketingList.set(i, info);
-        }
+//        ArrayList<TicketInfo> tempList = (ArrayList<TicketInfo>) ticketingList.clone();
+//        for (int i=0; i<ticketingList.size(); i++) {
+//            TicketInfo info = tempList.get(i);
+//            info.setType(tabList.get(ind));
+//            ticketingList.set(i, info);
+//        }
     }
 
     private void showTicketingDlg(int ind) {
@@ -393,6 +395,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     setTicketList();
                 }
             });
+            dlg.setCanceledOnTouchOutside(false);
             dlg.show();
         }else {
             // error alert
@@ -533,8 +536,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnReticketing:
                 if (ticketingList.size() > 0) {
                     PrinterManager manager = new PrinterManager();
-                    LabelPrinter printer = manager.printerStart(ticketingList, 0, "");
+                    LabelPrinter printer = manager.printerStart(ticketingList, 0, "", 0);
                     checkingPintState(printer, 2, 0, "");
+                    selectedPayType = 0;
                 }
                 break;
             case R.id.btnConsign:

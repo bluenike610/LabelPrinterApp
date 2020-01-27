@@ -66,7 +66,7 @@ public class SettlementMainItemView extends LinearLayout{
     public void initUI(HashMap map) {
         TextView codeTxt = viewInflate.findViewById(R.id.codeTxt);
         if(!String.valueOf(map.get("code")).equals(""))
-            codeTxt.setText(cm.numberFormat(Integer.valueOf(String.valueOf(map.get("code")))));
+            codeTxt.setText(String.valueOf(map.get("code")));
 
         TextView ticketTypeTxt = viewInflate.findViewById(R.id.ticketTypeTxt);
         ticketTypeTxt.setText(String.valueOf(map.get("type")));

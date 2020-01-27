@@ -81,7 +81,7 @@ public class ReceiptDialog extends Dialog {
                         //test
                         if(printer != null) {
                             listner.OnReceiptBtnClicked(printer, (int) money, receiptTxt.getText().toString());
-                            dismiss();
+//                            dismiss();
                         }
                     }
                 }

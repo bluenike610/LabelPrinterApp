@@ -327,7 +327,7 @@ public class Queries {
                 values.put("hanbaikingaku", info.getNum() * info.getModel().getPrice());
                 values.put("shohizeiritsu", info.getModel().getTaxRatio());
                 values.put("shohizeigaku", info.getModel().getTax());
-                values.put("tickettypecd", info.getType().getName());
+                values.put("tickettypecd", info.getType().getType());
                 values.put("meisho", info.getModel().getName());
                 if (payType == 5) {
                     values.put("haraimodoshikb", 1);
@@ -407,13 +407,26 @@ public class Queries {
             long endTime = calendar.getTimeInMillis();
 
             db = dbHelper.getWritableDatabase();
-            Cursor mCursor = db.rawQuery("select ticketid, meisho, hanbaitanka, haraimodoshikb, SUM(uriagesuryo) uriagesuryo from dat_record where tanmatsumei = '"+String.valueOf(getDeviceInfo().get("tanmatsumei"))+"' and  koshinnichiji > " +
-                    startTime + " and koshinnichiji <= " + endTime + " group by meisho, haraimodoshikb order by ticketid", null);
+
+            Cursor mCursor = db.rawQuery("select ticketid, tickettypecd, meisho, hanbaitanka, haraimodoshikb, SUM(uriagesuryo) uriagesuryo from dat_record where tanmatsumei = '"+String.valueOf(getDeviceInfo().get("tanmatsumei"))+"' and  koshinnichiji > " +
+                    startTime + " and koshinnichiji <= " + endTime + " group by ticketid, meisho, haraimodoshikb order by ticketid", null);
+
+//            Cursor mCursor = db.rawQuery("select ticketid, meisho, hanbaitanka, haraimodoshikb, SUM(uriagesuryo) uriagesuryo from dat_record where tanmatsumei = '"+String.valueOf(getDeviceInfo().get("tanmatsumei"))+"' and  koshinnichiji > " +
+//                    startTime + " and koshinnichiji <= " + endTime + " group by meisho, haraimodoshikb order by ticketid", null);
             mCursor.moveToFirst();
             if (!mCursor.isAfterLast()) {
                 do {
+                    String ticketTypeId = mCursor.getString(mCursor.getColumnIndex("tickettypecd"));
+                    String ticketTypeName = "";
+                    for (TicketType type : cm.ticketTypes) {
+                        if (type.getType().equals(ticketTypeId)) {
+                            ticketTypeName = type.getName().substring(0,type.getName().length()<3?type.getName().length():3);
+                            break;
+                        }
+                    }
                     HashMap map = new HashMap();
                     map.put("ticketid", mCursor.getInt(mCursor.getColumnIndex("ticketid")));
+                    map.put("tickettypename", ticketTypeName);
                     map.put("meisho", mCursor.getString(mCursor.getColumnIndex("meisho")));
                     map.put("hanbaitanka", mCursor.getInt(mCursor.getColumnIndex("hanbaitanka")));
                     map.put("haraimodoshikb", mCursor.getString(mCursor.getColumnIndex("haraimodoshikb")));

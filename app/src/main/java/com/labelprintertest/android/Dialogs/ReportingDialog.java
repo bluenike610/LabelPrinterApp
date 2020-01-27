@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -154,7 +155,14 @@ public class ReportingDialog extends Dialog implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
+        v.setEnabled(false);
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                v.setEnabled(true);
+            }
+        }, 1000L);
+
         switch (v.getId()) {
             case R.id.endCancelBtn:
                 isByEndSum = !deleteByDayEndData();
