@@ -1,7 +1,7 @@
 package com.labelprintertest.android.Common;
 
 public class Config {
-    public static String SERVER_IP_ADDRESS = "192.168.207.85";
+    public static String SERVER_IP_ADDRESS = "192.168.207.91";
     public static String SERVER_PORT = "1433";
     public static String DB_NAME = "db_ticket2";
     public static String USER_NAME = "NewLogin";

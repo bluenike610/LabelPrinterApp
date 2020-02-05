@@ -97,15 +97,14 @@ public class LoginActivity extends AppCompatActivity {
                             }, null);
                     return;
                 }else {
-                    login.setEnabled(false);
-                    new Handler().postDelayed(new Runnable() {
-                        public void run() {
-                            login.setEnabled(true);
-                        }
-                    }, 1000L);
                     login(userid.getText().toString(), password.getText().toString());
                 }
-
+                login.setEnabled(false);
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        login.setEnabled(true);
+                    }
+                }, 2000L);
             }
         });
 
