@@ -389,7 +389,7 @@ public class PrinterManager {
                         LabelConst.CLS_FNT_BOLD, 700, startY);
             }else {
                 if (!String.valueOf(map.get("code")).equals(""))
-                    design.drawTextLocalFont(String.valueOf(cm.numberFormat((int) map.get("code"))), Typeface.SERIF,
+                    design.drawTextLocalFont(String.valueOf(map.get("code")), Typeface.SERIF,
                         LabelConst.CLS_RT_NORMAL, 100, 100, 10,
                         LabelConst.CLS_FNT_BOLD, 10, startY);
                 design.drawTextLocalFont(String.valueOf(map.get("type")), Typeface.SERIF,
