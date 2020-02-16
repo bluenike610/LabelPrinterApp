@@ -143,7 +143,6 @@ public class TicketingDlg extends Dialog {
                         if(printer != null) {
                             linstener.OnTicketingBtnClicked(printer);
                             DisableButton();
-//                        dismiss();
                         }
                     }
                 }
@@ -174,7 +173,6 @@ public class TicketingDlg extends Dialog {
                             if(printer != null) {
                                 linstener.OnTicketingReceiptBtnClicked(printer, Integer.valueOf((int) preMoney), receiptTxt.getText().toString());
                                 DisableButton();
-//                                dismiss();
                             }
                         }
                     }

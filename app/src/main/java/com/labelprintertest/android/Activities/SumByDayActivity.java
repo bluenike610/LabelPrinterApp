@@ -157,62 +157,42 @@ public class SumByDayActivity extends AppCompatActivity {
 
     private ArrayList<HashMap> filterByRefund(ArrayList<HashMap> preList) {
         ArrayList<HashMap> list = new ArrayList<>();
-        int preNum = 0;
         int ind = 0;
         for (HashMap data : preList) {
-            if (ind < preList.size()-1) {
-                HashMap data2 = preList.get(ind+1);
-                if (data.get("meisho").equals(data2.get("meisho")) && data.get("ticketid").equals(data2.get("ticketid"))) {
-                    preNum = (int) data.get("uriagesuryo");
-                    ind ++;
-                    continue;
+            if (ind == 0) {
+                HashMap map = new HashMap();
+                map.put("code", data.get("tickettypename"));
+                map.put("type", data.get("meisho"));
+                int unit = (int) data.get("hanbaitanka");
+                int num = (int) data.get("uriagesuryo");
+                map.put("unit", unit);
+                if (data.get("haraimodoshikb").equals("0")) {
+                    map.put("sell", num);
+                    map.put("refund", 0);
+                    map.put("total", num);
+                    map.put("price", unit * num);
                 }else {
-                    if (preNum > 0) {
-                        HashMap map = new HashMap();
-                        map.put("code", data.get("tickettypename"));
-                        map.put("type", data.get("meisho"));
-                        int unit = (int) data.get("hanbaitanka");
-                        map.put("unit", unit);
-                        map.put("sell", preNum);
-                        int num = (int) data.get("uriagesuryo") * (-1);
-                        map.put("refund", num);
-                        map.put("total", preNum + num);
-                        map.put("price", unit * (preNum + num));
-                        list.add(map);
-                        preNum = 0;
-                    }else {
-                        HashMap map = new HashMap();
-                        map.put("code", data.get("tickettypename"));
-                        map.put("type", data.get("meisho"));
-                        int unit = (int) data.get("hanbaitanka");
-                        int num = (int) data.get("uriagesuryo");
-                        map.put("unit", unit);
-                        if (data.get("haraimodoshikb").equals("0")) {
-                            map.put("sell", num);
-                            map.put("refund", 0);
-                        }else {
-                            map.put("sell", 0);
-                            map.put("refund", -num);
-                        }
-                        map.put("total", num);
-                        map.put("price", unit * num);
-                        list.add(map);
-                    }
+                    map.put("sell", 0);
+                    map.put("refund", -num);
+                    map.put("total", -num);
+                    map.put("price", -unit * num);
                 }
+                list.add(map);
             }else {
-                if (preNum > 0) {
-                    HashMap map = new HashMap();
-                    map.put("code", data.get("tickettypename"));
-                    map.put("type", data.get("meisho"));
+                HashMap preMap = preList.get(ind-1);
+                HashMap data2 = list.get(list.size()-1);
+                if (data.get("meisho").equals(preMap.get("meisho")) && data.get("ticketid").equals(preMap.get("ticketid"))) {
                     int unit = (int) data.get("hanbaitanka");
-                    map.put("unit", unit);
-                    map.put("sell", preNum);
-                    int num = (int) data.get("uriagesuryo") * (-1);
-                    map.put("refund", num);
-                    map.put("total", preNum + num);
-                    map.put("price", unit * (preNum + num));
-                    list.add(map);
-                    preNum = 0;
+                    int num = (int) data.get("uriagesuryo");
+                    if (data.get("haraimodoshikb").equals("0")) {
+                        data2.put("sell", num + (int) data2.get("sell"));
+                        data2.put("total", num + (int) data2.get("total"));
+                    }else {
+                        data2.put("refund", -num + (int) data2.get("refund"));
+                        data2.put("total", -num + (int) data2.get("total"));
+                    }
+                    data2.put("price", unit * (int) data2.get("total"));
+                    list.set(list.size()-1, data2);
                 }else {
                     HashMap map = new HashMap();
                     map.put("code", data.get("tickettypename"));
@@ -223,12 +203,14 @@ public class SumByDayActivity extends AppCompatActivity {
                     if (data.get("haraimodoshikb").equals("0")) {
                         map.put("sell", num);
                         map.put("refund", 0);
+                        map.put("total", num);
+                        map.put("price", unit * num);
                     }else {
                         map.put("sell", 0);
                         map.put("refund", -num);
+                        map.put("total", -num);
+                        map.put("price", -unit * num);
                     }
-                    map.put("total", num);
-                    map.put("price", unit * num);
                     list.add(map);
                 }
             }
@@ -320,7 +302,7 @@ public class SumByDayActivity extends AppCompatActivity {
             HashMap map0 = new HashMap();
             map0.put("title", "消費税内税");
             map0.put("num", 0);
-            map0.put("price", tax1+tax2+tax3+tax4+tax5);
+            map0.put("price", tax1+tax2+tax3+tax4+tax5+tax6);
 
             view0.initUI(map0);
             subListLayout.addView(view0);
